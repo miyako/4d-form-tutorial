@@ -403,6 +403,35 @@ button {
 
 CSS property names match the JSON property names. Specificity follows the standard cascade: type < class < name/ID < JSON < `!important`.
 
+CSS values can use `:xliff:` references for localization:
+
+```css
+button {
+  text: ":xliff:ButtonClick";
+}
+```
+
+Reference: https://developer.4d.com/docs/FormEditor/stylesheets
+
+## Localization
+
+Button labels can be localized using XLIFF. Set the `text` property (in JSON or CSS) to a `:xliff:` reference:
+
+```json
+{ "text": ":xliff:ButtonClick" }
+```
+
+Then create XLIFF files in `Resources/{lang}.lproj/`:
+
+```xml
+<trans-unit id="ButtonClick" resname="ButtonClick">
+  <source>Click</source>
+  <target>クリック</target>
+</trans-unit>
+```
+
+4D resolves the reference at runtime based on the application language.
+
 ## Runtime Commands
 
 Button properties can be modified at runtime via `OBJECT SET *` commands.
