@@ -16,26 +16,34 @@
 	"destination": "detailScreen",
 	"pages": [
 		{
-			"objects": {}
+			"objects": {
+				"lblCommand": {
+					"type": "text",
+					"text": "Command Button (4-state)",
+					"top": 110,
+					"left": 20,
+					"width": 200,
+					"height": 20
+				},
+				"lblSelector": {
+					"type": "text",
+					"text": "Choice Selector (looping)",
+					"top": 110,
+					"left": 260,
+					"width": 200,
+					"height": 20
+				}
+			}
 		},
 		{
 			"objects": {
-				"picBtnNoImage": {
+				"cmdButton": {
 					"type": "pictureButton",
 					"top": 20,
 					"left": 20,
-					"width": 100,
-					"height": 100,
-					"rowCount": 1,
-					"columnCount": 4,
-					"events": ["onClick"]
-				},
-				"picBtnSwitchBack": {
-					"type": "pictureButton",
-					"top": 20,
-					"left": 140,
-					"width": 100,
-					"height": 100,
+					"width": 80,
+					"height": 80,
+					"picture": "/RESOURCES/Images/cmdButton.png",
 					"rowCount": 1,
 					"columnCount": 4,
 					"switchBackWhenReleased": true,
@@ -43,14 +51,15 @@
 					"useLastFrameAsDisabled": true,
 					"events": ["onClick"]
 				},
-				"picBtnLoop": {
+				"langSelector": {
 					"type": "pictureButton",
 					"top": 20,
 					"left": 260,
-					"width": 100,
-					"height": 100,
+					"width": 80,
+					"height": 80,
+					"picture": "/RESOURCES/Images/langSelector.png",
 					"rowCount": 1,
-					"columnCount": 3,
+					"columnCount": 5,
 					"loopBackToFirstFrame": true,
 					"events": ["onClick"]
 				}
