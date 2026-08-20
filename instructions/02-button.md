@@ -179,16 +179,85 @@ When a button is clicked:
 2. **Form method** runs second
 3. **Standard action** runs last
 
-### Object Method Pattern
+### Click Events in Detail
+
+#### Single and Double Click
+
+- `onClick` (On Clicked) fires on every click.
+- `onDoubleClick` (On Double Clicked) fires on the 2nd rapid click **instead of** `onClick` — the click event is consumed/replaced.
+- After the double-click, subsequent rapid clicks fire only `onClick` with incrementing `Clickcount`.
+
+Example: 10 rapid clicks produces:
+
+```
+On Clicked (Clickcount=1)
+On Double Clicked (Clickcount=2, replaces On Clicked)
+On Clicked (Clickcount=3)
+On Clicked (Clickcount=4)
+...
+On Clicked (Clickcount=10)
+```
+
+#### Clickcount
+
+`Clickcount` (command #1332) returns how many clicks have occurred in a rapid sequence. It keeps incrementing as long as clicks are rapid enough (governed by the system double-click interval). It resets when the user pauses.
+
+Reference: https://developer.4d.com/docs/commands/clickcount
+
+#### Modifier Keys
+
+Detect modifier keys during a click using these commands. Despite platform-specific names, they work **cross-platform**:
+
+| Command | Mac Key | Windows Key |
+|---------|---------|-------------|
+| `Shift down:C543` | Shift | Shift |
+| `Macintosh command down:C546` | ⌘ Command | Ctrl |
+| `Macintosh option down:C545` | ⌥ Option | Alt |
+| `Macintosh control down:C544` | ⌃ Control | — |
+| `Windows Ctrl down` | ⌘ Command | Ctrl |
+| `Windows Alt down` | ⌥ Option | Alt |
+| `Caps lock down` | Caps Lock | Caps Lock |
+| `Contextual click:C713` | Ctrl+click / right-click | Right-click |
+
+References:
+- https://developer.4d.com/docs/commands/shift-down
+- https://developer.4d.com/docs/commands/macintosh-command-down
+- https://developer.4d.com/docs/commands/macintosh-option-down
+- https://developer.4d.com/docs/commands/macintosh-control-down
+- https://developer.4d.com/docs/commands/windows-ctrl-down
+- https://developer.4d.com/docs/commands/windows-alt-down
+- https://developer.4d.com/docs/commands/caps-lock-down
+
+#### Recommended Pattern
+
+Test modifiers in a `Case of` with priority ordering — the first match wins:
 
 ```4d
 var $event:=FORM Event
 
 Case of 
+  : (FORM Event.code=On Double Clicked)
+    // double-click action
+
+  : ((FORM Event.code=On Clicked) && Contextual click)
+    // right-click / Ctrl+click
+
+  : ((FORM Event.code=On Clicked) && Shift down)
+    // Shift+click
+
+  : ((FORM Event.code=On Clicked) && Macintosh command down)
+    // ⌘+click (Mac) / Ctrl+click (Win)
+
+  : ((FORM Event.code=On Clicked) && Macintosh option down)
+    // ⌥+click (Mac) / Alt+click (Win)
+
   : (FORM Event.code=On Clicked)
-    // handle click
+    // plain click (fallback)
+
 End case 
 ```
+
+### Object Method File
 
 The object method file is at `ObjectMethods/<ObjectName>.4dm`.
 
