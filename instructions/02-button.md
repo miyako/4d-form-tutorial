@@ -54,7 +54,7 @@ Set via the `style` property. Each style has a distinct visual appearance.
 | Property | Values | Description |
 |----------|--------|-------------|
 | `text` | string | Button label text |
-| `textAlign` | `"left"`, `"center"`, `"right"` | Text alignment within the button |
+| `textAlign` | `"left"`, `"center"`, `"right"` | Text alignment within the button (since v20). Also settable via `OBJECT SET HORIZONTAL ALIGNMENT`. |
 | `fontWeight` | `"normal"`, `"bold"` | Font weight |
 | `fontStyle` | `"normal"`, `"italic"` | Font style |
 | `textDecoration` | `"none"`, `"underline"` | Text decoration |
