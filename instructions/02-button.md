@@ -71,8 +71,8 @@ Font properties also combine naturally with icons — large `fontSize` scales te
 |----------|--------|-------------|
 | `defaultButton` | boolean | Highlights as the recommended action. Only for `regular` and `flat`. |
 | `borderStyle` | `"system"`, `"none"`, `"solid"`, `"dotted"`, `"raised"`, `"sunken"`, `"double"` | Border line style |
-| `visibility` | `"visible"`, `"hidden"` | `"hidden"` shows a dashed outline in the editor but is invisible at runtime |
-| `display` | boolean | `false` = not rendered at all, but still active |
+| `visibility` | `"visible"`, `"hidden"` | `"hidden"` = invisible **and inactive** (does not respond to clicks) |
+| `display` | boolean | `false` = **not rendered but still active** (responds to clicks). Only for `custom` style. |
 | `focusable` | boolean | Whether the button can receive keyboard focus (see below) |
 | `tooltip` | string | Hover text displayed when the mouse rests over the button |
 
@@ -182,6 +182,21 @@ Only applicable when `style` is `"custom"`:
 | `customBorderX` | Horizontal internal margin (pixels) |
 | `customBorderY` | Vertical internal margin (pixels) |
 | `customOffset` | Icon offset (pixels) |
+
+A `custom` button with `"display": false` creates an **invisible but active clickable area**. This is useful for defining clickable regions over a graphic element or background image.
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesDisplay#not-rendered
+
+### Visibility vs Display (Active State)
+
+| State | Visible | Active (responds to clicks) |
+|-------|---------|----------------------------|
+| Normal (`visibility: "visible"`) | ✓ | ✓ |
+| Hidden (`visibility: "hidden"`) | ✗ | ✗ |
+| Not rendered (`display: false`, custom style) | ✗ | ✓ |
+
+- Use `OBJECT SET VISIBLE` to hide/show at runtime (also makes inactive).
+- Reference: https://developer.4d.com/docs/commands/object-set-visible
 
 ## Positioning and Sizing
 
