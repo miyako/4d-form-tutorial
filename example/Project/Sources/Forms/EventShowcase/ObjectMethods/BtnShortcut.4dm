@@ -1,8 +1,8 @@
-var $event:=FORM Event:C1606
+var $event:=FORM Event
 
 Case of 
-	: ($event.code=On Clicked:K2:4)
+	: ($event.code=On Clicked)
 		
-		Form:C1466.appendLog("⌘K shortcut triggered!")
+		Form.appendLog("⌘K shortcut triggered!")
 		
 End case 
