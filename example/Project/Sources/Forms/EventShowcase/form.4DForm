@@ -45,7 +45,7 @@
           "height": 260,
           "enterable": false,
           "multiline": "yes",
-          "dataSource": "Form:C1466.log",
+          "dataSource": "Form.log",
           "borderStyle": "solid"
         },
         "LabelCount": {
@@ -64,7 +64,7 @@
           "height": 20,
           "enterable": false,
           "dataSourceTypeHint": "integer",
-          "dataSource": "Form:C1466.clickCount",
+          "dataSource": "Form.clickCount",
           "textAlign": "center",
           "fontWeight": "bold"
         },

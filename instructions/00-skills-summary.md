@@ -57,19 +57,19 @@
 - Reference 4D built-in Common IDs (CommonOK, CommonCancel, etc.)
 
 ### Runtime Commands
-- `OBJECT SET ENABLED`, `OBJECT SET TITLE`, `OBJECT SET FORMAT` (title + icon), `OBJECT SET FONT`, `OBJECT SET ACTION`, `OBJECT SET VISIBLE`
-- Know which commands **don't apply** to buttons (ENTERABLE, CORNER RADIUS, FILTER)
+- Full list: https://developer.4d.com/docs/commands/theme/Objects-Forms
+- Not all commands apply to all object types (e.g., `OBJECT SET ENTERABLE` does not apply to buttons)
 
-### 4D Code Patterns
-- Command token syntax: `CommandName:CNNN`
-- Constant syntax: `ConstantName:KNN:NN`
-- `Case of ... : (condition) ... End case`
-- `FORM Event` object (code, description, objectName)
-- Mandatory token verification by grepping project sources before using any `:C` suffix
+### 4D Code
+- Write command and constant names **without** token suffixes — the IDE adds `:CNNN` and `:KNN:NN` automatically
+- `Case of ... : (condition) ... End case` for branching
+- `FORM Event` returns an object with `.code`, `.description`, `.objectName`
+- `Form` returns the form data object (class instance if `formClass` is set)
 
 ### CLI Testing
-- Screenshot: `4D --startup-method=project_form_to_image --dataless --headless --project=<path> --user-param=<Form>:<Page>:<output.png>`
-- Print (CSS-aware): `4D --startup-method=print_form_to_file --dataless --headless --project=<path> --user-param=<Form>:<Page>:<output.pdf>`
+- `FORM SCREENSHOT` is not supported by tool4d — must use 4D via CLI
+- Reference: https://developer.4d.com/docs/Admin/cli
+- Helper methods (e.g., `project_form_to_image`) can be added to a project and run via `4D --startup-method=<method> --dataless --headless --project=<path> --user-param=<params>`
 
 ## Showcase Forms Created
 
