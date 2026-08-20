@@ -155,6 +155,32 @@ These two events are special **gate events**:
 
 All other events (e.g., `onClick`) can be enabled independently at the object level — they do not require the form to also subscribe.
 
+### The `FORM Event` Command
+
+Use `FORM Event` (C1606) to get information about the current event. It returns an **object** with:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `code` | integer | Numeric event ID (e.g., 4 = On Clicked) |
+| `description` | text | Human-readable name (e.g., "On Clicked") |
+| `objectName` | text | Name of the object that triggered the event. Absent when the event is triggered by the form itself. |
+
+Additional context-specific properties may be included depending on the object type (e.g., `columnName` for list box header clicks).
+
+Reference: https://developer.4d.com/docs/commands/form-event
+
+**Note**: The older `Form event code` (C388) only returns the integer code. Always prefer `FORM Event` which is more informative.
+
+```4d
+var $event:=FORM Event
+
+Case of 
+  : ($event.code=On Clicked)
+    // $event.objectName contains the button name
+    // $event.description is "On Clicked"
+End case 
+```
+
 ### Event Execution Order
 
 When an event fires on an object:
@@ -183,6 +209,10 @@ Every form object has a `type` property and positioning via `top` and `left` (re
 | `sizingX` | enum | `"move"`, `"grow"`, `"fixed"` — horizontal resizing behavior |
 | `sizingY` | enum | `"move"`, `"grow"`, `"fixed"` — vertical resizing behavior |
 | `class` | string | CSS class name(s) for stylesheet selectors |
+
+### Sizing on Non-Visible Pages
+
+Regular objects on page 2+ receive resize events even when not visible, so they are in the correct position when the page is shown. **Subform containers (widgets)** on page 2+ are an exception — they are not instantiated until the page is shown, so they miss resize events and may appear misaligned after a window resize.
 
 ### Available Object Types
 
@@ -269,6 +299,78 @@ Reference: https://developer.4d.com/docs/FormObjects/propertiesObject#dynamic-va
 Use `OBJECT Get pointer` to dereference the dynamic variable data source of a form object.
 
 Reference: https://developer.4d.com/docs/commands/object-get-pointer
+
+## Form Class
+
+Since 4D 20 R8, you can associate a user class with a form. This enables:
+- **Auto-instantiation** of the class when the form loads
+- **Auto-completion** — `Form.` suggests class properties/functions in the code editor
+- **Syntax checking** — errors caught in real-time in both code editor and property list expressions
+- **Compilation** — the compiler validates form expressions against the class
+
+Reference: https://developer.4d.com/docs/FormEditor/propertiesForm#form-class
+Blog: https://blog.4d.com/empower-your-development-process-with-your-forms/
+
+### Defining a Form Class
+
+Create a user class in `Sources/Classes/<ClassName>.4dm`:
+
+```4d
+property count : Integer
+
+Class constructor
+  This.count:=0
+
+Function onClicked() : cs.MyFormController
+  This.count+=1
+  return This
+```
+
+Reference: https://developer.4d.com/docs/Concepts/classes
+
+### Approach 1: By `formClass` Property
+
+Set `"formClass": "MyFormController"` in the form JSON. 4D automatically creates an instance when the form loads. The `Form` command returns the class instance.
+
+```json
+{
+  "formClass": "MyFormController",
+  "events": ["onLoad", "onClick"]
+}
+```
+
+The object method can then call class functions:
+
+```4d
+Form.onClicked()
+```
+
+### Approach 2: By Code
+
+Explicitly instantiate the class and pass it to `DIALOG`:
+
+```4d
+var $form : cs.MyFormController
+$form:=cs.MyFormController.new()
+var $window : Integer
+$window:=Open form window("MyFirstProjectForm")
+DIALOG("MyFirstProjectForm"; $form)
+// After dialog closes, $form still holds accumulated state
+ALERT("You clicked "+String($form.count)+" times!")
+```
+
+Reference: https://developer.4d.com/docs/commands/dialog
+
+### Precedence Rules
+
+- **Object passed to `DIALOG`** takes precedence over the `formClass` property
+- **`formClass` only** (no object passed) → 4D auto-instantiates the class
+- **Neither** → `Form` returns a generic empty object
+
+### Lifecycle
+
+- With `formClass`: the instance is scoped to the form's lifetime. It is created on load and destroyed on unload.
+- With `DIALOG($form)`: **you** control the lifecycle. The instance exists before and after `DIALOG`, so you can read its state after the form closes. It is cleared when the last reference to it goes out of scope.
 
 ## Version Encoding
 

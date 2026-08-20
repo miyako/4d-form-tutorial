@@ -73,7 +73,40 @@ Font properties also combine naturally with icons — large `fontSize` scales te
 | `borderStyle` | `"system"`, `"none"`, `"solid"`, `"dotted"`, `"raised"`, `"sunken"`, `"double"` | Border line style |
 | `visibility` | `"visible"`, `"hidden"` | `"hidden"` shows a dashed outline in the editor but is invisible at runtime |
 | `display` | boolean | `false` = not rendered at all, but still active |
-| `focusable` | boolean | Whether the button can receive keyboard focus. A focusable object is always tabbable. |
+| `focusable` | boolean | Whether the button can receive keyboard focus (see below) |
+| `tooltip` | string | Hover text displayed when the mouse rests over the button |
+
+#### Tooltip Configuration
+
+Tooltip display behavior is controlled globally at runtime via `SET DATABASE PARAMETER`:
+
+| Selector | ID | Description |
+|----------|-----|-------------|
+| Tips enabled | 101 | Enable/disable tooltips |
+| Tips delay | 102 | Delay before tooltip appears (ticks) |
+| Tips duration | 103 | How long tooltip stays visible (ticks) |
+
+Reference: https://developer.4d.com/docs/commands/set-database-parameter
+
+#### `focusable` Behavior
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesEntry#focusable
+
+When **focusable is true** (default):
+- Clicking the button **claims focus** from the current focus object (e.g., a text input)
+- The previously focused object's edited text is **validated** (its data source is updated)
+- The button in focus can be triggered by pressing the **space bar**
+- Use `Focus object` to get the currently focused object name
+
+When **focusable is false**:
+- Clicking the button does **not** claim focus
+- The current focus object (e.g., a text input being edited) **remains in edit mode**
+- Useful for toolbar-style buttons that should not interrupt text entry
+
+Related commands:
+- https://developer.4d.com/docs/commands/focus-object
+- https://developer.4d.com/docs/commands/get-edited-text
+- https://developer.4d.com/docs/commands/object-get-data-source
 
 #### `defaultButton` Behavior
 
@@ -162,6 +195,38 @@ Only applicable when `style` is `"custom"`:
 | `right` | integer | Right position |
 | `sizingX` | enum | `"move"`, `"grow"`, `"fixed"` — horizontal behavior on form resize |
 | `sizingY` | enum | `"move"`, `"grow"`, `"fixed"` — vertical behavior on form resize |
+
+### Sizing Behavior on Non-Visible Pages
+
+- **Regular objects** (buttons, inputs, etc.) on page 2+ still receive window resize events and grow/move accordingly, even when the page is not visible. When the user switches to that page, objects are already in the correct position.
+- **Subform containers (widgets)** on page 2+ are **not instantiated** until the page is shown, so they do **not** receive resize events while hidden. This can cause widgets to appear out of sync with regular objects after a window resize.
+- In **nested subforms**: regular objects on page 2+ of a subform still receive resize events when the parent container is resized.
+
+## Keyboard Shortcut
+
+A button can have a keyboard shortcut that triggers its click event.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `shortcutKey` | string | The key character (e.g., `"c"`, `"f"`) |
+| `shortcutAccel` | boolean | ⌘ Command on Mac / Ctrl on Windows (the platform accelerator) |
+| `shortcutShift` | boolean | Shift modifier |
+| `shortcutAlt` | boolean | ⌥ Option on Mac / Alt on Windows |
+| `shortcutControl` | boolean | ⌃ Control (Mac-specific) |
+
+Example — ⌘C triggers the button:
+
+```json
+{
+  "shortcutKey": "c",
+  "shortcutAccel": true,
+  "shortcutShift": false,
+  "shortcutAlt": false,
+  "shortcutControl": false
+}
+```
+
+**Important**: A button shortcut **overrides the keyboard shortcut** for system commands (e.g., ⌘C overrides Copy via keyboard) but does **not** override the Edit menu item. Be cautious about assigning shortcuts that conflict with standard system shortcuts.
 
 ## Events
 
@@ -337,3 +402,38 @@ button {
 ```
 
 CSS property names match the JSON property names. Specificity follows the standard cascade: type < class < name/ID < JSON < `!important`.
+
+## Runtime Commands
+
+Button properties can be modified at runtime via `OBJECT SET *` commands.
+
+### Applicable to Buttons
+
+| Command | Description |
+|---------|-------------|
+| `OBJECT SET ENABLED` | Enable/disable the button |
+| `OBJECT SET FONT` | Change the font |
+| `OBJECT SET TITLE` | Change the button label |
+| `OBJECT SET FORMAT` | Change the button label **and/or icon** |
+| `OBJECT SET ACTION` | Change the standard action |
+| `OBJECT SET VISIBLE` | Show/hide the button |
+
+References:
+- https://developer.4d.com/docs/commands/object-set-enabled
+- https://developer.4d.com/docs/commands/object-set-title
+- https://developer.4d.com/docs/commands/object-set-format
+- https://developer.4d.com/docs/commands/object-set-font
+- https://developer.4d.com/docs/commands/object-set-action
+
+### Not Applicable to Buttons
+
+| Command | Reason |
+|---------|--------|
+| `OBJECT SET ENTERABLE` | Buttons are not enterable |
+| `OBJECT SET CORNER RADIUS` | Not supported for buttons |
+| `OBJECT SET FILTER` | Buttons have no input filter |
+
+References:
+- https://developer.4d.com/docs/commands/object-set-enterable
+- https://developer.4d.com/docs/commands/object-set-corner-radius
+- https://developer.4d.com/docs/commands/object-set-filter
