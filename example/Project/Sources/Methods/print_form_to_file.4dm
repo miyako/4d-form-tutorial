@@ -36,18 +36,11 @@ If ($formPage>$pages)
 	$formPage:=$pages
 End if 
 
-var $screenshot : Picture
-Case of 
-	: (False:C215)
-		FORM LOAD:C1103($formName)
-		FORM GOTO PAGE:C247($formPage)
-		FORM SCREENSHOT:C940($screenshot)
-		FORM UNLOAD:C1299
-	: (True:C214)
-		FORM SCREENSHOT:C940($formName; $screenshot; $formPage)
-End case 
+SET PRINT OPTION:C733(Destination option:K47:7; 3; $file.platformPath)
 
-WRITE PICTURE FILE:C680($file.platformPath; $screenshot)
+FORM LOAD:C1103($formName)
+$height:=Print form:C5($formName; Form detail:K43:1)
+FORM UNLOAD:C1299
 
 If (Application info:C1599.headless)
 	LOG EVENT:C667(Into system standard outputs:K38:9; $file.path; Information message:K38:1)
