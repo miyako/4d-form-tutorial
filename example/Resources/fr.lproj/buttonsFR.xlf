@@ -6,6 +6,10 @@
         <source>Click</source>
         <target>Cliquer</target>
       </trans-unit>
+      <trans-unit id="ShowcaseTitle" resname="ShowcaseTitle">
+        <source>Button Style Showcase</source>
+        <target>Vitrine des styles de boutons</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

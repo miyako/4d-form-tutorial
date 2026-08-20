@@ -6,6 +6,10 @@
         <source>Click</source>
         <target>クリック</target>
       </trans-unit>
+      <trans-unit id="ShowcaseTitle" resname="ShowcaseTitle">
+        <source>Button Style Showcase</source>
+        <target>ボタンスタイル一覧</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
