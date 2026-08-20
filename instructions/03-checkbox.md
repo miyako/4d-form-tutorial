@@ -36,7 +36,7 @@ Checkboxes are closely related to buttons. They share most of the same visual pr
 | State persistence | Momentary (resets after click) | Persistent (stays checked/unchecked) |
 | Three-states | No | Yes (regular and flat styles only, integer variables only) |
 | Standard actions | Generic actions (accept, cancel, etc.) | Checkable actions (fontBold, fontItalic, etc.) |
-| Available styles | All 11 styles | 9 styles (no `help` or `custom`) |
+| Available styles | All 11 styles | 12 styles (no `help`; adds `disclosure`, `collapseExpand`) |
 
 ## Data Source
 
@@ -108,7 +108,7 @@ The three-states property can be toggled at runtime:
 
 ## Checkbox Styles
 
-Checkboxes support the same styles as buttons, except `help` and `custom`:
+Checkboxes support 12 styles (all button styles except `help`, plus `disclosure` and `collapseExpand`):
 
 | Style | Description |
 |-------|-------------|
@@ -121,6 +121,9 @@ Checkboxes support the same styles as buttons, except `help` and `custom`:
 | `texturedBevel` | Gray textured background. |
 | `office` | Light blue background with thin border. |
 | `circular` | Circular outline with text below. |
+| `disclosure` | Disclosure triangle style. |
+| `collapseExpand` | Collapse/expand toggle style. |
+| `custom` | Fully customizable using background picture (`customBackgroundPicture`, `customBorderX/Y`, `customOffset`). |
 
 ### Checkbox-Specific Style Notes
 
