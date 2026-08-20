@@ -200,8 +200,30 @@ Key commands:
 - `Create menu` — creates an empty menu
 - `APPEND MENU ITEM` — adds an item
 - `SET MENU ITEM PARAMETER` — assigns a string identifier to the last added item (`-1` = last item)
-- `Dynamic pop up menu` — displays the menu, returns the selected item's parameter (empty string if dismissed)
+- `Dynamic pop up menu` — **(preferred)** displays the menu, returns the selected item's parameter (empty string if dismissed)
 - `RELEASE MENU` — frees the menu resource
+
+Reference: https://developer.4d.com/docs/commands/dynamic-pop-up-menu
+
+#### Legacy `Pop up menu` Command
+
+The older `Pop up menu` command takes a semicolon-delimited string and returns an integer index:
+
+```4d
+var $item : Integer
+$item:=Pop up menu("Item 1;Item 2;Item 3")
+// $item = 0 (dismissed), 1, 2, or 3
+```
+
+Reference: https://developer.4d.com/docs/commands/pop-up-menu
+
+Prefer `Dynamic pop up menu` for new code — it's more flexible and identifies items by parameter strings rather than fragile index positions.
+
+#### `On Long Click` as Popup Trigger
+
+`On Long Click` can also be used to display a popup menu, triggered when the user presses and holds the button. This works with **separated** popup buttons (where the main area handles regular clicks) or with any button style.
+
+Reference: https://developer.4d.com/docs/Events/onLongClick
 
 ### Special Style Notes
 

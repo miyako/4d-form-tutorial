@@ -12,7 +12,19 @@ Case of
 		
 	: ($event.code=On Long Click:K2:37)
 		
-		ALERT:C41($event.description)
+		var $item : Integer
+		$item:=Pop up menu:C542("item 1;item 2;item 3")
+		
+		Case of 
+			: ($item=0)
+				//no item selected
+			: ($item=1)
+				ALERT:C41("item 1")
+			: ($item=2)
+				ALERT:C41("item 2")
+			: ($item=3)
+				ALERT:C41("item 3")
+		End case 
 		
 	: ($event.code=On Alternative Click:K2:36)
 		
