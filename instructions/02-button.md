@@ -156,6 +156,53 @@ Best demonstrated on wide buttons where the difference is clearly visible.
 
 Works with `toolbar`, `bevel`, `roundedBevel`, `gradientBevel`, `texturedBevel`, `office` styles. Combines with icons — the icon, text, and popup triangle all coexist.
 
+**Important**: The `popupPlacement` property only defines the visual representation. No popup menu is displayed by default — you must implement it in the object method.
+
+#### Popup Event Behavior
+
+| Mode | Main button area | Triangle zone |
+|------|-----------------|---------------|
+| `"linked"` | `On Alternative Click` (mouse **down**) | `On Alternative Click` (mouse **down**) |
+| `"separated"` | `On Clicked` / `On Double Clicked` / `On Long Click` (mouse **up**) | `On Alternative Click` (mouse **down**) |
+
+- With **`"linked"`**: `On Clicked`, `On Double Clicked`, and `On Long Click` are **never fired** because every click triggers `On Alternative Click` on mouse down.
+- With **`"separated"`**: both regular click events and popup events work independently.
+
+#### Popup Menu Implementation Pattern
+
+```4d
+Case of 
+  : (FORM Event.code=On Alternative Click)
+
+    var $menu : Text
+    $menu:=Create menu
+    APPEND MENU ITEM($menu; "Item 1")
+    SET MENU ITEM PARAMETER($menu; -1; "one")
+    APPEND MENU ITEM($menu; "Item 2")
+    SET MENU ITEM PARAMETER($menu; -1; "two")
+    var $parameter : Text
+    $parameter:=Dynamic pop up menu($menu)
+    RELEASE MENU($menu)
+
+    Case of 
+      : ($parameter="")
+        // no item selected (dismissed)
+      : ($parameter="one")
+        // handle item 1
+      : ($parameter="two")
+        // handle item 2
+    End case
+
+End case
+```
+
+Key commands:
+- `Create menu` — creates an empty menu
+- `APPEND MENU ITEM` — adds an item
+- `SET MENU ITEM PARAMETER` — assigns a string identifier to the last added item (`-1` = last item)
+- `Dynamic pop up menu` — displays the menu, returns the selected item's parameter (empty string if dismissed)
+- `RELEASE MENU` — frees the menu resource
+
 ### Special Style Notes
 
 #### `help` Style
