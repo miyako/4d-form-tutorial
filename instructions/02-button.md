@@ -60,19 +60,31 @@ Set via the `style` property. Each style has a distinct visual appearance.
 | `textDecoration` | `"none"`, `"underline"` | Text decoration |
 | `fontSize` | integer | Font size in points |
 | `fontFamily` | string | Font family name (e.g., `"Courier New"`, `"Georgia"`) |
-| `stroke` | CSS color | **Text color** (also affects border on flat-style buttons) |
+| `stroke` | CSS color | **Text color**. Also affects border color on `flat`-style buttons. Works on all styles. |
 
 All font properties can be combined (bold + italic + underline + custom size + custom font).
+Font properties also combine naturally with icons — large `fontSize` scales text but not the icon.
 
 ### Appearance
 
 | Property | Values | Description |
 |----------|--------|-------------|
-| `defaultButton` | boolean | Highlights as the recommended action. Regular style turns blue; flat style gets thick border. Only for `regular` and `flat`. |
+| `defaultButton` | boolean | Highlights as the recommended action. Only for `regular` and `flat`. |
 | `borderStyle` | `"system"`, `"none"`, `"solid"`, `"dotted"`, `"raised"`, `"sunken"`, `"double"` | Border line style |
 | `visibility` | `"visible"`, `"hidden"` | `"hidden"` shows a dashed outline in the editor but is invisible at runtime |
 | `display` | boolean | `false` = not rendered at all, but still active |
 | `focusable` | boolean | Whether the button can receive keyboard focus. A focusable object is always tabbable. |
+
+#### `defaultButton` Behavior
+
+- **`regular` + `defaultButton`**: blue background with white text (macOS accent). If an icon is present, it renders inside the blue button.
+- **`flat` + `defaultButton`**: thick black border. If `stroke` is set, the stroke color is used for both text AND the thick border.
+
+#### `borderStyle` Behavior by Style
+
+- **`flat`**: respects all border styles clearly — `solid`, `raised`, `sunken`, `dotted`, `double` are all visually distinct.
+- **`bevel`**: responds to border overrides. `"none"` removes the border entirely.
+- **`regular`**: largely ignores border overrides (native capsule shape dominates). `"none"` shows dashed outline (like hidden).
 
 ### Icon and Popup
 
@@ -81,8 +93,51 @@ All font properties can be combined (bold + italic + underline + custom size + c
 | `icon` | path | Path to icon image (e.g., `"/SOURCES/Forms/MyForm/icon.png"`) |
 | `textPlacement` | `"left"`, `"right"`, `"top"`, `"bottom"`, `"center"` | Position of text **relative to the icon** |
 | `iconFrames` | integer (min 1) | Number of frames in the icon image |
-| `imageHugsTitle` | boolean | Keep icon close to the text rather than at a fixed position |
-| `popupPlacement` | `"none"`, `"linked"`, `"separated"` | Popup menu indicator. `"linked"` = triangle in corner, whole button triggers popup. `"separated"` = separate clickable triangle area with divider. |
+| `imageHugsTitle` | boolean | Whether icon stays close to the text (see below) |
+| `popupPlacement` | `"none"`, `"linked"`, `"separated"` | Popup menu indicator (see below) |
+
+#### `textPlacement` Details
+
+- `"right"`: icon on the left, text on the right
+- `"left"`: text on the left, icon on the right
+- `"top"`: text above, icon below (vertical stacking)
+- `"bottom"`: icon above, text below (vertical stacking)
+- `"center"`: icon and text overlap in the center
+
+Icons work with all button styles. The `regular` style renders the icon inside its native capsule shape.
+
+#### `imageHugsTitle` Details
+
+Controls how icon and text are positioned within the button area:
+
+- **`false` (default)**: icon is anchored to the edge of the button. Text is centered independently. On wide buttons, icon and text appear far apart.
+- **`true`**: icon and text move together as a unit, staying close to each other regardless of button width.
+
+Best demonstrated on wide buttons where the difference is clearly visible.
+
+#### `popupPlacement` Details
+
+- **`"none"` (default)**: no popup menu.
+- **`"linked"`**: small triangle indicator in the bottom-right corner. The entire button triggers the popup.
+- **`"separated"`**: vertical divider line creating a separate clickable triangle zone on the right. The main button area and the popup trigger are independent click targets.
+
+Works with `toolbar`, `bevel`, `roundedBevel`, `gradientBevel`, `texturedBevel`, `office` styles. Combines with icons — the icon, text, and popup triangle all coexist.
+
+### Special Style Notes
+
+#### `help` Style
+
+- Always renders as a circular "?" button.
+- The `text` property is **completely ignored**.
+- Scales the circle to fit the smaller of `width`/`height`.
+- The question mark appearance is fixed and cannot be customized.
+
+#### `circular` Style
+
+- Renders a circular outline with text displayed **below** the circle.
+- If an `icon` is provided, it replaces the circle content.
+- `stroke` colors the text below but not the circle outline.
+- `fontWeight` and other font properties apply to the text below the circle.
 
 ### Custom Style Properties
 
