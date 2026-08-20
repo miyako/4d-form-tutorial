@@ -90,7 +90,7 @@
 					"width": 100,
 					"height": 30,
 					"style": "regular",
-					"defaultButton": true,
+					"defaultButton": false,
 					"action": "accept",
 					"events": [
 						"onClick"

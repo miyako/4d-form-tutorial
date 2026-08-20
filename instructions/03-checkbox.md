@@ -222,6 +222,39 @@ A `fontBold` checkbox bound to a multi-style text input or 4D Write Pro area:
 
 Reference: https://blog.4d.com/discover-and-use-standard-actions/
 
+## Keyboard Interaction
+
+When a checkbox has focus (requires `focusable: true`, the default):
+
+| Key | Action |
+|-----|--------|
+| **Space** | Toggles the checkbox (same as clicking) |
+| **Tab** / **Return** | Moves focus to the next object in entry order |
+| **Shift+Tab** / **Shift+Return** | Moves focus to the previous object in entry order |
+
+**Exception**: If the form has a **default button** (`defaultButton: true`), the Return key triggers that button instead of advancing to the next object.
+
+Entry order can be set in the form editor or at runtime:
+- https://developer.4d.com/docs/FormEditor/overview#data-entry-order
+- https://developer.4d.com/docs/commands/form-set-entry-order
+- https://developer.4d.com/docs/commands/form-get-entry-order
+
+## Keyboard Shortcuts
+
+Checkboxes support the same shortcut properties as buttons:
+
+```json
+{
+  "shortcutKey": "b",
+  "shortcutAccel": true,
+  "shortcutShift": false,
+  "shortcutAlt": false,
+  "shortcutControl": false
+}
+```
+
+This is especially useful with standard actions -- for example, ⌘B (Cmd+B) to toggle bold via a `fontBold` checkbox. The shortcut toggles the checkbox without stealing focus from the text area.
+
 ## Events
 
 Checkboxes support the same click events as buttons:
