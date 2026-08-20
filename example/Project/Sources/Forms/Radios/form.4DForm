@@ -32,7 +32,21 @@
 	"destination": "detailScreen",
 	"pages": [
 		{
-			"objects": {}
+			"objects": {
+				"Tab Control": {
+					"type": "tab",
+					"text": "Tab control",
+					"top": 9,
+					"left": 265,
+					"width": 148,
+					"height": 73,
+					"labels": [
+						"1",
+						"2"
+					],
+					"action": "gotoPage"
+				}
+			}
 		},
 		{
 			"objects": {
@@ -49,19 +63,6 @@
 					"dataSource": "Form:C1466.rb1",
 					"radioGroup": "group1"
 				},
-				"rb2": {
-					"type": "radio",
-					"text": "Radio",
-					"top": 40,
-					"left": 20,
-					"width": 167,
-					"height": 13,
-					"events": [
-						"onClick"
-					],
-					"dataSource": "Form:C1466.rb2",
-					"radioGroup": "group1"
-				},
 				"rb3": {
 					"type": "radio",
 					"text": "Radio",
@@ -76,9 +77,26 @@
 					"radioGroup": "group1"
 				}
 			}
+		},
+		{
+			"objects": {
+				"rb2": {
+					"type": "radio",
+					"text": "Radio",
+					"top": 40,
+					"left": 20,
+					"width": 167,
+					"height": 13,
+					"events": [
+						"onClick"
+					],
+					"dataSource": "Form:C1466.rb2",
+					"radioGroup": "group1"
+				}
+			}
 		}
 	],
-	"geometryStamp": 18,
+	"geometryStamp": 23,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

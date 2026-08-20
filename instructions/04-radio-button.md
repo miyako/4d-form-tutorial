@@ -83,6 +83,10 @@ The `radioGroup` property only controls **user interaction** behavior. It does n
 
 When a form opens, all radio buttons initialize to 0 (unchecked). It is the **developer's responsibility** to set one radio button's data source to 1 if a pre-selected default is the expected behavior.
 
+### Same-Page Restriction
+
+Radio buttons in the same `radioGroup` can technically be placed on different pages, but **mutual exclusion only applies to radio buttons on the same page**. Clicking a radio on page 1 will not deselect a radio on page 0, even if they share the same group name.
+
 ## Data Source
 
 A radio button can be associated with an **integer** or **boolean** variable or expression.
@@ -94,7 +98,7 @@ When a radio button in a group is selected, its variable becomes 1 (or True), an
 
 The value is NOT automatically saved -- radio button values must be stored in their variables and managed with methods (unless using `memorizeValue` with "Save Geometry").
 
-Like checkboxes, radio buttons **can** use `Form.property` expressions as their data source:
+Like checkboxes, radio buttons **can** use `Form.property` expressions as their data source (unlike buttons, which are limited to variables because their value toggles back to 0/False at the end of the form event cycle):
 
 ```json
 {
@@ -133,8 +137,8 @@ Radio buttons support 12 styles (all button styles except `help`, plus `disclosu
 
 - **`regular` and `flat`**: Display the traditional radio button appearance (a small filled/empty circle next to the label text). Like checkboxes, the bullseye retains its native system appearance regardless of text styling.
 - **Other styles** (toolbar, bevel, etc.): Render as **toggle buttons** -- visually identical to their button/checkbox counterparts. They stay pressed/highlighted when selected. Usually associated with a multi-state icon (`iconFrames: 4` or more).
-- **`disclosure`**: Renders as a right-pointing triangle/chevron (`>`). Text is not displayed. Typically used for show/hide toggles.
-- **`collapseExpand`**: Renders similar to a regular bullseye circle with text. Used for expand/collapse toggles.
+- **`disclosure`**: Renders as a right-pointing triangle/chevron (`>`). Text is not displayed. Typically used for show/hide toggles. The chevron faces sideways (collapsed) or downwards (expanded). Note: disclosure only changes the icon -- it does not automatically push objects down to make space. The developer must implement object layout for disclosure behavior.
+- **`collapseExpand`**: Renders similar to a regular bullseye circle with text. Used for expand/collapse toggles. Same caveat as disclosure regarding layout management.
 - **`custom`**: Fully customizable appearance using a background picture. Supports additional properties:
   - `customBackgroundPicture` (string) -- path to background image
   - `customBorderX` / `customBorderY` (number) -- horizontal/vertical margin in pixels
