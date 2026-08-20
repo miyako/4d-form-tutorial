@@ -406,3 +406,29 @@ The `.4DProject` file's `compatibilityVersion` encodes the 4D version:
 ```
 
 Note: `FORM SCREENSHOT` does **not** apply CSS stylesheets. Use print form output to verify CSS styling.
+
+## Application Settings
+
+Application settings are stored in `Project/Sources/settings.4DSettings` (XML format).
+
+Reference: https://developer.4d.com/docs/settings/overview
+
+**Important**: Default values are NOT explicitly stored in the file. Only non-default settings appear. For example, Enter to accept and Escape to cancel are defaults that work without any explicit configuration.
+
+### Keyboard Shortcuts (Accept / Cancel)
+
+The settings file can define application-wide keyboard shortcuts for form interaction:
+
+```xml
+<shortcuts>
+  <accept_input_form alt="false" command="false" ctrl="false" key_code="19459" shift="false"/>
+  <cancel_input_form alt="false" command="false" ctrl="false" key_code="13595" shift="false"/>
+  <add_subform alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
+</shortcuts>
+```
+
+- **`accept_input_form`** (default: Enter) -- validates and accepts the current form
+- **`cancel_input_form`** (default: Escape) -- cancels and dismisses the current form
+- **`add_subform`** (default: none) -- adds a subrecord in a subform
+
+These interact with form objects: when a focusable object (checkbox, input, etc.) has focus, pressing Return either advances to the next object in entry order, or triggers the **default button** if one exists. The default button is typically associated with the accept action.
