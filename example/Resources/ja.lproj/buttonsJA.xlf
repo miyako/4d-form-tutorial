@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file datatype="plaintext" original="Project/Sources/Forms/MyFirstProjectForm/form.4DForm" source-language="en" target-language="ja">
+    <body>
+      <trans-unit id="ButtonClick" resname="ButtonClick">
+        <source>Click</source>
+        <target>クリック</target>
+      </trans-unit>
+      <trans-unit id="ShowcaseTitle" resname="ShowcaseTitle">
+        <source>Button Style Showcase</source>
+        <target>ボタンスタイル一覧</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
