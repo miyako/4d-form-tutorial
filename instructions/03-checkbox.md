@@ -102,6 +102,10 @@ Requirements:
 
 In entry mode, the three states cycle sequentially: unchecked (0) -> checked (1) -> intermediate (2) -> unchecked (0). The intermediate state is generally not useful in entry mode -- in code, force the value to 0 when it reaches 2 to skip directly from checked to unchecked.
 
+The three-states property can be toggled at runtime:
+- https://developer.4d.com/docs/commands/object-get-three-states-checkbox
+- https://developer.4d.com/docs/commands/object-set-three-states-checkbox
+
 ## Checkbox Styles
 
 Checkboxes support the same styles as buttons, except `help` and `custom`:
@@ -189,6 +193,34 @@ Reference: https://developer.4d.com/docs/FormObjects/propertiesAction#standard-a
 | `visibleReferences` | |
 
 When associated with a text area, the checkbox automatically reflects and toggles the attribute state -- no code is needed.
+
+### Practical Example: fontBold with a Text Area
+
+A `fontBold` checkbox bound to a multi-style text input or 4D Write Pro area:
+- Shows **checked** (1) when the selected text is all bold
+- Shows **unchecked** (0) when the selected text is all plain
+- Shows **intermediate** (2) when the selection contains mixed bold and plain text
+- Clicking the checkbox toggles bold on/off for the entire selection
+
+**Critical**: The checkbox must be **non-focusable** (`"focusable": false`) so that clicking it does not steal focus from the text input. If focus moves away, the standard action cannot determine which text selection to act on.
+
+```json
+{
+  "BoldCheck": {
+    "type": "checkbox",
+    "text": "Bold",
+    "action": "fontBold",
+    "focusable": false,
+    "threeState": true,
+    "top": 20,
+    "left": 20,
+    "width": 100,
+    "height": 20
+  }
+}
+```
+
+Reference: https://blog.4d.com/discover-and-use-standard-actions/
 
 ## Events
 

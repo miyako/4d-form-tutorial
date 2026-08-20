@@ -64,7 +64,7 @@
 				},
 				"cb3": {
 					"type": "checkbox",
-					"text": "Checkbox",
+					"text": "Bold",
 					"top": 63,
 					"left": 14,
 					"width": 116,
@@ -73,13 +73,20 @@
 						"onClick"
 					],
 					"dataSource": "Form:C1466.cb3",
-					"threeState": true
+					"threeState": true,
+					"action": "fontBold",
+					"focusable": false,
+					"shortcutAccel": true,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"shortcutKey": "b"
 				},
 				"OK": {
 					"type": "button",
 					"text": "OK",
-					"top": 100,
-					"left": 120,
+					"top": 231,
+					"left": 292,
 					"width": 100,
 					"height": 30,
 					"style": "regular",
@@ -88,10 +95,42 @@
 					"events": [
 						"onClick"
 					]
+				},
+				"Input": {
+					"type": "input",
+					"left": 166,
+					"top": 44,
+					"width": 200,
+					"height": 17,
+					"styledText": true
+				},
+				"WriteProArea": {
+					"type": "write",
+					"left": 166,
+					"top": 81,
+					"width": 200,
+					"height": 49,
+					"events": [
+						"onDataChange",
+						"onSelectionChange",
+						"onAfterEdit"
+					],
+					"layoutMode": "embedded",
+					"showHeaders": false,
+					"showFooters": false,
+					"showHorizontalRuler": false,
+					"showVerticalRuler": false
 				}
 			}
 		}
 	],
-	"geometryStamp": 21,
-	"formClass": "MyFormController"
+	"geometryStamp": 29,
+	"formClass": "MyFormController",
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }
