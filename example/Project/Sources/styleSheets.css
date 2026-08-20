@@ -1,0 +1,21 @@
+button {
+	text: "Click Me";
+	style: flat;
+}
+
+#OK {
+	text: "OK";
+	style: flat;
+}
+
+@media (prefers-color-scheme: light) {
+	button {
+		stroke: #000080;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	button {
+		stroke: #7FFFD4;
+	}
+}
