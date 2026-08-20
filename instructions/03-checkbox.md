@@ -42,6 +42,23 @@ Checkboxes are closely related to buttons. They share most of the same visual pr
 
 A checkbox can be associated with an **integer** or **boolean** variable or expression.
 
+Unlike buttons (which can only use variables), checkboxes **can** use `Form.property` expressions as their data source:
+
+```json
+{
+  "dataSource": "Form.myCheck",
+  "threeState": true
+}
+```
+
+This allows pre-setting the checkbox state before displaying the form:
+
+```4d
+$form:=cs.MyController.new()
+$form.myCheck:=2  // intermediate state
+DIALOG("MyForm"; $form)
+```
+
 ### Integer data source
 - **0** = unchecked
 - **1** = checked
@@ -205,16 +222,16 @@ End case
 
 ## Positioning and Sizing
 
-Same as buttons:
-
 | Property | Type | Description |
 |----------|------|-------------|
 | `top` | integer | **Required**. Y position |
 | `left` | integer | **Required**. X position |
 | `width` | integer | Checkbox width |
-| `height` | integer | Checkbox height |
+| `height` | integer | Checkbox height — **also scales the checkbox square** on regular/flat styles |
 | `sizingX` | enum | `"move"`, `"grow"`, `"fixed"` |
 | `sizingY` | enum | `"move"`, `"grow"`, `"fixed"` |
+
+**Note**: Unlike buttons where height only affects the clickable area, for regular/flat checkboxes the `height` property controls the visual size of the checkbox square itself. Larger height = larger checkbox.
 
 ## CSS Styling
 
