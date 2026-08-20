@@ -13,6 +13,7 @@
 	"bottomMargin": 20,
 	"events": [
 		"onLoad",
+		"onClick",
 		"onUnload"
 	],
 	"windowTitle": "window title",
@@ -25,17 +26,63 @@
 			"objects": {
 				"Button": {
 					"type": "button",
-					"text": "Button",
 					"top": 20,
 					"left": 20,
 					"width": 146,
-					"height": 24,
+					"height": 46,
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": true,
+					"method": "ObjectMethods/Button.4dm",
+					"style": "flat",
+					"dataSource": "",
+					"shortcutAccel": true,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"shortcutKey": "c"
+				},
+				"OK": {
+					"type": "button",
+					"top": 108,
+					"left": 279,
+					"width": 146,
+					"height": 46,
+					"events": [
+						"onClick"
+					],
+					"focusable": true,
+					"style": "flat",
+					"dataSource": "",
+					"action": "accept"
+				},
+				"Input": {
+					"type": "input",
+					"left": 30,
+					"top": 103,
+					"width": 169,
+					"height": 17,
+					"enterable": false,
+					"dataSourceTypeHint": "integer",
+					"dataSource": "Form:C1466.count",
+					"textAlign": "center"
 				}
 			}
 		}
 	],
-	"geometryStamp": 1
+	"geometryStamp": 27,
+	"markerFooter": 85,
+	"markerBreak": 85,
+	"markerBody": 85,
+	"markerHeader": 0,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"method": "method.4dm",
+	"formClass": "MyFormController"
 }
