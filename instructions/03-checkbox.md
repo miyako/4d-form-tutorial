@@ -103,8 +103,8 @@ Checkboxes support the same styles as buttons, except `help` and `custom`:
 
 ### Checkbox-Specific Style Notes
 
-- **`regular` and `flat`**: These are the only styles that display the traditional checkbox appearance (square with checkmark). They are also the only styles that support three-states.
-- **Other styles** (toolbar, bevel, etc.): These render as toggle buttons -- visually they look like buttons that stay pressed when checked. They are usually associated with a multi-state icon (`iconFrames: 4` for unchecked/checked/rollover/disabled).
+- **`regular` and `flat`**: These are the only styles that display the traditional checkbox appearance (a small square with a checkmark next to the label text). They are also the only styles that support three-states. The checkbox square itself retains its native system appearance regardless of text styling (stroke, fontWeight, etc. only affect the label text).
+- **Other styles** (toolbar, bevel, roundedBevel, gradientBevel, texturedBevel, office, circular): These render as **toggle buttons** -- visually identical to their button counterparts, with no checkbox square visible. They stay pressed/highlighted when checked. They are usually associated with a multi-state icon (`iconFrames: 4` or more).
 
 ### Icon States for Non-Regular Styles
 
