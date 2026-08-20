@@ -1,0 +1,5 @@
+example/Data/*
+
+example/Project/DerivedData/formAttributes.json
+example/Project/DerivedData/methodAttributes.json
+example/userPreferences.*
