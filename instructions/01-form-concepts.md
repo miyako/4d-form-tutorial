@@ -247,6 +247,128 @@ Native controls (regular/flat styles) have system-defined size variants based on
 
 Reference: https://developer.4d.com/docs/commands/get-style-sheet-info
 
+## Icons and Pictures for Form Objects
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesTextAndPicture#number-of-states
+
+Buttons, checkboxes, and radio buttons can display icons. The `custom` style (referred to as "3D button" in legacy documentation) is specifically designed for fully customized appearance using icons and/or background pictures, with developer control over offset and margins.
+
+### Picture Locations
+
+Images can be stored in two locations:
+
+1. **Resources folder**: `"/RESOURCES/Images/myIcon.png"` -- shared across all forms in the project
+2. **Adjacent to the form**: `"myIcon.png"` -- resolved relative to the form folder (e.g., `Forms/MyForm/myIcon.png`). Useful when the image should travel with the form.
+3. **Variable**: `"var:myPictureVar"` -- loaded from a 4D picture variable at runtime
+
+### Path Syntax Differences
+
+The syntax differs between JSON properties and CSS:
+
+**In JSON (.4DForm)** -- plain path string:
+```json
+{
+  "icon": "/RESOURCES/Images/edit.png",
+  "customBackgroundPicture": "/RESOURCES/Images/bg.png"
+}
+```
+
+**In CSS** -- wrapped in `url()`:
+```css
+button {
+  icon: url("/RESOURCES/Images/edit.png");
+  customBackgroundPicture: url("/RESOURCES/Images/bg.png");
+}
+```
+
+Adjacent (relative) paths also work:
+```json
+{ "icon": "edit.png" }
+```
+```css
+button { icon: url("edit.png"); }
+```
+
+### Custom Style Properties
+
+The `custom` style supports additional properties for appearance control:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `icon` | string | Path to the icon image |
+| `iconFrames` | number | Number of states in the icon (1-6) |
+| `customBackgroundPicture` | string | Path to background image |
+| `customBorderX` | number | Horizontal margin in pixels |
+| `customBorderY` | number | Vertical margin in pixels |
+| `customOffset` | number | Click offset in pixels (3D click effect) |
+
+### Icon States (Multi-State Icons)
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesTextAndPicture#number-of-states
+
+Icons can have multiple states stacked vertically in a single image. It is the **designer's responsibility** to ensure the source image contains exactly the correct number of frames to match the object's `iconFrames` value. Mismatched frames will cause images to display incorrectly.
+
+**Supported image formats**: PNG, JPEG, SVG (preferred). TIFF, BMP, GIF are also supported.
+
+Reference: https://developer.4d.com/docs/Concepts/picture
+Reference: https://developer.4d.com/docs/commands/picture-codec-list
+
+### High-Resolution Images (Retina / HiDPI)
+
+Reference: https://developer.4d.com/docs/FormEditor/pictures#scale-factor
+
+For raster image formats (PNG, JPEG, etc.), supply high-resolution variants for Retina/HiDPI displays. 4D uses a naming convention with `@nx` suffix:
+
+| File | Scale |
+|------|-------|
+| `icon.png` | 1x (standard) |
+| `icon@2x.png` | 2x (Retina) |
+| `icon@3x.png` | 3x (high-density) |
+
+Place all variants in the same folder. 4D automatically selects the highest available resolution for the current display. SVG images scale natively and do not need `@nx` variants.
+
+### Dark Mode Images
+
+Reference: https://developer.4d.com/docs/FormEditor/pictures#dark-mode-pictures
+
+4D automatically loads dark mode variants when the form uses the dark color scheme. The convention:
+
+- Name the dark variant with a `_dark` suffix: `icon_dark.png`
+- Store it next to the standard (light) version: `icon.png`
+
+At runtime, 4D selects the light or dark image based on the form's current color scheme. This combines with the `@nx` convention: `icon_dark@2x.png` for high-resolution dark mode.
+
+### CSS-Based Icon Switching
+
+You can also use CSS media queries to switch icons based on platform or color scheme:
+
+```css
+@media (prefers-color-scheme: dark) {
+  #myButton {
+    icon: url("/RESOURCES/Images/icon_dark.png");
+  }
+}
+
+@media (form-theme: fluent-ui) {
+  #myButton {
+    icon: url("/RESOURCES/Images/icon_fluent.png");
+  }
+}
+```
+
+This gives explicit control over which icon is used per platform/theme, as an alternative to the automatic `_dark` naming convention.
+
+| Frames | States (buttons) | States (checkbox/radio) |
+|--------|-------------------|-------------------------|
+| 1 | Single image for all states | Single image for all states |
+| 2 | Normal, Clicked | Unchecked, Checked |
+| 3 | Normal, Clicked, Rollover | Unchecked, Checked, Rollover |
+| 4 | Normal, Clicked, Rollover, Disabled | Unchecked, Checked, Rollover, Disabled |
+| 5 | -- | Unchecked, Checked, True Rollover, False Rollover, Disabled |
+| 6 | -- | Unchecked, Checked, True Rollover, False Rollover, True Disabled, False Disabled |
+
+5 and 6-state icons are only available for checkboxes and radio buttons (since v20).
+
 ## CSS Stylesheets
 
 4D supports CSS for styling form objects. This uses CSS **syntax** but is not the web CSS specification.
