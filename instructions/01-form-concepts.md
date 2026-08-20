@@ -218,6 +218,35 @@ Regular objects on page 2+ receive resize events even when not visible, so they 
 
 `text`, `input`, `button`, `checkbox`, `radio`, `dropdown`, `combo`, `groupBox`, `tab`, `line`, `rectangle`, `oval`, `picture`, `write`, `view`, `webArea`, `subform`, `listbox`, `plugin`, `splitter`, `progress`, `ruler`, `spinner`, `stepper`, `list`, `buttonGrid`, `pictureButton`, `picturePopup`
 
+## Font Themes (Automatic Font)
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesText#font-theme
+
+Font themes (called "style sheets" in legacy documentation -- not to be confused with CSS) control the default font properties of form objects.
+
+When no `fontFamily`, `fontSize`, or `fontTheme` is explicitly set, the default theme is `"normal"` (internal name `__automatic__`).
+
+| Theme | Internal Name | Description |
+|-------|---------------|-------------|
+| `normal` | `__automatic__` | System default font. Adapts size to object height. |
+| `main` | `__system__` | System main font (typically larger). |
+| `additional` | `__systemMini__` | Smaller system font. |
+
+The `"normal"` theme has a special behavior: **the system automatically reduces the font size** when the object height is too small for the normal font size. This is decided by the OS and applies to native controls like buttons, checkboxes, and radio buttons.
+
+### Best Practice
+
+For native controls (buttons, checkboxes, radio buttons), use the default `"normal"` theme without setting explicit font properties. This produces a professional, platform-native desktop appearance where the OS determines the appropriate font size for the object height.
+
+### Height and Size Variants
+
+Native controls (regular/flat styles) have system-defined size variants based on `height`:
+- The height selects from discrete size variants (not smooth scaling)
+- Both the control shape (bullseye, checkbox square, button capsule) and the font size adapt together
+- Available variants are OS-dependent (may differ between macOS and Windows)
+
+Reference: https://developer.4d.com/docs/commands/get-style-sheet-info
+
 ## CSS Stylesheets
 
 4D supports CSS for styling form objects. This uses CSS **syntax** but is not the web CSS specification.
