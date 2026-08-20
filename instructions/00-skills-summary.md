@@ -2,74 +2,63 @@
 
 ## What I Can Do
 
-### Form Creation
+### Form JSON Structure
 - Create **project forms** from scratch with proper JSON structure (`$4d` metadata, pages, events, margins, window sizing)
 - Set up the correct file/directory structure: `Forms/<Name>/form.4DForm`, `ObjectMethods/`, `method.4dm`
-- Configure form-level properties: `windowTitle`, `destination`, `windowSizingX/Y`, margins, `geometryStamp`
+- Configure form-level properties: `windowTitle`, `destination`, `windowSizingX/Y`, margins
 - Subscribe forms to events: `onLoad`, `onUnload`, `onClick`, `onDoubleClick`
-- Associate a **form class** via the `formClass` property for auto-instantiation and IDE support
+- Associate a **form class** via the `formClass` property
 
-### Button Objects
+### Button Object JSON
 - Create buttons with all **11 styles**: regular, flat, toolbar, bevel, roundedBevel, gradientBevel, texturedBevel, office, help, circular, custom
-- Apply **visual properties**: stroke (text/border color), fontWeight, fontStyle, textDecoration, fontSize, fontFamily, textAlign, borderStyle
-- Set **defaultButton** (regular → blue background; flat → thick border)
-- Configure **keyboard shortcuts** with modifier combinations (shortcutAccel, shortcutShift, shortcutAlt, shortcutControl, shortcutKey)
-- Set **popup placement** (linked vs separated) for bevel-family styles
-- Configure **focusable** behavior (claim focus vs non-disruptive)
-- Add **tooltips** with runtime configuration (delay, duration)
-- Handle **sizing** (sizingX/sizingY: fixed, move, grow) with awareness of the widget resize caveat on non-visible pages
+- Apply **visual properties**: stroke, fontWeight, fontStyle, textDecoration, fontSize, fontFamily, textAlign, borderStyle
+- Set **defaultButton**, **keyboard shortcuts**, **popup placement**, **focusable**, **tooltip**
+- Configure **sizing** (sizingX/sizingY) with awareness of the widget resize caveat on non-visible pages
 - Set icon, textPlacement, imageHugsTitle for icon+text layouts
 
-### Events & Click Handling
-- Handle **single click** (`On Clicked`) — fires on mouse up
-- Handle **double click** (`On Double Clicked`) — replaces On Clicked for the 2nd rapid click
-- Use **Clickcount** to detect triple-click and beyond (keeps incrementing in rapid sequence)
-- Detect **modifier keys**: Shift, ⌘/Ctrl, ⌥/Alt, ⌃Control, Contextual click (cross-platform)
-- Implement proper **priority ordering** in `Case of` for modifier detection
+### Events (Concepts Only)
 - Understand **event execution order**: object method → form method → standard action
+- Understand `onLoad`/`onUnload` as gate events
+- Understand double-click behavior (replaces On Clicked for 2nd click) and `Clickcount`
+- Know the modifier key commands and their cross-platform mappings
 
-### Form Classes
-- Create **user classes** with properties and functions (`Class constructor`, `Function`)
-- Associate classes with forms via **`formClass` property** (approach 1: auto-instantiation)
-- Pass class instances to **`DIALOG`** command (approach 2: explicit lifecycle control)
-- Understand **precedence**: passed object > formClass property
-- Return `This` from functions for **method chaining**
-- Use `Form` command to access the class instance in methods
+### Form Classes (Concepts Only)
+- Understand two approaches: `formClass` property vs passing object to `DIALOG`
+- Understand precedence: passed object > formClass property
+- Understand lifecycle differences between the two approaches
 
-### Data Sources
-- Use **dynamic variables** for button data sources (not `Form.property` — button exception)
-- Use `Form.property` expressions for other form objects (input fields)
-- Dereference with `OBJECT Get pointer(Object named; objectName)->`
-- Understand button value lifecycle: 1 during click event, 0 after
-
-### CSS Styling
+### CSS Stylesheets
 - Write 4D CSS stylesheets (type, class, ID selectors)
-- Apply **light/dark mode** via `@media (prefers-color-scheme: light/dark)`
+- Apply light/dark mode via `@media (prefers-color-scheme: light/dark)`
 - Use `:xliff:` references in CSS property values
 - Understand specificity cascade: type < class < ID < JSON < !important
-- Theme media queries: `mac-classic`, `win-classic`, `fluent-ui`, `liquid-glass`
 
-### Localization (XLIFF)
+### XLIFF Localization
 - Create XLIFF 1.2 files with proper structure and naming (`{name}{LANG}.xlf`)
 - Set up `Resources/{lang}.lproj/` directory structure
 - Use `:xliff:` notation in form JSON and CSS
-- Use `Localized string` command in 4D code
-- Reference 4D built-in Common IDs (CommonOK, CommonCancel, etc.)
 
-### Runtime Commands
-- Full list: https://developer.4d.com/docs/commands/theme/Objects-Forms
-- Not all commands apply to all object types (e.g., `OBJECT SET ENTERABLE` does not apply to buttons)
+## What I Cannot Yet Do
 
-### 4D Code
-- Write command and constant names **without** token suffixes — the IDE adds `:CNNN` and `:KNN:NN` automatically
-- `Case of ... : (condition) ... End case` for branching
-- `FORM Event` returns an object with `.code`, `.description`, `.objectName`
-- `Form` returns the form data object (class instance if `formClass` is set)
+### 4D Language
+- I have **not learned the 4D language** systematically. The code I write mimics patterns I observed from the user's examples but I don't know the full syntax, type system, or command set.
+- I should **never invent command names or guess syntax** — always refer to documentation or existing project code.
+- Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
+
+### Other Form Object Types
+- I have only studied the **button** object in depth. The remaining 25 object types (input, checkbox, radio, dropdown, listbox, subform, etc.) have not been covered yet.
+
+### Runtime Behavior
+- I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
+- I cannot run 4D myself — I rely on the user to verify runtime behavior.
+
+### Form Editor
+- I can only create and edit the JSON directly. I have no experience with the visual form editor or its features.
 
 ### CLI Testing
 - `FORM SCREENSHOT` is not supported by tool4d — must use 4D via CLI
+- The helper methods used in this project (`project_form_to_image`, `print_form_to_file`) are project-specific, not built-in
 - Reference: https://developer.4d.com/docs/Admin/cli
-- Helper methods (e.g., `project_form_to_image`) can be added to a project and run via `4D --startup-method=<method> --dataless --headless --project=<path> --user-param=<params>`
 
 ## Showcase Forms Created
 
@@ -77,19 +66,17 @@
 All 11 button styles side by side, plus border style variations (solid, dotted, raised, sunken), popup placement demos (linked, separated), and font variations (bold, italic, underline). OK button uses `:xliff:CommonOK` and standard `accept` action.
 
 ### 2. EventShowcase
-Interactive form with a form class (`EventShowcaseController`) that logs all click events. Demonstrates:
-- Single/double/Shift/⌘/contextual click detection with proper `Case of` priority
+Interactive form with a form class (`EventShowcaseController`) that logs click events. Demonstrates:
+- Single/double/Shift/⌘/contextual click detection with `Case of` priority
 - `Clickcount` tracking
-- Form class functions for event handling (`onClicked`, `onDoubleClicked`, `onShiftClicked`, etc.)
-- Non-focusable "Clear Log" button (won't steal focus from other inputs)
-- Keyboard shortcut (⌘K) on a button
-- Tooltip on hover
-- Localized button text via XLIFF
+- Form class functions for event handling
+- Non-focusable "Clear Log" button
+- Keyboard shortcut (⌘K)
+- Tooltip and localized button text via XLIFF
 
 ### 3. FormClassShowcase
 Demonstrates the form class lifecycle:
 - `formClass` property for auto-instantiation
 - `test_formclass_showcase.4dm` method showing approach 2 (pass instance to DIALOG, read state after close)
-- Class with typed properties (`clickCount: Integer`, `message: Text`)
-- Method chaining via `return This`
+- Class with typed properties
 - Live data binding (`Form.clickCount`, `Form.message` as data sources)

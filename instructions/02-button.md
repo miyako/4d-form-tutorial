@@ -54,7 +54,7 @@ Set via the `style` property. Each style has a distinct visual appearance.
 | Property | Values | Description |
 |----------|--------|-------------|
 | `text` | string | Button label text |
-| `textAlign` | `"left"`, `"center"`, `"right"` | Text alignment within the button |
+| `textAlign` | `"left"`, `"center"`, `"right"` | Text alignment within the button (since v20). Also settable via `OBJECT SET HORIZONTAL ALIGNMENT`. |
 | `fontWeight` | `"normal"`, `"bold"` | Font weight |
 | `fontStyle` | `"normal"`, `"italic"` | Font style |
 | `textDecoration` | `"none"`, `"underline"` | Text decoration |
@@ -71,8 +71,8 @@ Font properties also combine naturally with icons — large `fontSize` scales te
 |----------|--------|-------------|
 | `defaultButton` | boolean | Highlights as the recommended action. Only for `regular` and `flat`. |
 | `borderStyle` | `"system"`, `"none"`, `"solid"`, `"dotted"`, `"raised"`, `"sunken"`, `"double"` | Border line style |
-| `visibility` | `"visible"`, `"hidden"` | `"hidden"` shows a dashed outline in the editor but is invisible at runtime |
-| `display` | boolean | `false` = not rendered at all, but still active |
+| `visibility` | `"visible"`, `"hidden"` | `"hidden"` = invisible **and inactive** (does not respond to clicks) |
+| `display` | boolean | `false` = **not rendered but still active** (responds to clicks). Only for `custom` style. |
 | `focusable` | boolean | Whether the button can receive keyboard focus (see below) |
 | `tooltip` | string | Hover text displayed when the mouse rests over the button |
 
@@ -156,6 +156,75 @@ Best demonstrated on wide buttons where the difference is clearly visible.
 
 Works with `toolbar`, `bevel`, `roundedBevel`, `gradientBevel`, `texturedBevel`, `office` styles. Combines with icons — the icon, text, and popup triangle all coexist.
 
+**Important**: The `popupPlacement` property only defines the visual representation. No popup menu is displayed by default — you must implement it in the object method.
+
+#### Popup Event Behavior
+
+| Mode | Main button area | Triangle zone |
+|------|-----------------|---------------|
+| `"linked"` | `On Alternative Click` (mouse **down**) | `On Alternative Click` (mouse **down**) |
+| `"separated"` | `On Clicked` / `On Double Clicked` / `On Long Click` (mouse **up**) | `On Alternative Click` (mouse **down**) |
+
+- With **`"linked"`**: `On Clicked`, `On Double Clicked`, and `On Long Click` are **never fired** because every click triggers `On Alternative Click` on mouse down.
+- With **`"separated"`**: both regular click events and popup events work independently.
+
+#### Popup Menu Implementation Pattern
+
+```4d
+Case of 
+  : (FORM Event.code=On Alternative Click)
+
+    var $menu : Text
+    $menu:=Create menu
+    APPEND MENU ITEM($menu; "Item 1")
+    SET MENU ITEM PARAMETER($menu; -1; "one")
+    APPEND MENU ITEM($menu; "Item 2")
+    SET MENU ITEM PARAMETER($menu; -1; "two")
+    var $parameter : Text
+    $parameter:=Dynamic pop up menu($menu)
+    RELEASE MENU($menu)
+
+    Case of 
+      : ($parameter="")
+        // no item selected (dismissed)
+      : ($parameter="one")
+        // handle item 1
+      : ($parameter="two")
+        // handle item 2
+    End case
+
+End case
+```
+
+Key commands:
+- `Create menu` — creates an empty menu
+- `APPEND MENU ITEM` — adds an item
+- `SET MENU ITEM PARAMETER` — assigns a string identifier to the last added item (`-1` = last item)
+- `Dynamic pop up menu` — **(preferred)** displays the menu, returns the selected item's parameter (empty string if dismissed)
+- `RELEASE MENU` — frees the menu resource
+
+Reference: https://developer.4d.com/docs/commands/dynamic-pop-up-menu
+
+#### Legacy `Pop up menu` Command
+
+The older `Pop up menu` command takes a semicolon-delimited string and returns an integer index:
+
+```4d
+var $item : Integer
+$item:=Pop up menu("Item 1;Item 2;Item 3")
+// $item = 0 (dismissed), 1, 2, or 3
+```
+
+Reference: https://developer.4d.com/docs/commands/pop-up-menu
+
+Prefer `Dynamic pop up menu` for new code — it's more flexible and identifies items by parameter strings rather than fragile index positions.
+
+#### `On Long Click` as Popup Trigger
+
+`On Long Click` can also be used to display a popup menu, triggered when the user presses and holds the button. This works with **separated** popup buttons (where the main area handles regular clicks) or with any button style.
+
+Reference: https://developer.4d.com/docs/Events/onLongClick
+
 ### Special Style Notes
 
 #### `help` Style
@@ -182,6 +251,21 @@ Only applicable when `style` is `"custom"`:
 | `customBorderX` | Horizontal internal margin (pixels) |
 | `customBorderY` | Vertical internal margin (pixels) |
 | `customOffset` | Icon offset (pixels) |
+
+A `custom` button with `"display": false` creates an **invisible but active clickable area**. This is useful for defining clickable regions over a graphic element or background image.
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesDisplay#not-rendered
+
+### Visibility vs Display (Active State)
+
+| State | Visible | Active (responds to clicks) |
+|-------|---------|----------------------------|
+| Normal (`visibility: "visible"`) | ✓ | ✓ |
+| Hidden (`visibility: "hidden"`) | ✗ | ✗ |
+| Not rendered (`display: false`, custom style) | ✗ | ✓ |
+
+- Use `OBJECT SET VISIBLE` to hide/show at runtime (also makes inactive).
+- Reference: https://developer.4d.com/docs/commands/object-set-visible
 
 ## Positioning and Sizing
 
