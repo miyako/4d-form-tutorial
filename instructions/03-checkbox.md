@@ -231,7 +231,7 @@ End case
 | `sizingX` | enum | `"move"`, `"grow"`, `"fixed"` |
 | `sizingY` | enum | `"move"`, `"grow"`, `"fixed"` |
 
-**Note**: Unlike buttons where height only affects the clickable area, for regular/flat checkboxes the `height` property controls the visual size of the checkbox square itself. Larger height = larger checkbox.
+**Note**: For regular/flat checkboxes, the `height` property selects from **system-defined size variants** for the checkbox square. The available sizes are determined by the OS and may differ between macOS and Windows, or between macOS editions.
 
 ## CSS Styling
 
