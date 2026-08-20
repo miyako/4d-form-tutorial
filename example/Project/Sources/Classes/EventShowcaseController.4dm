@@ -3,53 +3,53 @@ property clickCount : Integer
 
 Class constructor
 	
-	This:C1470.log:=""
-	This:C1470.clickCount:=0
+	This.log:=""
+	This.clickCount:=0
 
-Function appendLog($message : Text) : cs:C1710.EventShowcaseController
+Function appendLog($message : Text) : cs.EventShowcaseController
 	
-	This:C1470.log+=$message+"\r"
+	This.log+=$message+"\r"
 	
-	return This:C1470
+	return This
 
-Function onClicked() : cs:C1710.EventShowcaseController
+Function onClicked() : cs.EventShowcaseController
 	
-	This:C1470.clickCount+=1
-	This:C1470.appendLog("On Clicked ×"+String:C10(Clickcount:C1332)+" (total: "+String:C10(This:C1470.clickCount)+")")
+	This.clickCount+=1
+	This.appendLog("On Clicked ×"+String(Clickcount)+" (total: "+String(This.clickCount)+")")
 	
-	return This:C1470
+	return This
 
-Function onDoubleClicked() : cs:C1710.EventShowcaseController
+Function onDoubleClicked() : cs.EventShowcaseController
 	
-	This:C1470.clickCount+=1
-	This:C1470.appendLog("On Double Clicked (total: "+String:C10(This:C1470.clickCount)+")")
+	This.clickCount+=1
+	This.appendLog("On Double Clicked (total: "+String(This.clickCount)+")")
 	
-	return This:C1470
+	return This
 
-Function onShiftClicked() : cs:C1710.EventShowcaseController
+Function onShiftClicked() : cs.EventShowcaseController
 	
-	This:C1470.clickCount+=1
-	This:C1470.appendLog("Shift+Click (total: "+String:C10(This:C1470.clickCount)+")")
+	This.clickCount+=1
+	This.appendLog("Shift+Click (total: "+String(This.clickCount)+")")
 	
-	return This:C1470
+	return This
 
-Function onCommandClicked() : cs:C1710.EventShowcaseController
+Function onCommandClicked() : cs.EventShowcaseController
 	
-	This:C1470.clickCount+=1
-	This:C1470.appendLog("⌘+Click (total: "+String:C10(This:C1470.clickCount)+")")
+	This.clickCount+=1
+	This.appendLog("⌘+Click (total: "+String(This.clickCount)+")")
 	
-	return This:C1470
+	return This
 
-Function onContextualClicked() : cs:C1710.EventShowcaseController
+Function onContextualClicked() : cs.EventShowcaseController
 	
-	This:C1470.clickCount+=1
-	This:C1470.appendLog("Contextual Click (total: "+String:C10(This:C1470.clickCount)+")")
+	This.clickCount+=1
+	This.appendLog("Contextual Click (total: "+String(This.clickCount)+")")
 	
-	return This:C1470
+	return This
 
-Function clearLog() : cs:C1710.EventShowcaseController
+Function clearLog() : cs.EventShowcaseController
 	
-	This:C1470.log:=""
-	This:C1470.clickCount:=0
+	This.log:=""
+	This.clickCount:=0
 	
-	return This:C1470
+	return This

@@ -1,24 +1,24 @@
-var $event:=FORM Event:C1606
+var $event:=FORM Event
 
 Case of 
-	: ($event.code=On Double Clicked:K2:5)
+	: ($event.code=On Double Clicked)
 		
-		Form:C1466.onDoubleClicked()
+		Form.onDoubleClicked()
 		
-	: (($event.code=On Clicked:K2:4) && Contextual click:C713)
+	: (($event.code=On Clicked) && Contextual click)
 		
-		Form:C1466.onContextualClicked()
+		Form.onContextualClicked()
 		
-	: (($event.code=On Clicked:K2:4) && Shift down:C543)
+	: (($event.code=On Clicked) && Shift down)
 		
-		Form:C1466.onShiftClicked()
+		Form.onShiftClicked()
 		
-	: (($event.code=On Clicked:K2:4) && Macintosh command down:C546)
+	: (($event.code=On Clicked) && Macintosh command down)
 		
-		Form:C1466.onCommandClicked()
+		Form.onCommandClicked()
 		
-	: ($event.code=On Clicked:K2:4)
+	: ($event.code=On Clicked)
 		
-		Form:C1466.onClicked()
+		Form.onClicked()
 		
 End case 

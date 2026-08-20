@@ -275,14 +275,14 @@ Detect modifier keys during a click using these commands. Despite platform-speci
 
 | Command | Mac Key | Windows Key |
 |---------|---------|-------------|
-| `Shift down:C543` | Shift | Shift |
-| `Macintosh command down:C546` | ⌘ Command | Ctrl |
-| `Macintosh option down:C545` | ⌥ Option | Alt |
-| `Macintosh control down:C544` | ⌃ Control | — |
+| `Shift down` | Shift | Shift |
+| `Macintosh command down` | ⌘ Command | Ctrl |
+| `Macintosh option down` | ⌥ Option | Alt |
+| `Macintosh control down` | ⌃ Control | — |
 | `Windows Ctrl down` | ⌘ Command | Ctrl |
 | `Windows Alt down` | ⌥ Option | Alt |
 | `Caps lock down` | Caps Lock | Caps Lock |
-| `Contextual click:C713` | Ctrl+click / right-click | Right-click |
+| `Contextual click` | Ctrl+click / right-click | Right-click |
 
 References:
 - https://developer.4d.com/docs/commands/shift-down
