@@ -1,4 +1,4 @@
-# 4D Forms & Buttons — Skills Summary
+# 4D Forms — Skills Summary
 
 ## What I Can Do
 
@@ -16,7 +16,35 @@
 - Configure **sizing** (sizingX/sizingY) with awareness of the widget resize caveat on non-visible pages
 - Set icon, textPlacement, imageHugsTitle for icon+text layouts
 
-### Events (Concepts Only)
+### Checkbox Object JSON
+- Create checkboxes with all **12 styles**: same as button except no `help`, plus `disclosure` and `collapseExpand`
+- Configure **three-states** mode (regular/flat only, integer data source only, cycle 0→1→2→0)
+- Use `Form.property` as data source (unlike buttons)
+- Set standard actions (fontBold etc.) with non-focusable for text formatting reflection
+- Understand height-based size variants (OS-dependent)
+
+### Radio Button Object JSON
+- Create radios with all **12 styles** (same as checkbox)
+- Configure **radioGroup** (string) for mutual exclusion (UI-only, same-page only)
+- Understand that Form Editor groups ≠ radioGroup (editor groups have no runtime effect)
+- Use `Form.property` as data source
+- Know that no default selection is set — developer must explicitly select one
+
+### Button Grid Object JSON
+- Create button grids with `rowCount`/`columnCount` defining the grid overlay
+- Understand transparent overlay concept (placed on top of background graphics)
+- Cell numbering is **1-based** (top-left = 1, bottom-right = rows×cols)
+- Configure `gotoPage` standard action (click cell N → page N)
+
+### Picture Button Object JSON
+- Create picture buttons with `picture` property pointing to a multi-frame source image
+- Configure grid layout with `rowCount`/`columnCount` for frame slicing
+- Frame numbering is **0-based** (different from button grid)
+- Set up **command button** mode: `switchBackWhenReleased`, `switchWhenRollover`, `useLastFrameAsDisabled`
+- Set up **choice selector** mode: `loopBackToFirstFrame`
+- Configure animation: `frameDelay`, `switchContinuously`
+- Create properly sized source images with frames arranged in rows/columns
+
 - Understand **event execution order**: object method → form method → standard action
 - Understand `onLoad`/`onUnload` as gate events
 - Understand double-click behavior (replaces On Clicked for 2nd click) and `Clickcount`
@@ -46,7 +74,7 @@
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have only studied the **button** object in depth. The remaining 25 object types (input, checkbox, radio, dropdown, listbox, subform, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, and **picture button** in depth. The remaining object types (input, text, dropdown, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -80,3 +108,18 @@ Demonstrates the form class lifecycle:
 - `test_formclass_showcase.4dm` method showing approach 2 (pass instance to DIALOG, read state after close)
 - Class with typed properties
 - Live data binding (`Form.clickCount`, `Form.message` as data sources)
+
+### 4. PopupMenuDemo
+Demonstrates linked and separated popup placement for buttons.
+
+### 5. RadioButtons
+All 12 radio button styles including disclosure and collapseExpand.
+
+### 6. ButtonGridDemo
+Button grids with 4×4 and 8×8 layouts demonstrating the transparent overlay concept.
+
+### 7. PictureButtonDemo
+Two picture buttons with generated source images:
+- **Command button** (4-state: default/clicked/rollover/disabled) using `cmdButton.png`
+- **Choice selector** (5 language flags, looping) using `langSelector.png`
+- Labels on page 0 for always-visible descriptions
