@@ -20,9 +20,18 @@ Also: https://developer.4d.com/docs/Desktop/standard-actions (standard action sy
 }
 ```
 
-A drop-down list is a closed list of items presented as a single-line control; clicking it opens a list/menu of choices. On macOS it is rendered as a native pop-up menu (same object, platform-specific chrome only). Available only in 4D **projects**, not in 4D classic databases (for the object/array-based variants below; choice-list variants work in both).
+A drop-down list is a closed list of items presented as a single-line control; clicking it opens a list/menu of choices. On macOS it is rendered as a native pop-up menu (same object, platform-specific chrome only); the OS may render the control at a different height than the object's declared `height` depending on platform conventions. Available only in 4D **projects**, not in 4D classic databases (for the object/array-based variants below; choice-list variants work in both).
 
-There are five distinct kinds of drop-down list, distinguished entirely by which JSON properties are present -- not by a separate `type` value. `"type"` is always `"dropdown"`.
+## Interaction Model
+
+A drop-down list is an active object like button, checkbox, and radio button:
+
+- `On Clicked` fires **on mouse-down** (press), not on mouse-up (release) -- same timing as buttons, checkboxes, and radio buttons.
+- It supports `focusable` like a button. When focused: `Return`/`Tab` moves to the next object in tab order, `Shift+Return`/`Shift+Tab` moves to the previous object in tab order, and `Space` is equivalent to clicking it (opens the list).
+
+Like progress indicators and rulers, a drop-down list's data source can be a live expression, and the binding is **bidirectional**: the object reads its displayed state from the expression, and user interaction writes the selection back into the expression -- there is no need to trap `On Clicked`/`On Data Change` just to copy the value back manually (though those events are still available for reacting to a change).
+
+There are five distinct kinds of drop-down list, distinguished entirely by which JSON properties are present -- not by a separate `type` value. `"type"` is always `"dropdown"`. The underlying data source is always one of three shapes -- **object**, **array**, or **list** (choice list / hierarchical list) -- with **object being the modern, recommended shape** (see https://blog.4d.com/use-collections-and-lists-within-forms-objects/).
 
 ## The Five Kinds
 
@@ -53,9 +62,11 @@ Form.dropFruit.index:=1
 Form.dropFruit.currentValue:="Banana"
 ```
 
-- `values` (Collection, mandatory): all elements must be the same scalar type (text, number, date, or time).
-- `index` (Integer, 0-based): the selected element's position in `values`. `-1` means "no selection" -- the control displays `currentValue` instead, acting as a placeholder (e.g. `"Select a fruit"`).
-- `currentValue`: the currently selected value (kept in sync with `index` at runtime), or the placeholder text when `index` is `-1`.
+- `values` (Collection, mandatory): all elements must be the same scalar type (text, number, date, or time). Collections are always **0-based**, so `index` is 0-based too (see https://developer.4d.com/docs/API/CollectionClass).
+- `index` (Integer, 0-based): **bidirectional**. Assigning it selects the specified item (e.g. `Form.dropFruit.index:=2` programmatically selects the 3rd item); when the user selects an item, 4D assigns its position back into `index`. `-1` means "no selection" -- the control displays `currentValue` instead, acting as a placeholder.
+- `currentValue`: **read-only** from the form's perspective. Assigning it directly is ignored -- the value reverts to whatever the actual selection is (or to the placeholder when `index` is `-1`). When the user selects an item, 4D assigns that item's value into `currentValue`. It only has a meaningful assignable role once, as the placeholder text, at initialization time (see below).
+
+To initialize an object-based drop-down list, set `index` to `-1` and, optionally, `currentValue` to a placeholder message (e.g. `"Select a fruit"`) -- this is the only time `currentValue` should be assigned.
 
 ### Array-based
 

@@ -89,7 +89,9 @@
 
 ### Dropdown Object JSON
 - Five kinds distinguished by JSON properties, not a separate `type`: object-based (`dataSourceTypeHint: "object"`, `Form.xxx` = `{values, index, currentValue}`), array-based (`dataSourceTypeHint: "arrayText"/"arrayNumber"/"arrayDate"/"arrayTime"`, `dataSource` names the array directly), choice list value/reference (`choiceList` + `saveAs: "value"|"reference"`), hierarchical (`dataSourceTypeHint: "integer"` alone), and standard action submenu (`action: "gotoPage"`, no data source)
+- Underlying data source is always object, array, or list -- object is the modern/recommended shape. For object: `values` is a 0-based Collection; `index` is bidirectional (assign to select, user selection writes back); `currentValue` is read-only (assignments other than at init time are ignored and revert) -- initialize with `index:=-1` + `currentValue:=` placeholder message
 - Choice list dropdown cannot be combined with object/array data source -- binding a field/variable directly always forces choice-list mode
+- Like button/checkbox/radio: `On Clicked` fires on mouse-down, not mouse-up; supports `focusable` with Return/Tab, Shift+Return/Shift+Tab, and Space-to-click keyboard behavior. Like progress/ruler: data source can be a live expression with bidirectional binding. OS may render at a different height than declared
 - Know that `FORM SCREENSHOT` on a form name renders the Form Editor's static template: object/array-bound dropdowns render blank (no `On Load` execution), choice-list dropdowns preview their first item regardless of `saveAs`, unbound objects show their object name in quotes as placeholder
 
 ### Event Cycle Architecture
