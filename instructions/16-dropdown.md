@@ -40,8 +40,8 @@ There are five distinct kinds of drop-down list, distinguished entirely by which
 | Object-based | `dataSourceTypeHint: "object"` | `Form.xxx` = `{ values, index, currentValue }` |
 | Array-based | `dataSourceTypeHint: "arrayText"` / `"arrayNumber"` / `"arrayDate"` / `"arrayTime"` | `dataSource` names a 4D array variable directly (e.g. `"asColor"`) |
 | Choice list (value) | `choiceList: [...]` + `saveAs: "value"` (default) | `dataSource` is a plain field/variable holding the literal selected value |
-| Choice list (reference) | `choiceList: [...]` + `saveAs: "reference"` | `dataSource` is a plain field/variable holding a 1-based numeric reference into the list |
-| Hierarchical | `dataSourceTypeHint: "integer"` **alone** (no `choiceList`, `list`, object, or array) | Managed via `list`/hierarchical-list language commands |
+| Choice list (reference) | `choiceList: [...]` + `saveAs: "reference"` | `dataSource` is a plain field/variable holding a numeric item reference into the list |
+| Hierarchical | `dataSourceTypeHint: "integer"` **alone** (no `choiceList`, `list`, object, or array) | `dataSource` is the hierarchical list reference itself; resolved via Hierarchical Lists language commands |
 
 Only one kind can be active on a given object. Binding `dataSource` directly to a field/variable (rather than to an object or array) always forces choice-list behavior; it cannot be combined with `dataSourceTypeHint: "object"` or an array hint.
 
@@ -115,12 +115,12 @@ To initialize an array-based drop-down list, set the array variable to `0` and, 
 }
 ```
 
-`choiceList` can be either a static list/collection of items inlined directly in the object's JSON, or the name of a list defined in the project's toolbox (`lists.json` -- see https://developer.4d.com/docs/Project/architecture). A named toolbox list is automatically instantiated when the form is loaded and cleared when the form is unloaded -- no manual lifecycle code is needed for it, unlike array-based or hierarchical-by-code data sources.
+`choiceList` can be either a static list/collection of items inlined directly in the object's JSON, or the name of a list defined in the project's toolbox (`lists.json` -- see https://developer.4d.com/docs/Project/architecture). A named toolbox list is automatically instantiated when the form is loaded and cleared when the form is unloaded -- no manual lifecycle code is needed for it, unlike array-based or hierarchical-by-code data sources. `OBJECT SET LIST BY NAME` (https://developer.4d.com/docs/commands/object-set-list-by-name) achieves the same effect at runtime as setting a toolbox list's name directly in `choiceList`.
 
-`saveAs` controls what the bound field/variable (the data source) holds, and the on-screen behavior is identical either way -- only the code working with the data source is affected:
+`saveAs` (the "Data Type (list)" property) defines what is stored in the data source, and the on-screen behavior is identical either way -- only the code working with the data source is affected:
 
-- `"value"` (default): the data source holds the literal selected item's text (e.g. `"Blue"`). Intuitive to read directly.
-- `"reference"`: the data source holds a 1-based numeric reference to the selected item's position in the list. Decouples the displayed text (which a user sees, and which can be relabeled or localized) from the value code actually keys off of.
+- `"value"` (default, "Selected item value"): the data source holds the literal selected item's text (e.g. `"Blue"`) directly -- no need to resolve which position/item-reference is selected.
+- `"reference"` ("Selected item reference"): the data source holds a numeric item reference associated with the selected item (via `APPEND TO LIST`'s `itemRef` parameter, `SET LIST ITEM`, or the list editor -- not necessarily the item's 1-based position). The bound field/variable must be Number type. This decouples the displayed text (which a user sees, and which can be relabeled or localized) from the reference code actually keys off of.
 
 The data source is **bidirectional**: assigning a value (or reference number) to it selects the corresponding item; when the user selects an item, its value (or reference number) is assigned back into the data source.
 
@@ -130,14 +130,12 @@ A choice list dropdown cannot be combined with an object or array data source --
 
 ### Hierarchical
 
-Setting only `"dataSourceTypeHint": "integer"` (with `"type": "dropdown"` and no `choiceList`/object/array data source) declares a **hierarchical** drop-down list, limited to two levels in forms. `dataSourceTypeHint: "integer"` reflects the fact that the underlying data source really is an integer: a **hierarchical list reference**.
+Setting only `"dataSourceTypeHint": "integer"` (with `"type": "dropdown"` and no `choiceList`/object/array data source) declares a **hierarchical** drop-down list ("List reference" mode of the "Data Type (list)" property), limited to two levels in forms. In this mode the data source itself is the **hierarchical list reference** (an integer) -- resolving the actual selected item requires the Hierarchical Lists language commands (e.g. `Selected list items`, `Select list items by reference`, `Select list items by position`), unlike the `"value"`/`"reference"` choice-list modes above where the data source already holds a usable selected value or item reference.
 
-A hierarchical list is built at runtime with the dedicated list-management commands rather than assigned as a JSON literal:
+A hierarchical list can be attached in two ways:
 
-- `New list` (https://developer.4d.com/docs/commands/new-list) creates an empty hierarchical list and returns its reference (an integer).
-- `Load list` (https://developer.4d.com/docs/commands/load-list) loads a hierarchical list previously defined in the toolbox and returns its reference.
-- The returned integer reference is assigned directly to the object's data source expression.
-- `Clear list` (https://developer.4d.com/docs/commands/clear-list) must be called to release the list when it is no longer needed (typically in `On Unload`) -- unlike a named toolbox `choiceList`, a hierarchical list built by code is not cleared automatically and will leak if forgotten.
+- **By name**: `OBJECT SET LIST BY NAME` (https://developer.4d.com/docs/commands/object-set-list-by-name) attaches a toolbox-defined list by name -- equivalent to setting that list's name directly in `choiceList`/`list`. 4D instantiates it when the form loads and clears it when the form unloads; no manual `Clear list` call is needed.
+- **By reference**: build the list at runtime with `New list` (https://developer.4d.com/docs/commands/new-list) or `Load list` (https://developer.4d.com/docs/commands/load-list), each returning an integer list reference, and assign that reference directly to the object via `OBJECT SET LIST BY REFERENCE` (https://developer.4d.com/docs/commands/object-set-list-by-reference) or by assigning it to the data source expression. The dropdown retains its own reference count on the list, so the caller may call `Clear list` (https://developer.4d.com/docs/commands/clear-list) immediately after assigning it -- the list itself is only actually released once the dropdown's reference count reaches zero, which happens when the form is unloaded.
 
 ### Standard action (submenu-style)
 
@@ -151,6 +149,16 @@ A hierarchical list is built at runtime with the dedicated list-management comma
 Drop-down lists (and hierarchical choice lists) can only be directly associated with standard actions that generate a submenu, such as `gotoPage`, `backgroundColor`, or `fontSize`. With `action: "gotoPage"` the list is auto-populated with the form's page numbers; selecting item *N* navigates to page *N*. No `dataSource` is required or used for this mode. Custom per-item actions (e.g. `backgroundColor?value="red"`) can replace the automatic values by setting them on a choice list via `SET LIST ITEM PARAMETER` and assigning that list as the object's choice list.
 
 ## `Data Type (list)` Properties
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesDataSource#data-type-list
+
+Three named options, all controlled by the same `saveAs` JSON property:
+
+| Option | `saveAs` value | Data source holds |
+|--------|-----------------|--------------------|
+| List reference | *(omit `saveAs`; use `dataSourceTypeHint: "integer"` alone instead)* | The hierarchical list reference (integer) -- declares the drop-down hierarchical |
+| Selected item value (default) | `"value"` | The literal selected item's value |
+| Selected item reference | `"reference"` | A numeric item reference (via `APPEND TO LIST`'s `itemRef`, `SET LIST ITEM`, or the list editor); requires a Number-type field/variable |
 
 | Property | JSON Name | Type | Notes |
 |----------|-----------|------|-------|
