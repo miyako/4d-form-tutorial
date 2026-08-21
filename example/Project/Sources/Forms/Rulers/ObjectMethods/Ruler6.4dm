@@ -4,6 +4,10 @@ $event:=FORM Event:C1606
 Case of 
 	: ($event.code=On Data Change:K2:15)
 		
-		ALERT:C41($event.description)
+		Form:C1466.info:=$event.description
+		
+	: ($event.code=On Clicked:K2:4)
+		
+		Form:C1466.info:=$event.description
 		
 End case 

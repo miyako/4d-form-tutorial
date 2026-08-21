@@ -109,8 +109,38 @@ Labels display the numeric values at each graduation mark. Labels require `showG
 
 ## Events
 
-- `onDataChange` (On Data Change) -- fires when the value changes (primary event)
-- `onClick` (On Clicked) / `onDoubleClick` (On Double Clicked)
+### Event Behavior
+
+The ruler's event model is similar to a button but with important additions:
+
+**On Clicked**: Fires when the mouse is **released** after interacting with the ruler. The new value is calculated based on the click position relative to the ruler's width (horizontal) or height (vertical). Unlike a button, the release does **not** need to be above the ruler -- the event fires regardless of where the mouse is released.
+
+**On Data Change** (requires "Execute Object Method" property): Fires repeatedly during drag interaction:
+1. Fires as soon as the mouse is pressed on the lever/handle
+2. Fires again on every mouse move while the button is held down
+3. Does **not** fire when the mouse is released (that triggers On Clicked instead)
+
+Despite its name, On Data Change fires even if the new value equals the old value. This is a general rule for this event across all form object types.
+
+**Important**: On Data Change is **not** fired when the data source is updated by code -- only by user interaction.
+
+### Execute Object Method
+
+The `methodExecutionMode` property (called "Execute Object Method" in the form editor) enables On Data Change events. When enabled, both On Data Change and On Clicked events fire during interaction. When disabled, only On Clicked fires on mouse release.
+
+### Mouse Wheel
+
+If the ruler is **focusable**, the mouse scroll wheel interacts with it when the pointer hovers over the ruler. The scroll direction can be:
+- Vertical scroll on a **horizontal** ruler
+- Horizontal scroll on a **vertical** ruler
+
+At the end of a scroll sequence, On Data Change fires (if enabled).
+
+### Supported Events
+
+- `onDataChange` (On Data Change) -- fires repeatedly during drag/scroll (requires Execute Object Method)
+- `onClick` (On Clicked) -- fires on mouse release
+- `onDoubleClick` (On Double Clicked)
 - `onLoad` / `onUnload`
 - `onGettingFocus` / `onLosingFocus`
 - `onMouseEnter` / `onMouseLeave` / `onMouseMove`
