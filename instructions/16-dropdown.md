@@ -148,7 +148,13 @@ A hierarchical list can be attached in two ways:
 }
 ```
 
-Drop-down lists (and hierarchical choice lists) can only be directly associated with standard actions that generate a submenu, such as `gotoPage`, `backgroundColor`, or `fontSize`. With `action: "gotoPage"` the list is auto-populated with the form's page numbers; selecting item *N* navigates to page *N*. No `dataSource` is required or used for this mode. Custom per-item actions (e.g. `backgroundColor?value="red"`) can replace the automatic values by setting them on a choice list via `SET LIST ITEM PARAMETER` and assigning that list as the object's choice list.
+Reference: https://developer.4d.com/docs/Desktop/standard-actions
+
+A standard action is a built-in behavior identified by name (`action` property, or the "Standard action" property list entry) that 4D executes without requiring a method. Some standard actions accept one parameter using URL-like syntax: `standardActionName{?nameParameter=valueParameter}`, e.g. `gotoPage?value=5`. This syntax is valid anywhere a standard action can be set: property list, Menu editor, or via language commands.
+
+If an object (or menu command) has both a method and a standard action assigned, the method runs first, then the standard action runs after it -- the only exception is `deleteRecord`, which runs before any attached method. When a style-related standard action (`fontSize`, `backgroundColor`, `bold`, etc.) is triggered, 4D generates the `On After Edit` form event.
+
+Drop-down lists (and hierarchical choice lists) can only be directly associated with standard actions that generate a submenu, such as `gotoPage`, `backgroundColor`, or `fontSize`. With `action: "gotoPage"` the list is auto-populated with the form's page numbers; selecting item *N* navigates to page *N*. No `dataSource` is required or used for this mode. Custom per-item actions (e.g. `backgroundColor?value="red"`) can replace the automatic values by setting them on a choice list via `SET LIST ITEM PARAMETER` and assigning that list as the object's choice list -- only standard actions that themselves take a value parameter related to the submenu's main action are valid for this substitution.
 
 ## `Data Type (list)` Properties
 
