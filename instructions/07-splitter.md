@@ -150,7 +150,27 @@ Objects above/left act as stops -- you cannot drag the splitter past them.
 | `"grow"` (Resize) | Keep position, resize according to splitter's new position |
 | `"move"` (Move) | Move with the splitter |
 
-**Note**: An object completely contained within the splitter's rectangle moves along with the splitter.
+### Coverage Rule
+
+A splitter only affects objects that are **completely covered** by the splitter's span:
+
+- **Vertical splitter**: only objects whose full height falls within the splitter's top-to-bottom range are affected
+- **Horizontal splitter**: only objects whose full width falls within the splitter's left-to-right range are affected
+
+Objects that are only partially covered are **not moved or resized** by the splitter, even if they are positioned to its left/right or above/below.
+
+For example, if a vertical splitter spans top=91 to bottom=257, a button at top=54, height=49 (bottom=103) extends above the splitter's top edge and is therefore **not affected**. A button at top=111, height=49 (bottom=160) is fully within range and **will be affected**.
+
+### Stops
+
+For objects to the left/above (standard and pusher), the splitter cannot be dragged past them.
+
+For objects to the right/below of a **standard** splitter, affected objects move with the splitter until a stop is reached. Stops are:
+- The window border
+- Another splitter
+- An immovable object (e.g., one with `sizingX: "fixed"`)
+
+For objects to the right/below of a **pusher** splitter, there are no stops -- objects are pushed indefinitely.
 
 ## Events
 
