@@ -167,7 +167,7 @@ For objects to the left/above (standard and pusher), the splitter cannot be drag
 
 For objects to the right/below of a **standard** splitter, the splitter stops as soon as its edge reaches the near edge of the object (e.g., splitter's right edge touches the object's left edge). No overlapping occurs. Affected objects with `"move"` sizing move with the splitter; objects with `"grow"` sizing resize.
 
-For objects to the right/below of a **pusher** splitter, there are no stops -- objects are pushed indefinitely.
+For objects to the right/below of a **pusher** splitter, objects with `"move"` sizing are pushed along with the splitter. They keep moving until they run out of room — i.e., they hit the form margin (`rightMargin` or `bottomMargin`). The pusher does not respect other splitters or objects as stops, but pushed objects cannot leave the form's margin boundary.
 
 ## Events
 
