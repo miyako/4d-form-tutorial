@@ -1,0 +1,148 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "variable",
+	"windowSizingY": "variable",
+	"windowMinWidth": 0,
+	"windowMinHeight": 0,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"rightMargin": 20,
+	"bottomMargin": 20,
+	"events": [
+		"onLoad",
+		"onPageChange",
+		"onValidate",
+		"onClick",
+		"onDoubleClick",
+		"onOutsideCall",
+		"onBeginDragOver",
+		"onDragOver",
+		"onDrop",
+		"onAfterKeystroke",
+		"onMenuSelect",
+		"onPluginArea",
+		"onAfterEdit",
+		"onTimer",
+		"onBoundVariableChange"
+	],
+	"windowTitle": "window title",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"Ruler": {
+					"type": "ruler",
+					"left": 26,
+					"top": 55,
+					"width": 237,
+					"height": 14,
+					"max": 100,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.ruler"
+				},
+				"Ruler1": {
+					"type": "ruler",
+					"left": 26,
+					"top": 95,
+					"width": 237,
+					"height": 19,
+					"max": 100,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.ruler"
+				},
+				"Ruler2": {
+					"type": "ruler",
+					"left": 26,
+					"top": 175,
+					"width": 237,
+					"height": 26,
+					"max": 100,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.ruler"
+				},
+				"Ruler3": {
+					"type": "ruler",
+					"left": 339,
+					"top": 30,
+					"width": 15,
+					"height": 166,
+					"max": 100,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.ruler"
+				},
+				"Ruler4": {
+					"type": "ruler",
+					"left": 374,
+					"top": 30,
+					"width": 20,
+					"height": 166,
+					"max": 100,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.ruler"
+				},
+				"Ruler5": {
+					"type": "ruler",
+					"left": 409,
+					"top": 30,
+					"width": 25,
+					"height": 166,
+					"max": 100,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.ruler"
+				},
+				"Ruler6": {
+					"type": "ruler",
+					"left": 444,
+					"top": 30,
+					"width": 30,
+					"height": 166,
+					"max": 100,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.ruler",
+					"continuousExecution": false,
+					"method": "ObjectMethods/Ruler6.4dm"
+				},
+				"Ruler7": {
+					"type": "ruler",
+					"left": 26,
+					"top": 135,
+					"width": 237,
+					"height": 25,
+					"max": 100,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.ruler"
+				}
+			}
+		}
+	],
+	"geometryStamp": 48,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
+}
