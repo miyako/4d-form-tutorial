@@ -1,0 +1,35 @@
+{
+	"$4d": { "version": "1", "kind": "form" },
+	"windowSizingX": "variable", "windowSizingY": "variable",
+	"windowMinWidth": 0, "windowMinHeight": 0, "windowMaxWidth": 32767, "windowMaxHeight": 32767,
+	"rightMargin": 20, "bottomMargin": 20,
+	"events": ["onLoad"],
+	"windowTitle": "Ruler Demo",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {
+				"lblPlain": { "type": "text", "text": "Plain", "top": 5, "left": 10, "width": 300, "height": 16 },
+				"lblGrad": { "type": "text", "text": "Graduation (step=10)", "top": 55, "left": 10, "width": 300, "height": 16 },
+				"lblLabelTop": { "type": "text", "text": "Labels top", "top": 105, "left": 10, "width": 300, "height": 16 },
+				"lblLabelBottom": { "type": "text", "text": "Labels bottom (step=20)", "top": 175, "left": 10, "width": 300, "height": 16 },
+				"lblStep5": { "type": "text", "text": "Step=5, max=50", "top": 245, "left": 10, "width": 300, "height": 16 },
+				"lblVert": { "type": "text", "text": "Vertical + labels", "top": 5, "left": 380, "width": 150, "height": 16 }
+			}
+		},
+		{
+			"objects": {
+				"rPlain": { "type": "ruler", "left": 10, "top": 25, "width": 300, "height": 25, "min": 0, "max": 100 },
+				"rGrad": { "type": "ruler", "left": 10, "top": 75, "width": 300, "height": 25, "min": 0, "max": 100, "showGraduations": true, "graduationStep": 10 },
+				"rLabelTop": { "type": "ruler", "left": 10, "top": 125, "width": 300, "height": 40, "min": 0, "max": 100, "showGraduations": true, "graduationStep": 10, "labelsPlacement": "top" },
+				"rLabelBottom": { "type": "ruler", "left": 10, "top": 195, "width": 300, "height": 40, "min": 0, "max": 100, "showGraduations": true, "graduationStep": 20, "labelsPlacement": "bottom" },
+				"rStep5": { "type": "ruler", "left": 10, "top": 265, "width": 300, "height": 40, "min": 0, "max": 50, "step": 5, "showGraduations": true, "graduationStep": 5, "labelsPlacement": "bottom" },
+				"rVert": { "type": "ruler", "left": 420, "top": 25, "width": 50, "height": 250, "min": 0, "max": 100, "showGraduations": true, "graduationStep": 10, "labelsPlacement": "right" },
+				"rNotEnterable": { "type": "ruler", "left": 10, "top": 305, "width": 300, "height": 25, "min": 0, "max": 100, "enterable": false, "dataSource": "50" },
+				"lblNotEnterable": { "type": "text", "text": "Not enterable (display-only)", "top": 290, "left": 10, "width": 300, "height": 16 }
+			}
+		}
+	],
+	"geometryStamp": 1,
+	"editor": { "activeView": "View 1", "defaultView": "View 1", "views": { "View 1": {} } }
+}

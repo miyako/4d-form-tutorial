@@ -45,7 +45,47 @@
 - Configure animation: `frameDelay`, `switchContinuously`
 - Create properly sized source images with frames arranged in rows/columns
 
-- Understand **event execution order**: object method → form method → standard action
+### Splitter Object JSON
+- Create splitters with `borderStyle` options (dotted, solid, raised, sunken, none)
+- Understand orientation: `height > width` = vertical, `width > height` = horizontal
+- Configure **pusher** mode (`splitterMode: "move"`)
+- Understand **coverage rule**: splitter only affects objects fully within its height/width span
+- Understand **sizing interaction**: `"grow"` = resize, `"move"` = move/stop, `"fixed"` = pushed (not immune)
+- Know stop rules: edge-to-edge contact, margins on right/bottom only
+- Data source = distance traveled (resets), must be variable (not `Form.property`)
+
+### Ruler Object JSON
+- Create rulers with scale properties (`min`, `max`, `step`, `showGraduations`, `graduationStep`, `labelsPlacement`)
+- Understand orientation: same as splitter (width vs height)
+- Values are **integer only** — use code conversion for decimals
+- `Form.property` allowed as data source; multiple rulers sync via shared data source
+- Event model: On Data Change fires repeatedly during drag (requires Execute Object Method); On Clicked fires on release
+- Mouse wheel interaction when focusable; `enterable: false` = non-interactive (no visual difference)
+
+### Stepper Object JSON
+- Create steppers with `min`, `max`, `step` properties
+- **Vertical only** — no horizontal variant
+- `Form.property` allowed; syncs with inputs and other objects via shared data source
+- Arrow keys (up/right = increase, down/left = decrease) when focusable
+- Date/time support via `dataSourceTypeHint`
+
+### Progress Indicator Object JSON
+- Create progress indicators (thermometers) with same scale properties as ruler
+- **Barber shop mode**: omit `max` property; data source 1 = running, 0 = stopped
+- When `enterable: true`, behaves like a ruler (click, drag, scroll)
+- Visual: filled bar (vs ruler's track-with-cursor)
+
+### Spinner Object JSON
+- Create spinners with binary state: non-zero = running, 0 = stopped
+- Circular shape, no scale properties, minimal configuration
+- Functionally identical to barber shop progress but circular
+
+### Event Cycle Architecture
+- Event cycle is **atomic, sequential, cooperative**
+- Animations pause during mouse-down waits on clickable objects
+- `On Timer` cannot fire between press and release
+- Data source updates during event handlers are deferred to end of cycle
+
 - Understand `onLoad`/`onUnload` as gate events
 - Understand double-click behavior (replaces On Clicked for 2nd click) and `Clickcount`
 - Know the modifier key commands and their cross-platform mappings
@@ -74,7 +114,7 @@
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have studied **button**, **checkbox**, **radio**, **button grid**, and **picture button** in depth. The remaining object types (input, text, dropdown, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, and **spinner** in depth. The remaining object types (input, text, dropdown, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -123,3 +163,9 @@ Two picture buttons with generated source images:
 - **Command button** (4-state: default/clicked/rollover/disabled) using `cmdButton.png`
 - **Choice selector** (5 language flags, looping) using `langSelector.png`
 - Labels on page 0 for always-visible descriptions
+
+### 8. SplitterDemo
+Vertical/horizontal/invisible/pusher splitter variants, plus edge case tests (fixed objects, grow on both sides, object between two splitters).
+
+### 9. RulerDemo
+All ruler display options: plain, graduation, labels top/bottom, custom step/max, vertical with labels, and non-enterable with static value.
