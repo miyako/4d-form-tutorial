@@ -82,12 +82,10 @@
 
 ### Static Picture Object JSON
 - Create static pictures with `pictureFormat`: `scaled` (distorts if box isn't proportional), `tiled`, `truncatedCenter`, `truncatedTopLeft`
-- Reference pictures via `/RESOURCES/Images/...` or a form-relative path (bare filename or `Images/...` next to `form.4DForm`) -- both verified working via real-4D CLI screenshots
-- Understand `@nx` high-resolution and `_dark` dark-mode picture naming conventions -- dark-mode `_dark` substitution is confirmed working (via real-4D CLI) when the form's `colorScheme` is `"dark"`
-- Know that PNG DPI metadata does **not** affect declarative form rendering (verified twice: label-tagged 72/96/144/300 dpi PNGs, and a byte-identical-content pixel-diff test that came back with zero difference)
-- Know `vector-effect="non-scaling-stroke"` (SVG) keeps stroke width constant under scaling -- 4D's substitute for shape-primitive grid lines; verified by rendering a scaled-up grid with/without the attribute
-- Know 4D accepts the proprietary `ns4d:DPI` SVG root attribute without breaking rendering; no visible scale effect was observable once the object's box size is fixed in JSON
-- SVG and WEBP pictures **do render correctly** -- an earlier finding that they render blank was a `tool4d`-specific artifact, not a real limitation (see CLI Testing note below)
+- Reference pictures via `/RESOURCES/Images/...` or a form-relative path (bare filename or `Images/...` next to `form.4DForm`) -- both work
+- Understand `@nx` high-resolution and `_dark` dark-mode picture naming conventions; dark-mode `_dark` substitution activates when the form's `colorScheme` is `"dark"`
+- Know `vector-effect="non-scaling-stroke"` (SVG) keeps stroke width constant under scaling -- 4D's substitute for shape-primitive grid lines
+- SVG and WEBP are natively supported picture formats and render correctly
 
 ### Event Cycle Architecture
 - Event cycle is **atomic, sequential, cooperative**
@@ -133,7 +131,7 @@
 - I can only create and edit the JSON directly. I have no experience with the visual form editor or its features.
 
 ### CLI Testing
-- **`FORM SCREENSHOT` must be driven via the real 4D application binary (`4D.app/Contents/MacOS/4D --headless --user-param ... --startup-method ...`), never via `tool4d`.** `tool4d` segfaults on some builds and, even when it runs, produces silently blank/wrong output for certain picture formats (SVG, WEBP) and misses conditional form behavior (dark-mode substitution) -- it is not a valid substitute for verifying rendering.
+- **`FORM SCREENSHOT` must be driven via the real 4D application binary (`4D.app/Contents/MacOS/4D --headless --user-param ... --startup-method ...`), never via `tool4d`.** `tool4d` is not a valid substitute for verifying rendering: it segfaults on some builds, and can silently produce blank/wrong output for certain picture formats (SVG, WEBP) or miss conditional form behavior (dark-mode substitution) even when it doesn't crash.
 - The helper methods used in this project (`project_form_to_image`, `print_form_to_file`) are project-specific, not built-in
 - Reference: https://developer.4d.com/docs/Admin/cli
 

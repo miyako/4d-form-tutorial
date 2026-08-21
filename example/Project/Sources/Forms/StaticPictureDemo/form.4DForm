@@ -24,31 +24,6 @@
 		},
 		{
 			"objects": {
-				"lblTitle2": { "type": "text", "text": "PNG DPI metadata: same 100x100 pixel canvas, different embedded DPI tag, format=truncatedTopLeft (no scaling), box=100x100", "top": 5, "left": 10, "width": 780, "height": 16 },
-				"lbl72": { "type": "text", "text": "72 dpi", "top": 30, "left": 10, "width": 100, "height": 16 },
-				"pic72": { "type": "picture", "top": 50, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi72.png", "pictureFormat": "truncatedTopLeft" },
-				"lbl96": { "type": "text", "text": "96 dpi", "top": 30, "left": 120, "width": 100, "height": 16 },
-				"pic96": { "type": "picture", "top": 50, "left": 120, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi96.png", "pictureFormat": "truncatedTopLeft" },
-				"lbl144": { "type": "text", "text": "144 dpi", "top": 30, "left": 230, "width": 100, "height": 16 },
-				"pic144": { "type": "picture", "top": 50, "left": 230, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi144.png", "pictureFormat": "truncatedTopLeft" },
-				"lbl300": { "type": "text", "text": "300 dpi", "top": 30, "left": 340, "width": 100, "height": 16 },
-				"pic300": { "type": "picture", "top": 50, "left": 340, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi300.png", "pictureFormat": "truncatedTopLeft" },
-				"lblNoDpi": { "type": "text", "text": "no dpi tag", "top": 30, "left": 450, "width": 100, "height": 16 },
-				"picNoDpi": { "type": "picture", "top": 50, "left": 450, "width": 100, "height": 100, "picture": "/RESOURCES/Images/nodpi.png", "pictureFormat": "truncatedTopLeft" },
-				"lblSamePixTitle": { "type": "text", "text": "Same pixel content, only DPI metadata differs (72 vs 300), no scaling:", "top": 260, "left": 10, "width": 500, "height": 16 },
-				"lblSame72": { "type": "text", "text": "72 dpi", "top": 285, "left": 10, "width": 100, "height": 16 },
-				"picSame72": { "type": "picture", "top": 305, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/samepix_72.png", "pictureFormat": "truncatedTopLeft" },
-				"lblSame300": { "type": "text", "text": "300 dpi", "top": 285, "left": 120, "width": 100, "height": 16 },
-				"picSame300": { "type": "picture", "top": 305, "left": 120, "width": 100, "height": 100, "picture": "/RESOURCES/Images/samepix_300.png", "pictureFormat": "truncatedTopLeft" },
-				"lblNote2": { "type": "text", "text": "Repeat with pictureFormat=scaled to see if the fit calculation also depends on dpi.", "top": 165, "left": 10, "width": 780, "height": 16 },
-				"pic72s": { "type": "picture", "top": 185, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi72.png", "pictureFormat": "scaled" },
-				"pic96s": { "type": "picture", "top": 185, "left": 120, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi96.png", "pictureFormat": "scaled" },
-				"pic144s": { "type": "picture", "top": 185, "left": 230, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi144.png", "pictureFormat": "scaled" },
-				"pic300s": { "type": "picture", "top": 185, "left": 340, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi300.png", "pictureFormat": "scaled" }
-			}
-		},
-		{
-			"objects": {
 				"lblTitle3": { "type": "text", "text": "Scale-factor (@nx) resolution: logical box is 64x64, icon.png has icon@2x.png / icon@3x.png next to it", "top": 5, "left": 10, "width": 780, "height": 16 },
 				"lblScale": { "type": "text", "text": "icon.png (64x64 box, picks highest available @nx for the current screen)", "top": 30, "left": 10, "width": 500, "height": 16 },
 				"picScale": { "type": "picture", "top": 50, "left": 10, "width": 64, "height": 64, "picture": "/RESOURCES/Images/icon.png", "pictureFormat": "truncatedTopLeft" },
@@ -63,19 +38,6 @@
 				"picScalingStroke": { "type": "picture", "top": 50, "left": 10, "width": 320, "height": 320, "picture": "/RESOURCES/Images/grid_scaling.svg", "pictureFormat": "scaled" },
 				"lblNonScalingStroke": { "type": "text", "text": "grid_nonscaling.svg (vector-effect=non-scaling-stroke -> lines stay 1px)", "top": 30, "left": 350, "width": 400, "height": 16 },
 				"picNonScalingStroke": { "type": "picture", "top": 50, "left": 350, "width": 320, "height": 320, "picture": "/RESOURCES/Images/grid_nonscaling.svg", "pictureFormat": "scaled" }
-			}
-		},
-		{
-			"objects": {
-				"lblTitle5": { "type": "text", "text": "SVG ns4d:DPI attribute (4D-specific xmlns:ns4d=\"http://www.4d.com\" ns4d:DPI=\"n\" on the root <svg>)", "top": 5, "left": 10, "width": 780, "height": 16 },
-				"lblDpi72": { "type": "text", "text": "ns4d:DPI=72, format=truncatedTopLeft, box=100x100", "top": 30, "left": 10, "width": 350, "height": 16 },
-				"picDpi72": { "type": "picture", "top": 50, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi_ns4d_72.svg", "pictureFormat": "truncatedTopLeft" },
-				"lblDpi300": { "type": "text", "text": "ns4d:DPI=300, format=truncatedTopLeft, box=100x100", "top": 30, "left": 130, "width": 350, "height": 16 },
-				"picDpi300": { "type": "picture", "top": 50, "left": 130, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi_ns4d_300.svg", "pictureFormat": "truncatedTopLeft" },
-				"lblDpi72s": { "type": "text", "text": "ns4d:DPI=72, format=scaled, box=100x100", "top": 170, "left": 10, "width": 350, "height": 16 },
-				"picDpi72s": { "type": "picture", "top": 190, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi_ns4d_72.svg", "pictureFormat": "scaled" },
-				"lblDpi300s": { "type": "text", "text": "ns4d:DPI=300, format=scaled, box=100x100", "top": 170, "left": 130, "width": 350, "height": 16 },
-				"picDpi300s": { "type": "picture", "top": 190, "left": 130, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi_ns4d_300.svg", "pictureFormat": "scaled" }
 			}
 		},
 		{
