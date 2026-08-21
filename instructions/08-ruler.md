@@ -77,7 +77,7 @@ Graduation ticks are small marks along the ruler track. They are purely visual a
 
 ### Enterable
 
-Setting `enterable: false` makes the ruler display-only (read-only). It renders greyed out and can only be updated by code. This effectively turns it into a visual indicator similar to a thermometer.
+Setting `enterable: false` makes the ruler non-interactive (no dragging, no scroll wheel). It can only be updated by code. Unlike disabled buttons/checkboxes, the ruler does **not** appear greyed out — it looks identical to an enterable ruler.
 
 ### Labels
 
