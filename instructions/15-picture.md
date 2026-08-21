@@ -48,10 +48,6 @@ Only these four values are supported for the static picture object (`OBJECT Get 
 
 Add `@2x`, `@3x`, etc. to a filename placed **next to** the base picture (`icon.png`, `icon@2x.png`, `icon@3x.png`) to supply pre-rendered high-DPI variants. 4D automatically substitutes the highest-resolution variant available for the current screen -- you still reference only the base name (`"picture": "/RESOURCES/Images/icon.png"`) in the JSON; you never reference the `@nx` file directly. This prioritization only happens for on-screen display, never for printing. In a headless render with no physical high-DPI display, the `1x` (base) variant is always used.
 
-## PNG / picture DPI metadata
-
-Embedded picture DPI only affects **interactive** operations: Drop/Paste in the Form Editor, and the "Automatic Size" context-menu command -- both of which compute the object's box size from `(picture pixels * screen dpi) / picture dpi`. It has **no effect on declarative rendering**: once `width`/`height` are set in the form JSON, pictures with different embedded DPI tags (e.g. 72 vs 300) render pixel-identical for the same source pixels. DPI metadata only matters at picture-drop time in the editor, never at form-render time.
-
 ## SVG Pictures
 
 SVG is a native, fully supported picture format. A plain-text SVG file (`<?xml version="1.0"?><svg xmlns="...">...</svg>`) can be referenced from `"picture"` exactly like a PNG/JPEG; vector content (shapes, text) is rasterized into the object at whatever size/crop the `pictureFormat` dictates, following the same distortion/cropping rules as raster formats.
@@ -72,22 +68,6 @@ By default, an SVG's stroke width scales along with the rest of the shape when t
 Without the attribute, a stroke drawn at `stroke-width="1"` in a 100x100 viewBox scales up proportionally with the object (e.g. to ~3px when the object is enlarged 3x). With `vector-effect="non-scaling-stroke"`, the stroke stays hairline-thin regardless of enlargement.
 
 This is the mechanism 4D recommends as a substitute for drawing grid lines with shape primitives/4D drawing code: author the grid as an SVG with `non-scaling-stroke` on every line, drop it into a static picture object with `pictureFormat: "scaled"`, and the line weight will not visually thicken as the box is resized.
-
-### `ns4d:DPI` attribute (4D-specific)
-
-4D defines a proprietary namespaced attribute on the root `<svg>` element to declare the image's DPI, used by 4D-authored SVG (e.g. plugin-generated barcodes/QR codes):
-
-```xml
-<svg width="100%" height="100%" viewBox="0 0 100 100"
-     xmlns="http://www.w3.org/2000/svg"
-     xmlns:ns4d="http://www.4d.com" ns4d:DPI="300">
-  ...
-</svg>
-```
-
-Source confirming the exact syntax: https://github.com/miyako/4d-plugin-qrencode-v2/blob/master/4DPlugin-qrencode.cpp (`toSVGs`, building `xmlns:ns4d="http://www.4d.com" ns4d:DPI="<n>"` on the `<svg>` root).
-
-The attribute does not affect rendering when the static picture object's `width`/`height` are explicitly set in the form JSON (same behavior as raster PNG DPI, above) -- it applies to native/intrinsic-size calculations (e.g. "Automatic Size", or how a host asks for the image's natural point size) rather than how the SVG is rasterized into an already-sized object. There is no JSON property to place a picture object at its "auto size", so this attribute's effect cannot be observed purely from form JSON.
 
 ## Dark Mode Pictures (`_dark` suffix)
 

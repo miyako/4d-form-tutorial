@@ -84,9 +84,7 @@
 - Create static pictures with `pictureFormat`: `scaled` (distorts if box isn't proportional), `tiled`, `truncatedCenter`, `truncatedTopLeft`
 - Reference pictures via `/RESOURCES/Images/...` or a form-relative path (bare filename or `Images/...` next to `form.4DForm`) -- both work
 - Understand `@nx` high-resolution and `_dark` dark-mode picture naming conventions; dark-mode `_dark` substitution activates when the form's `colorScheme` is `"dark"`
-- Know that PNG DPI metadata does **not** affect declarative form rendering -- it only matters for interactive Drop/Paste and "Automatic Size" in the Form Editor
 - Know `vector-effect="non-scaling-stroke"` (SVG) keeps stroke width constant under scaling -- 4D's substitute for shape-primitive grid lines
-- Know 4D accepts the proprietary `ns4d:DPI` SVG root attribute; it affects native/intrinsic-size calculations, not rendering into an already-sized object
 - SVG and WEBP are natively supported picture formats and render correctly
 
 ### Event Cycle Architecture
