@@ -163,11 +163,13 @@ For example, if a vertical splitter spans top=91 to bottom=257, a button at top=
 
 ### Stops
 
-For objects to the left/above (standard and pusher), the splitter cannot be dragged past them.
+For objects to the left/above (standard and pusher), the splitter cannot be dragged past them. The leftmost/topmost stop is the window edge (0) — no margin is enforced on the left or top sides.
 
 For objects to the right/below of a **standard** splitter, the splitter stops as soon as its edge reaches the near edge of the object (e.g., splitter's right edge touches the object's left edge). No overlapping occurs. Affected objects with `"move"` sizing move with the splitter; objects with `"grow"` sizing resize.
 
 For objects to the right/below of a **pusher** splitter, objects with `"move"` sizing are pushed along with the splitter. They keep moving until they run out of room — i.e., they hit the form margin (`rightMargin` or `bottomMargin`). The pusher does not respect other splitters or objects as stops, but pushed objects cannot leave the form's margin boundary.
+
+**Note**: Margins (`rightMargin`, `bottomMargin`) only apply to the right and bottom sides. Historically this reserved space for scroll bars. There is no corresponding margin enforcement on the left or top.
 
 ## Events
 
