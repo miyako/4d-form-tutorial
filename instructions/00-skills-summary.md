@@ -101,6 +101,16 @@
 - Know that `FORM SCREENSHOT` on a form name renders the Form Editor's static template: every drop-down kind (object/array/choice-list/hierarchical) renders the literal `dataSource` expression text as its label, never a resolved value, first-choiceList-item, or blank; only a `dataSource`-less standard-action dropdown (e.g. `gotoPage`) shows its own object name in quotes as placeholder
 - `Button Style` (`style`) is officially listed as supported for drop-down lists and accepts the full button style enum, but empirically produces **no visible difference** -- every style renders as the same native pop-up-menu chrome; unlike buttons/checkboxes/radio buttons, a drop-down's appearance is controlled by the platform, not this property
 
+### Combo Box Object JSON
+- A combo box (`type: "combo"`) is a drop-down list that is also an **enterable** field -- shares the object/array/choice-list data source shapes with drop-down, but has no `index`, no hierarchical mode, no `saveAs`/reference storage, no standard action support, and no `focusable`/`On Clicked` (it behaves like an ordinary input, not an "active" object)
+- Object-based: `values` (Collection) + `currentValue` only -- no `index`; `currentValue` is bidirectional and simply holds whatever text is typed or selected
+- Array-based: typed/selected text is written into **element `0`** of the array -- the array variable itself is not used as a selection index (unlike the drop-down list's array-based mode)
+- Choice list: same `choiceList` mechanics as drop-down (inline list or named toolbox list), but always stores the literal text -- no `saveAs: "reference"` option exists for combo box
+- Combo-specific properties: `automaticInsertion` (typed values not in the list get added to the in-memory list; works for choice-list, object, and array data sources) and `excludedList` (named values are rejected on entry, with an error message)
+- The Combo Box overview page states `requiredList` is **not available** for combo boxes (use a drop-down list instead for a closed required list), but the generic Range of Values property page's "Objects Supported" line contradicts this by listing Combo Box -- an unresolved documentation inconsistency requiring interactive confirmation
+- The official Combo Box overview page's prose recommends `On Data Change` for handling entries, yet that event is **absent** from the same page's own "Supported Events" list -- another documentation inconsistency
+- Like dropdown: `FORM SCREENSHOT`'s static template renders every combo box kind's literal `dataSource` expression text as its label, never a resolved value
+
 ### Event Cycle Architecture
 - Event cycle is **atomic, sequential, cooperative**
 - Animations pause during mouse-down waits on clickable objects
@@ -135,7 +145,7 @@
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, and **dropdown** in depth. The remaining object types (input, text, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, and **combo box** in depth. The remaining object types (input, text, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -193,3 +203,6 @@ All ruler display options: plain, graduation, labels top/bottom, custom step/max
 
 ### 10. Dropdowns
 Object-based (indexed selection + `-1` placeholder), array-based, choice list (`saveAs` value vs. reference), standard action (`gotoPage`), and hierarchical drop-down lists, one kind per page.
+
+### 11. Combos
+Object-based (`values`/`currentValue`, no index), array-based (typed text goes to element 0), plain choice list, `automaticInsertion`, `excludedList`, and a `requiredList`-on-combo edge case (docs disagree on whether this is even valid), one kind per page.
