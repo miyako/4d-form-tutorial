@@ -50,7 +50,7 @@ Multiple rulers can share the same data source and they will **stay in sync** --
 }
 ```
 
-The data source value represents the current position within the min/max range.
+The data source value represents the current position within the min/max range. **Values are integer only.** To work with real/decimal values, use a large integer range (e.g., 0-1000 for 0.0-100.0), hide the ticker labels, and convert by code.
 
 ## Scale Properties
 
@@ -74,6 +74,10 @@ The `step` property controls the granularity of value selection. For example, wi
 | Graduation step | `graduationStep` | integer | Interval between graduation tick marks |
 
 Graduation ticks are small marks along the ruler track. They are purely visual and independent of the `step` property (though typically they match or are multiples of `step`).
+
+### Enterable
+
+Setting `enterable: false` makes the ruler display-only (read-only). It renders greyed out and can only be updated by code. This effectively turns it into a visual indicator similar to a thermometer.
 
 ### Labels
 

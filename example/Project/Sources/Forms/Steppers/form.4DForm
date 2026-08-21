@@ -36,38 +36,43 @@
 		},
 		{
 			"objects": {
-				"Ruler6": {
-					"type": "ruler",
-					"left": 103,
-					"top": 98,
-					"width": 321,
-					"height": 97,
+				"Stepper": {
+					"type": "stepper",
+					"left": 44,
+					"top": 41,
+					"width": 14,
+					"height": 34,
 					"max": 100,
 					"events": [
-						"onClick",
 						"onDataChange"
 					],
-					"dataSource": "50",
-					"continuousExecution": true,
-					"method": "ObjectMethods/Ruler6.4dm",
-					"showGraduations": true,
-					"graduationStep": 10,
-					"labelsPlacement": "bottom",
-					"focusable": false
+					"dataSource": "Form:C1466.stepper"
+				},
+				"Stepper1": {
+					"type": "stepper",
+					"left": 84,
+					"top": 41,
+					"width": 19,
+					"height": 34,
+					"max": 100,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.stepper"
 				},
 				"Input": {
 					"type": "input",
-					"left": 103,
-					"top": 23,
-					"width": 165,
+					"left": 134,
+					"top": 50,
+					"width": 182,
 					"height": 17,
-					"dataSource": "Form:C1466.info",
-					"enterable": false
+					"dataSource": "Form:C1466.stepper",
+					"dataSourceTypeHint": "integer"
 				}
 			}
 		}
 	],
-	"geometryStamp": 56,
+	"geometryStamp": 17,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
