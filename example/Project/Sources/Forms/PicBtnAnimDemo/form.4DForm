@@ -1,0 +1,143 @@
+{
+  "$4d": { "version": "1", "kind": "form" },
+  "windowTitle": "Picture Button Animation Tests",
+  "windowSizingX": "fixed",
+  "windowSizingY": "fixed",
+  "width": 700,
+  "height": 520,
+  "pages": [
+    {
+      "objects": {}
+    },
+    {
+      "objects": {
+        "labelA": {
+          "type": "text",
+          "text": "A: switchBack+rollover (4fr, lastDisabled)",
+          "top": 10, "left": 10, "width": 300, "height": 20
+        },
+        "btnA": {
+          "type": "pictureButton",
+          "top": 35, "left": 10, "width": 80, "height": 80,
+          "picture": "/RESOURCES/Images/animBtn4.png",
+          "rowCount": 1,
+          "columnCount": 4,
+          "switchBackWhenReleased": true,
+          "switchWhenRollover": true,
+          "useLastFrameAsDisabled": true,
+          "events": ["onClick"]
+        },
+        "labelB": {
+          "type": "text",
+          "text": "B: switchBack only (4fr, lastDisabled)",
+          "top": 10, "left": 200, "width": 300, "height": 20
+        },
+        "btnB": {
+          "type": "pictureButton",
+          "top": 35, "left": 200, "width": 80, "height": 80,
+          "picture": "/RESOURCES/Images/animBtn4.png",
+          "rowCount": 1,
+          "columnCount": 4,
+          "switchBackWhenReleased": true,
+          "switchWhenRollover": false,
+          "useLastFrameAsDisabled": true,
+          "events": ["onClick"]
+        },
+        "labelC": {
+          "type": "text",
+          "text": "C: rollover only (4fr, lastDisabled)",
+          "top": 10, "left": 390, "width": 300, "height": 20
+        },
+        "btnC": {
+          "type": "pictureButton",
+          "top": 35, "left": 390, "width": 80, "height": 80,
+          "picture": "/RESOURCES/Images/animBtn4.png",
+          "rowCount": 1,
+          "columnCount": 4,
+          "switchBackWhenReleased": false,
+          "switchWhenRollover": true,
+          "useLastFrameAsDisabled": true,
+          "events": ["onClick"]
+        },
+        "labelD": {
+          "type": "text",
+          "text": "D: switchBack+roll (6fr, lastDisabled)",
+          "top": 140, "left": 10, "width": 350, "height": 20
+        },
+        "btnD": {
+          "type": "pictureButton",
+          "top": 165, "left": 10, "width": 80, "height": 80,
+          "picture": "/RESOURCES/Images/animBtn6.png",
+          "rowCount": 1,
+          "columnCount": 6,
+          "switchBackWhenReleased": true,
+          "switchWhenRollover": true,
+          "useLastFrameAsDisabled": true,
+          "events": ["onClick"]
+        },
+        "labelE": {
+          "type": "text",
+          "text": "E: switchBack+roll (6fr, NO disabled)",
+          "top": 140, "left": 200, "width": 350, "height": 20
+        },
+        "btnE": {
+          "type": "pictureButton",
+          "top": 165, "left": 200, "width": 80, "height": 80,
+          "picture": "/RESOURCES/Images/animBtn6.png",
+          "rowCount": 1,
+          "columnCount": 6,
+          "switchBackWhenReleased": true,
+          "switchWhenRollover": true,
+          "useLastFrameAsDisabled": false,
+          "events": ["onClick"]
+        },
+        "labelF": {
+          "type": "text",
+          "text": "F: rollover+loop (6fr, click cycles)",
+          "top": 140, "left": 390, "width": 350, "height": 20
+        },
+        "btnF": {
+          "type": "pictureButton",
+          "top": 165, "left": 390, "width": 80, "height": 80,
+          "picture": "/RESOURCES/Images/animBtn6.png",
+          "rowCount": 1,
+          "columnCount": 6,
+          "switchWhenRollover": true,
+          "loopBackToFirstFrame": true,
+          "events": ["onClick"]
+        },
+        "labelG": {
+          "type": "text",
+          "text": "G: switchContinuously+loop (6fr, lastDisabled)",
+          "top": 270, "left": 10, "width": 400, "height": 20
+        },
+        "btnG": {
+          "type": "pictureButton",
+          "top": 295, "left": 10, "width": 80, "height": 80,
+          "picture": "/RESOURCES/Images/animBtn6.png",
+          "rowCount": 1,
+          "columnCount": 6,
+          "switchContinuously": true,
+          "loopBackToFirstFrame": true,
+          "useLastFrameAsDisabled": true,
+          "events": ["onClick"]
+        },
+        "labelH": {
+          "type": "text",
+          "text": "H: frameDelay=1 (6fr, auto-cycle)",
+          "top": 270, "left": 200, "width": 350, "height": 20
+        },
+        "btnH": {
+          "type": "pictureButton",
+          "top": 295, "left": 200, "width": 80, "height": 80,
+          "picture": "/RESOURCES/Images/animBtn6.png",
+          "rowCount": 1,
+          "columnCount": 6,
+          "frameDelay": 1,
+          "loopBackToFirstFrame": true,
+          "events": ["onClick"]
+        }
+      }
+    }
+  ]
+}

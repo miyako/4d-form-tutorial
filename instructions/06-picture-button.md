@@ -104,12 +104,43 @@ These properties control when and how the picture button switches between frames
 
 | Property | JSON Name | Type | Description |
 |----------|-----------|------|-------------|
-| Switch back when released | `switchBackWhenReleased` | boolean | Shows frame 0 normally; shows frame 1 when clicked (mouse down). Returns to frame 0 on release. Creates a standard click button effect. |
-| Switch when roll over | `switchWhenRollover` | boolean | Shows a different frame when the mouse cursor hovers over the button. The initial frame is restored when the cursor leaves. |
-| Switch continuously on clicks | `switchContinuously` | boolean | Holding down the mouse button cycles through frames continuously (animation). Does not loop back. |
-| Loop back to first frame | `loopBackToFirstFrame` | boolean | After reaching the last frame, clicking cycles back to frame 0. Without this, clicking stops at the last frame. |
-| Switch every x seconds | `frameDelay` | integer | Auto-cycles through frames at the specified interval (in seconds). Ignores all other animation options. |
-| Use last frame as disabled | `useLastFrameAsDisabled` | boolean | The last frame is reserved for the disabled state. It is excluded from click/animation sequences and only shown when the button is disabled. |
+| Switch back when released | `switchBackWhenReleased` | boolean | Shows frame 0 normally; shows frame 1 when clicked (mouse down). Returns to frame 0 on release regardless of cursor position. |
+| Switch when roll over | `switchWhenRollover` | boolean | Shows the **last available frame** when the mouse cursor hovers over the button. The initial frame is restored when the cursor leaves. |
+| Switch continuously on clicks | `switchContinuously` | boolean | Holding down the mouse button cycles through frames continuously (animation). |
+| Loop back to first frame | `loopBackToFirstFrame` | boolean | After reaching the last available frame, cycles back to frame 0. Without this, stops at the last frame. |
+| Switch every x seconds | `frameDelay` | integer | Auto-cycles through ALL frames at the specified interval (in seconds). Ignores all other animation options. Only animates while the window is active. |
+| Use last frame as disabled | `useLastFrameAsDisabled` | boolean | The last frame is reserved for the disabled state. It is excluded from all sequences (rollover, continuous, loop) and only shown when the button is disabled. |
+
+### Frame Assignment Rules
+
+The frame used for each state depends on the total number of frames and which animation properties are enabled.
+
+**Key rule**: `switchWhenRollover` always uses the **last available frame** (i.e., the last frame that isn't reserved for disabled). `switchBackWhenReleased` always uses **frame 1** for the clicked state.
+
+| Frames | `lastDisabled` | Frame 0 | Frame 1 | Middle frames | Second-to-last | Last |
+|--------|---------------|---------|---------|---------------|----------------|------|
+| 4 | yes | normal | clicked | rollover (fr 2) | rollover (fr 2) | disabled (fr 3) |
+| 4 | no | normal | clicked | — | — | rollover (fr 3) |
+| 6 | yes | normal | clicked | unused (fr 2,3) | rollover (fr 4) | disabled (fr 5) |
+| 6 | no | normal | clicked | unused (fr 2,3,4) | — | rollover (fr 5) |
+
+**Important**: When using `switchBackWhenReleased` + `switchWhenRollover`, frames between 1 and the rollover frame are **unused**. This means for command buttons, use exactly the minimum number of frames needed (typically 4 with disabled, or 3 without).
+
+### Click Behavior Without switchBack
+
+Without `switchBackWhenReleased`, each click advances the data source by 1 (cycling through frames). The click is **positional**:
+- If the mouse is **released over the button**: the new frame value sticks
+- If the mouse is **released outside the button**: the value reverts to the previous frame (the click is cancelled)
+
+This is the behavior used for **choice selector** buttons.
+
+### switchContinuously Behavior
+
+When `switchContinuously` is true with `loopBackToFirstFrame` and `useLastFrameAsDisabled`, the animation loops through frames 0 to N-2 (excluding the disabled frame). Without `loopBackToFirstFrame`, it stops at the last available frame.
+
+### frameDelay Behavior
+
+When `frameDelay` is set, it overrides all other animation properties. The button auto-cycles through **all** frames (including the last, even if `useLastFrameAsDisabled` is set — `frameDelay` ignores it). Animation only runs while the parent window is the active/focused window.
 
 ### Typical Combinations
 
