@@ -165,10 +165,7 @@ For example, if a vertical splitter spans top=91 to bottom=257, a button at top=
 
 For objects to the left/above (standard and pusher), the splitter cannot be dragged past them.
 
-For objects to the right/below of a **standard** splitter, affected objects move with the splitter until a stop is reached. Stops are:
-- The window border
-- Another splitter
-- An immovable object (e.g., one with `sizingX: "fixed"`)
+For objects to the right/below of a **standard** splitter, the splitter stops as soon as its edge reaches the near edge of the object (e.g., splitter's right edge touches the object's left edge). No overlapping occurs. Affected objects with `"move"` sizing move with the splitter; objects with `"grow"` sizing resize.
 
 For objects to the right/below of a **pusher** splitter, there are no stops -- objects are pushed indefinitely.
 

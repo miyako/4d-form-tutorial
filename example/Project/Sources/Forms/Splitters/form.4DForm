@@ -64,13 +64,13 @@
 					"events": [
 						"onClick"
 					],
-					"sizingX": "move"
+					"sizingX": "grow"
 				},
 				"Button1": {
 					"type": "button",
 					"text": "",
 					"top": 111,
-					"left": 57,
+					"left": 71,
 					"width": 23,
 					"height": 49,
 					"events": [
@@ -81,7 +81,7 @@
 			}
 		}
 	],
-	"geometryStamp": 26,
+	"geometryStamp": 28,
 	"formClass": "",
 	"editor": {
 		"activeView": "View 1",
