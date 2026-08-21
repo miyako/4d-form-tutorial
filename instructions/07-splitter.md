@@ -163,13 +163,36 @@ For example, if a vertical splitter spans top=91 to bottom=257, a button at top=
 
 ### Stops
 
-For objects to the left/above (standard and pusher), the splitter cannot be dragged past them. The leftmost/topmost stop is the window edge (0) — no margin is enforced on the left or top sides.
+### Sizing Behavior Summary
 
-For objects to the right/below of a **standard** splitter, the splitter stops as soon as its edge reaches the near edge of the object (e.g., splitter's right edge touches the object's left edge). No overlapping occurs. Affected objects with `"move"` sizing move with the splitter; objects with `"grow"` sizing resize.
+| Object sizing | Position relative to splitter | Effect |
+|--------------|-------------------------------|--------|
+| `"grow"` | Left/above | Keeps position, shrinks/grows width/height (minimum ~10px) |
+| `"grow"` | Right/below | Keeps position, grows/shrinks width/height (inverse of left) |
+| `"move"` | Left/above | Moves with the splitter; acts as a stop for leftward/upward movement |
+| `"move"` | Right/below | Acts as a stop — splitter cannot move rightward/downward past it |
+| `"fixed"` | Left/above | Remains as is |
+| `"fixed"` | Right/below | Moves with the splitter (despite being "fixed") |
 
-For objects to the right/below of a **pusher** splitter, objects with `"move"` sizing are pushed along with the splitter. They keep moving until they run out of room — i.e., they hit the form margin (`rightMargin` or `bottomMargin`). The pusher does not respect other splitters or objects as stops, but pushed objects cannot leave the form's margin boundary.
+**Key insight**: `"fixed"` means "don't resize with the form window" — it does NOT mean "ignore splitters." A `"fixed"` object to the right of a splitter is still pushed by it.
+
+**Both sides respond simultaneously**: if `"grow"` objects exist on both sides, the left one shrinks while the right one grows (and vice versa) in a single drag operation.
+
+### Stops
+
+- The splitter cannot move past `"move"` objects to its right/below — they act as stops
+- The splitter cannot move past objects to its left/above (any sizing) — they always act as stops
+- The leftmost/topmost stop is the window edge (0) — no margin is enforced on left or top
+- For pushed objects, the rightmost/bottommost stop is the form margin (`rightMargin`/`bottomMargin`)
 
 **Note**: Margins (`rightMargin`, `bottomMargin`) only apply to the right and bottom sides. Historically this reserved space for scroll bars. There is no corresponding margin enforcement on the left or top.
+
+### Multiple Splitters
+
+When an object sits between two splitters:
+- The object is considered "to the left" of the right splitter — the right splitter can move the object
+- The object acts as a stop for the left splitter — the left splitter cannot move rightward past it
+- The left splitter can only move leftward (away from the object)
 
 ## Events
 
