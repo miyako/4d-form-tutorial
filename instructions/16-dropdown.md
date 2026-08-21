@@ -80,12 +80,23 @@ To initialize an object-based drop-down list, set `index` to `-1` and, optionall
 
 ```4d
 ARRAY TEXT(asColor; 3)
-asColor{1}:="Red"
-asColor{2}:="Green"
-asColor{3}:="Blue"
+asColor{1}:="item 1"
+asColor{2}:="item 2"
+asColor{3}:="item 3"
+asColor{0}:="please select item"
+asColor:=0
 ```
 
 The `dataSource` string is the array's own name (not `Form.xxx`); the object name and the array name do not need to match, but the array must exist as a form-local array. Populate it (and clear it) in `On Load` / `On Unload`. The `arrayNumber`/`arrayDate`/`arrayTime` hints work the same way for arrays of other scalar types.
+
+4D arrays are **1-based** (see https://developer.4d.com/docs/Concepts/arrays), unlike the 0-based `values` Collection used by the object-based kind:
+
+- `asColor{1}`, `asColor{2}`, `asColor{3}` are the three selectable items.
+- `asColor{0}` is reserved for the "no selection" placeholder message (e.g. `"please select item"`).
+- The **current element number** is held by the array variable itself, not by a separate index property: `asColor:=1` selects element 1. The idiom `asColor{asColor}` therefore always yields the currently selected value.
+- The array reference is **bidirectional**: assigning a number to the array variable selects that item; when the user selects an item, 4D assigns the selected element's number back into the array variable.
+
+To initialize an array-based drop-down list, set the array variable to `0` and, optionally, populate element `0` with an initialization message.
 
 ### Choice list (value vs. reference)
 
@@ -104,16 +115,29 @@ The `dataSource` string is the array's own name (not `Form.xxx`); the object nam
 }
 ```
 
-`choiceList` is a static list/collection of items attached directly to the object -- no runtime population needed. `saveAs` controls what the bound field/variable stores:
+`choiceList` can be either a static list/collection of items inlined directly in the object's JSON, or the name of a list defined in the project's toolbox (`lists.json` -- see https://developer.4d.com/docs/Project/architecture). A named toolbox list is automatically instantiated when the form is loaded and cleared when the form is unloaded -- no manual lifecycle code is needed for it, unlike array-based or hierarchical-by-code data sources.
 
-- `"value"` (default): the literal selected item (e.g. the text `"Blue"`).
-- `"reference"`: a 1-based numeric position into `choiceList` (e.g. `3` for `"Blue"`). The bound field/variable must be Number type.
+`saveAs` controls what the bound field/variable (the data source) holds, and the on-screen behavior is identical either way -- only the code working with the data source is affected:
+
+- `"value"` (default): the data source holds the literal selected item's text (e.g. `"Blue"`). Intuitive to read directly.
+- `"reference"`: the data source holds a 1-based numeric reference to the selected item's position in the list. Decouples the displayed text (which a user sees, and which can be relabeled or localized) from the value code actually keys off of.
+
+The data source is **bidirectional**: assigning a value (or reference number) to it selects the corresponding item; when the user selects an item, its value (or reference number) is assigned back into the data source.
+
+To initialize a choice list drop-down list: set the data source to `0` when using `saveAs: "reference"`, or to an initialization message (e.g. `"please select item"`) when using `saveAs: "value"`.
 
 A choice list dropdown cannot be combined with an object or array data source -- entering a field/variable name directly in "Variable or Expression" always forces this mode.
 
 ### Hierarchical
 
-Setting only `"dataSourceTypeHint": "integer"` (with `"type": "dropdown"` and no `choiceList`/`list`/object/array data source) declares a **hierarchical** drop-down list, limited to two levels in forms. Hierarchical lists are built and assigned with the dedicated Hierarchical Lists language commands (e.g. `List item parent`) rather than plain JSON literals, and are attached via the `list` JSON property.
+Setting only `"dataSourceTypeHint": "integer"` (with `"type": "dropdown"` and no `choiceList`/object/array data source) declares a **hierarchical** drop-down list, limited to two levels in forms. `dataSourceTypeHint: "integer"` reflects the fact that the underlying data source really is an integer: a **hierarchical list reference**.
+
+A hierarchical list is built at runtime with the dedicated list-management commands rather than assigned as a JSON literal:
+
+- `New list` (https://developer.4d.com/docs/commands/new-list) creates an empty hierarchical list and returns its reference (an integer).
+- `Load list` (https://developer.4d.com/docs/commands/load-list) loads a hierarchical list previously defined in the toolbox and returns its reference.
+- The returned integer reference is assigned directly to the object's data source expression.
+- `Clear list` (https://developer.4d.com/docs/commands/clear-list) must be called to release the list when it is no longer needed (typically in `On Unload`) -- unlike a named toolbox `choiceList`, a hierarchical list built by code is not cleared automatically and will leak if forgotten.
 
 ### Standard action (submenu-style)
 
@@ -130,8 +154,8 @@ Drop-down lists (and hierarchical choice lists) can only be directly associated 
 
 | Property | JSON Name | Type | Notes |
 |----------|-----------|------|-------|
-| Choice list | `choiceList` | list / collection | Static list of selectable items |
-| Hierarchical list | `list` | list / collection | Hierarchical lists only |
+| Choice list | `choiceList` | list / collection | Inline static list, or the name of a toolbox list (`lists.json`) -- auto-instantiated on load, auto-cleared on unload |
+| Hierarchical list reference | `list` | list / collection | Also used when a hierarchical list is built by code (`New list`/`Load list`) and assigned by integer reference |
 | Data source hint | `dataSourceTypeHint` | text | `"object"`, `"arrayText"`, `"arrayNumber"`, `"arrayDate"`, `"arrayTime"`, or `"integer"` (hierarchical trigger) |
 | Save as | `saveAs` | text | `"value"` (default) or `"reference"` |
 
