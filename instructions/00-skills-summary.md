@@ -87,6 +87,11 @@
 - Know `vector-effect="non-scaling-stroke"` (SVG) keeps stroke width constant under scaling -- 4D's substitute for shape-primitive grid lines
 - SVG and WEBP are natively supported picture formats and render correctly
 
+### Dropdown Object JSON
+- Five kinds distinguished by JSON properties, not a separate `type`: object-based (`dataSourceTypeHint: "object"`, `Form.xxx` = `{values, index, currentValue}`), array-based (`dataSourceTypeHint: "arrayText"/"arrayNumber"/"arrayDate"/"arrayTime"`, `dataSource` names the array directly), choice list value/reference (`choiceList` + `saveAs: "value"|"reference"`), hierarchical (`dataSourceTypeHint: "integer"` alone), and standard action submenu (`action: "gotoPage"`, no data source)
+- Choice list dropdown cannot be combined with object/array data source -- binding a field/variable directly always forces choice-list mode
+- Know that `FORM SCREENSHOT` on a form name renders the Form Editor's static template: object/array-bound dropdowns render blank (no `On Load` execution), choice-list dropdowns preview their first item regardless of `saveAs`, unbound objects show their object name in quotes as placeholder
+
 ### Event Cycle Architecture
 - Event cycle is **atomic, sequential, cooperative**
 - Animations pause during mouse-down waits on clickable objects
@@ -121,7 +126,7 @@
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, and **static picture** in depth. The remaining object types (input, text, dropdown, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, and **dropdown** in depth. The remaining object types (input, text, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -176,3 +181,6 @@ Vertical/horizontal/invisible/pusher splitter variants, plus edge case tests (fi
 
 ### 9. RulerDemo
 All ruler display options: plain, graduation, labels top/bottom, custom step/max, vertical with labels, and non-enterable with static value.
+
+### 10. Dropdowns
+Object-based (indexed selection + `-1` placeholder), array-based, choice list (`saveAs` value vs. reference), standard action (`gotoPage`), and hierarchical drop-down lists, one kind per page.
