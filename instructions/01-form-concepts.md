@@ -191,6 +191,17 @@ When an event fires on an object:
 
 This means code always runs before any built-in standard action, allowing you to conditionally modify or block the action.
 
+### Event Cycle Architecture
+
+The form event cycle is **atomic, sequential, and cooperative**:
+
+- Form objects (spinners, barber shop progress, etc.) are visually updated between event cycles
+- While a user holds a mouse button down on a clickable object (e.g., a button), the event cycle **waits** for the click to complete (mouse release). During this time:
+  - Animations (spinner, barber shop) are **paused** — not frozen at the runtime level, but the event cycle cannot refresh the display
+  - `On Timer` events cannot fire
+  - Any data source updates made during an event handler are **deferred** — they do not invalidate and refresh the form immediately, only at the end of the event cycle
+- This means a long-running `On Clicked` handler will freeze the form's visual updates until it completes
+
 ## Form Objects
 
 Every form object has a `type` property and positioning via `top` and `left` (required).
