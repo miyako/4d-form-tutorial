@@ -87,6 +87,20 @@
 - Know `vector-effect="non-scaling-stroke"` (SVG) keeps stroke width constant under scaling -- 4D's substitute for shape-primitive grid lines
 - SVG and WEBP are natively supported picture formats and render correctly
 
+### Dropdown Object JSON
+- Five kinds distinguished by JSON properties, not a separate `type`: object-based (`dataSourceTypeHint: "object"`, `Form.xxx` = `{values, index, currentValue}`), array-based (`dataSourceTypeHint: "arrayText"/"arrayNumber"/"arrayDate"/"arrayTime"`, `dataSource` names the array directly), choice list value/reference (`choiceList` + `saveAs: "value"|"reference"`), hierarchical (`dataSourceTypeHint: "integer"` alone), and standard action submenu (`action: "gotoPage"`, no data source)
+- Underlying data source is always object, array, or list -- object is the modern/recommended shape. For object: `values` is a 0-based Collection; `index` is bidirectional (assign to select, user selection writes back); `currentValue` is read-only (assignments other than at init time are ignored and revert) -- initialize with `index:=-1` + `currentValue:=` placeholder message
+- For array (1-based, unlike Collection): element `0` is the "no selection" placeholder, the array variable itself holds the current element number (bidirectional), `arr{arr}` is the current selected value -- initialize by setting the array variable to `0`
+- For choice list (`choiceList`, inline or a named toolbox list from `lists.json`, auto-instantiated/cleared with the form): `saveAs: "value"|"reference"` picks whether the bidirectional data source holds the literal text or a numeric item reference (via `APPEND TO LIST`'s `itemRef`/`SET LIST ITEM`, not position) -- initialize to `0` (reference) or a placeholder message (value). `OBJECT SET LIST BY NAME` sets a toolbox list at runtime, equivalent to naming it in `choiceList`
+- Hierarchical drop-down (`dataSourceTypeHint: "integer"` alone, the "List reference" Data Type (list) option) is backed by a hierarchical list reference (integer) attached via `OBJECT SET LIST BY NAME` (auto-cleared with the form) or `OBJECT SET LIST BY REFERENCE` with a `New list`/`Load list` reference (dropdown retains its own ref count, so `Clear list` can be called immediately after assigning); resolving the selected item requires Hierarchical Lists commands (`Selected list items`, etc.)
+- General rule across all data source shapes: if the "no selection" placeholder is never set, the control simply renders blank until the user selects; once selected, the "no selection" state can only be restored by resetting the data source by code, never through the UI
+- Standard actions use `standardActionName{?nameParameter=valueParameter}` syntax (e.g. `gotoPage?value=5`); when both a method and a standard action are set, the method runs first and the standard action after (except `deleteRecord`, which runs before the method); style-related standard actions (`fontSize`, `backgroundColor`, `bold`...) trigger `On After Edit`. Drop-downs (and hierarchical choice lists) can only be bound directly to standard actions that generate a submenu (`gotoPage`, `backgroundColor`, `fontSize`); custom per-item actions can replace the automatic submenu values via `SET LIST ITEM PARAMETER` on the choice list
+- Standard-action dropdown binding is one directional: selecting an item executes the action, but code-driven state changes (e.g. `FORM GOTO PAGE`) do not update the dropdown back -- resync explicitly (`FORM Get current page`/`FORM Get properties`) or drive the change via `INVOKE ACTION` instead. This is unworkable for open-ended targets like `fontSize` on styled text/Write Pro areas, where the current value may not even be one of the dropdown's fixed choices
+- Choice list dropdown cannot be combined with object/array data source -- binding a field/variable directly always forces choice-list mode
+- Like button/checkbox/radio: `On Clicked` fires on mouse-down, not mouse-up; supports `focusable` with Return/Tab, Shift+Return/Shift+Tab, and Space-to-click keyboard behavior. Like progress/ruler: data source can be a live expression with bidirectional binding. OS may render at a different height than declared
+- Know that `FORM SCREENSHOT` on a form name renders the Form Editor's static template: every drop-down kind (object/array/choice-list/hierarchical) renders the literal `dataSource` expression text as its label, never a resolved value, first-choiceList-item, or blank; only a `dataSource`-less standard-action dropdown (e.g. `gotoPage`) shows its own object name in quotes as placeholder
+- `Button Style` (`style`) is officially listed as supported for drop-down lists and accepts the full button style enum, but empirically produces **no visible difference** -- every style renders as the same native pop-up-menu chrome; unlike buttons/checkboxes/radio buttons, a drop-down's appearance is controlled by the platform, not this property
+
 ### Event Cycle Architecture
 - Event cycle is **atomic, sequential, cooperative**
 - Animations pause during mouse-down waits on clickable objects
@@ -121,7 +135,7 @@
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, and **static picture** in depth. The remaining object types (input, text, dropdown, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, and **dropdown** in depth. The remaining object types (input, text, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -176,3 +190,6 @@ Vertical/horizontal/invisible/pusher splitter variants, plus edge case tests (fi
 
 ### 9. RulerDemo
 All ruler display options: plain, graduation, labels top/bottom, custom step/max, vertical with labels, and non-enterable with static value.
+
+### 10. Dropdowns
+Object-based (indexed selection + `-1` placeholder), array-based, choice list (`saveAs` value vs. reference), standard action (`gotoPage`), and hierarchical drop-down lists, one kind per page.
