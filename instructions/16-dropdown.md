@@ -31,6 +31,8 @@ A drop-down list is an active object like button, checkbox, and radio button:
 
 Like progress indicators and rulers, a drop-down list's data source can be a live expression, and the binding is **bidirectional**: the object reads its displayed state from the expression, and user interaction writes the selection back into the expression -- there is no need to trap `On Clicked`/`On Data Change` just to copy the value back manually (though those events are still available for reacting to a change).
 
+Across all data source shapes (object, array, or list), if the "no selection" placeholder is left unset the control simply renders blank until the user makes a selection; the "no selection" state can never be restored through the UI once a selection has been made -- only by resetting the data source back to its "no selection" state (`-1` index / `0` array-or-reference value / empty text) by code.
+
 There are five distinct kinds of drop-down list, distinguished entirely by which JSON properties are present -- not by a separate `type` value. `"type"` is always `"dropdown"`. The underlying data source is always one of three shapes -- **object**, **array**, or **list** (choice list / hierarchical list) -- with **object being the modern, recommended shape** (see https://blog.4d.com/use-collections-and-lists-within-forms-objects/).
 
 ## The Five Kinds
