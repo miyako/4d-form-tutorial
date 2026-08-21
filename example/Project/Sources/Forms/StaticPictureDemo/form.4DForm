@@ -1,0 +1,103 @@
+{
+	"$4d": { "version": "1", "kind": "form" },
+	"windowSizingX": "variable", "windowSizingY": "variable",
+	"windowMinWidth": 0, "windowMinHeight": 0, "windowMaxWidth": 32767, "windowMaxHeight": 32767,
+	"rightMargin": 20, "bottomMargin": 20,
+	"events": ["onLoad"],
+	"windowTitle": "Static Picture Demo",
+	"destination": "detailScreen",
+	"pages": [
+		{ "objects": {} },
+		{
+			"objects": {
+				"lblTitle": { "type": "text", "text": "Display (pictureFormat): source is vector.svg, 100x100, stretched into a 180x120 box", "top": 5, "left": 10, "width": 600, "height": 16 },
+				"lblScaled": { "type": "text", "text": "scaled", "top": 30, "left": 10, "width": 180, "height": 16 },
+				"picScaled": { "type": "picture", "top": 50, "left": 10, "width": 180, "height": 120, "picture": "/RESOURCES/Images/vector.svg", "pictureFormat": "scaled" },
+				"lblTiled": { "type": "text", "text": "tiled", "top": 30, "left": 210, "width": 180, "height": 16 },
+				"picTiled": { "type": "picture", "top": 50, "left": 210, "width": 180, "height": 120, "picture": "/RESOURCES/Images/vector.svg", "pictureFormat": "tiled" },
+				"lblTruncCenter": { "type": "text", "text": "truncatedCenter", "top": 30, "left": 410, "width": 180, "height": 16 },
+				"picTruncCenter": { "type": "picture", "top": 50, "left": 410, "width": 180, "height": 120, "picture": "/RESOURCES/Images/vector.svg", "pictureFormat": "truncatedCenter" },
+				"lblTruncTopLeft": { "type": "text", "text": "truncatedTopLeft", "top": 30, "left": 610, "width": 180, "height": 16 },
+				"picTruncTopLeft": { "type": "picture", "top": 50, "left": 610, "width": 180, "height": 120, "picture": "/RESOURCES/Images/vector.svg", "pictureFormat": "truncatedTopLeft" },
+				"lblNote": { "type": "text", "text": "Note: box (180x120) is not proportional to the 100x100 source, so 'scaled' visibly distorts the circle into an ellipse.", "top": 185, "left": 10, "width": 780, "height": 16 }
+			}
+		},
+		{
+			"objects": {
+				"lblTitle2": { "type": "text", "text": "PNG DPI metadata: same 100x100 pixel canvas, different embedded DPI tag, format=truncatedTopLeft (no scaling), box=100x100", "top": 5, "left": 10, "width": 780, "height": 16 },
+				"lbl72": { "type": "text", "text": "72 dpi", "top": 30, "left": 10, "width": 100, "height": 16 },
+				"pic72": { "type": "picture", "top": 50, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi72.png", "pictureFormat": "truncatedTopLeft" },
+				"lbl96": { "type": "text", "text": "96 dpi", "top": 30, "left": 120, "width": 100, "height": 16 },
+				"pic96": { "type": "picture", "top": 50, "left": 120, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi96.png", "pictureFormat": "truncatedTopLeft" },
+				"lbl144": { "type": "text", "text": "144 dpi", "top": 30, "left": 230, "width": 100, "height": 16 },
+				"pic144": { "type": "picture", "top": 50, "left": 230, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi144.png", "pictureFormat": "truncatedTopLeft" },
+				"lbl300": { "type": "text", "text": "300 dpi", "top": 30, "left": 340, "width": 100, "height": 16 },
+				"pic300": { "type": "picture", "top": 50, "left": 340, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi300.png", "pictureFormat": "truncatedTopLeft" },
+				"lblNoDpi": { "type": "text", "text": "no dpi tag", "top": 30, "left": 450, "width": 100, "height": 16 },
+				"picNoDpi": { "type": "picture", "top": 50, "left": 450, "width": 100, "height": 100, "picture": "/RESOURCES/Images/nodpi.png", "pictureFormat": "truncatedTopLeft" },
+				"lblSamePixTitle": { "type": "text", "text": "Same pixel content, only DPI metadata differs (72 vs 300), no scaling:", "top": 260, "left": 10, "width": 500, "height": 16 },
+				"lblSame72": { "type": "text", "text": "72 dpi", "top": 285, "left": 10, "width": 100, "height": 16 },
+				"picSame72": { "type": "picture", "top": 305, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/samepix_72.png", "pictureFormat": "truncatedTopLeft" },
+				"lblSame300": { "type": "text", "text": "300 dpi", "top": 285, "left": 120, "width": 100, "height": 16 },
+				"picSame300": { "type": "picture", "top": 305, "left": 120, "width": 100, "height": 100, "picture": "/RESOURCES/Images/samepix_300.png", "pictureFormat": "truncatedTopLeft" },
+				"lblNote2": { "type": "text", "text": "Repeat with pictureFormat=scaled to see if the fit calculation also depends on dpi.", "top": 165, "left": 10, "width": 780, "height": 16 },
+				"pic72s": { "type": "picture", "top": 185, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi72.png", "pictureFormat": "scaled" },
+				"pic96s": { "type": "picture", "top": 185, "left": 120, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi96.png", "pictureFormat": "scaled" },
+				"pic144s": { "type": "picture", "top": 185, "left": 230, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi144.png", "pictureFormat": "scaled" },
+				"pic300s": { "type": "picture", "top": 185, "left": 340, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi300.png", "pictureFormat": "scaled" }
+			}
+		},
+		{
+			"objects": {
+				"lblTitle3": { "type": "text", "text": "Scale-factor (@nx) resolution: logical box is 64x64, icon.png has icon@2x.png / icon@3x.png next to it", "top": 5, "left": 10, "width": 780, "height": 16 },
+				"lblScale": { "type": "text", "text": "icon.png (64x64 box, picks highest available @nx for the current screen)", "top": 30, "left": 10, "width": 500, "height": 16 },
+				"picScale": { "type": "picture", "top": 50, "left": 10, "width": 64, "height": 64, "picture": "/RESOURCES/Images/icon.png", "pictureFormat": "truncatedTopLeft" },
+				"lblScaleFit": { "type": "text", "text": "same source, format=scaled, box=160x160 (upscaled well past 1x)", "top": 130, "left": 10, "width": 500, "height": 16 },
+				"picScaleFit": { "type": "picture", "top": 150, "left": 10, "width": 160, "height": 160, "picture": "/RESOURCES/Images/icon.png", "pictureFormat": "scaled" }
+			}
+		},
+		{
+			"objects": {
+				"lblTitle4": { "type": "text", "text": "SVG non-scaling-stroke: 100x100 viewBox blown up into a 320x320 box (format=scaled)", "top": 5, "left": 10, "width": 780, "height": 16 },
+				"lblScalingStroke": { "type": "text", "text": "grid_scaling.svg (stroke-width scales up with the box -> thick lines)", "top": 30, "left": 10, "width": 400, "height": 16 },
+				"picScalingStroke": { "type": "picture", "top": 50, "left": 10, "width": 320, "height": 320, "picture": "/RESOURCES/Images/grid_scaling.svg", "pictureFormat": "scaled" },
+				"lblNonScalingStroke": { "type": "text", "text": "grid_nonscaling.svg (vector-effect=non-scaling-stroke -> lines stay 1px)", "top": 30, "left": 350, "width": 400, "height": 16 },
+				"picNonScalingStroke": { "type": "picture", "top": 50, "left": 350, "width": 320, "height": 320, "picture": "/RESOURCES/Images/grid_nonscaling.svg", "pictureFormat": "scaled" }
+			}
+		},
+		{
+			"objects": {
+				"lblTitle5": { "type": "text", "text": "SVG ns4d:DPI attribute (4D-specific xmlns:ns4d=\"http://www.4d.com\" ns4d:DPI=\"n\" on the root <svg>)", "top": 5, "left": 10, "width": 780, "height": 16 },
+				"lblDpi72": { "type": "text", "text": "ns4d:DPI=72, format=truncatedTopLeft, box=100x100", "top": 30, "left": 10, "width": 350, "height": 16 },
+				"picDpi72": { "type": "picture", "top": 50, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi_ns4d_72.svg", "pictureFormat": "truncatedTopLeft" },
+				"lblDpi300": { "type": "text", "text": "ns4d:DPI=300, format=truncatedTopLeft, box=100x100", "top": 30, "left": 130, "width": 350, "height": 16 },
+				"picDpi300": { "type": "picture", "top": 50, "left": 130, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi_ns4d_300.svg", "pictureFormat": "truncatedTopLeft" },
+				"lblDpi72s": { "type": "text", "text": "ns4d:DPI=72, format=scaled, box=100x100", "top": 170, "left": 10, "width": 350, "height": 16 },
+				"picDpi72s": { "type": "picture", "top": 190, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi_ns4d_72.svg", "pictureFormat": "scaled" },
+				"lblDpi300s": { "type": "text", "text": "ns4d:DPI=300, format=scaled, box=100x100", "top": 170, "left": 130, "width": 350, "height": 16 },
+				"picDpi300s": { "type": "picture", "top": 190, "left": 130, "width": 100, "height": 100, "picture": "/RESOURCES/Images/dpi_ns4d_300.svg", "pictureFormat": "scaled" }
+			}
+		},
+		{
+			"objects": {
+				"lblTitle6": { "type": "text", "text": "Other native formats, format=scaled, box=100x100", "top": 5, "left": 10, "width": 780, "height": 16 },
+				"lblJpg": { "type": "text", "text": "JPEG", "top": 30, "left": 10, "width": 100, "height": 16 },
+				"picJpg": { "type": "picture", "top": 50, "left": 10, "width": 100, "height": 100, "picture": "/RESOURCES/Images/photo.jpg", "pictureFormat": "scaled" },
+				"lblBmp": { "type": "text", "text": "BMP", "top": 30, "left": 120, "width": 100, "height": 16 },
+				"picBmp": { "type": "picture", "top": 50, "left": 120, "width": 100, "height": 100, "picture": "/RESOURCES/Images/bitmap.bmp", "pictureFormat": "scaled" },
+				"lblTiff": { "type": "text", "text": "TIFF", "top": 30, "left": 230, "width": 100, "height": 16 },
+				"picTiff": { "type": "picture", "top": 50, "left": 230, "width": 100, "height": 100, "picture": "/RESOURCES/Images/scan.tiff", "pictureFormat": "scaled" },
+				"lblGif": { "type": "text", "text": "GIF (static)", "top": 30, "left": 340, "width": 100, "height": 16 },
+				"picGif": { "type": "picture", "top": 50, "left": 340, "width": 100, "height": 100, "picture": "/RESOURCES/Images/static.gif", "pictureFormat": "scaled" },
+				"lblGifAnim": { "type": "text", "text": "GIF (animated, runtime only)", "top": 30, "left": 450, "width": 130, "height": 16 },
+				"picGifAnim": { "type": "picture", "top": 50, "left": 450, "width": 100, "height": 100, "picture": "/RESOURCES/Images/animated.gif", "pictureFormat": "scaled" },
+				"lblWebp": { "type": "text", "text": "WEBP (mac only)", "top": 30, "left": 560, "width": 100, "height": 16 },
+				"picWebp": { "type": "picture", "top": 50, "left": 560, "width": 100, "height": 100, "picture": "/RESOURCES/Images/photo.webp", "pictureFormat": "scaled" },
+				"lblPdf": { "type": "text", "text": "PDF, 1st page (mac only)", "top": 30, "left": 670, "width": 120, "height": 16 },
+				"picPdf": { "type": "picture", "top": 50, "left": 670, "width": 100, "height": 100, "picture": "/RESOURCES/Images/document.pdf", "pictureFormat": "scaled" }
+			}
+		}
+	],
+	"geometryStamp": 1,
+	"editor": { "activeView": "View 1", "defaultView": "View 1", "views": { "View 1": {} } }
+}
