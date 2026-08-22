@@ -107,7 +107,8 @@
 - Array-based: typed/selected text is written into **element `0`** of the array -- the array variable itself is not used as a selection index (unlike the drop-down list's array-based mode)
 - Choice list: same `choiceList` mechanics as drop-down (inline list or named toolbox list), but always stores the literal text -- no `saveAs: "reference"` option exists for combo box
 - Combo-specific properties: `automaticInsertion` (typed values not in the list get added to the in-memory list; works for choice-list, object, and array data sources) and `excludedList` (named values are rejected on entry, with an error message)
-- The Combo Box overview page states `requiredList` is **not available** for combo boxes (use a drop-down list instead for a closed required list), but the generic Range of Values property page's "Objects Supported" line contradicts this by listing Combo Box -- an unresolved documentation inconsistency requiring interactive confirmation
+- The Combo Box overview page states `requiredList` is **not available** for combo boxes, and this is interactively confirmed: `requiredList` has no effect on a combo box (arbitrary text still validates without error), despite the generic Range of Values property page's "Objects Supported" line listing Combo Box for that property. Use a drop-down list for a real closed/required list
+- Interactively confirmed: `excludedList` rejection shows an alert "That value is not allowed."; `automaticInsertion` appends the new value at the bottom of the pop-up list as soon as the entry is validated (Return)
 - The official Combo Box overview page's prose recommends `On Data Change` for handling entries, yet that event is **absent** from the same page's own "Supported Events" list -- another documentation inconsistency
 - Like dropdown: `FORM SCREENSHOT`'s static template renders every combo box kind's literal `dataSource` expression text as its label, never a resolved value
 

@@ -1,193 +1,224 @@
 {
-    "$4d": {
-        "version": "1",
-        "kind": "form"
-    },
-    "windowSizingX": "variable",
-    "windowSizingY": "variable",
-    "windowMinWidth": 0,
-    "windowMinHeight": 0,
-    "windowMaxWidth": 32767,
-    "windowMaxHeight": 32767,
-    "rightMargin": 20,
-    "bottomMargin": 20,
-    "events": [
-        "onLoad",
-        "onUnload"
-    ],
-    "windowTitle": "Combos",
-    "destination": "detailScreen",
-    "pages": [
-        {
-            "objects": {}
-        },
-        {
-            "objects": {
-                "lblTitle": {
-                    "type": "text",
-                    "text": "Object-based combo box (dataSourceTypeHint: object) -- values + currentValue only, no index",
-                    "top": 5,
-                    "left": 10,
-                    "width": 600,
-                    "height": 16
-                },
-                "lblObj": {
-                    "type": "text",
-                    "text": "Form.comboFruit (typed text overwrites currentValue)",
-                    "top": 30,
-                    "left": 10,
-                    "width": 300,
-                    "height": 16
-                },
-                "comboFruit": {
-                    "type": "combo",
-                    "top": 50,
-                    "left": 10,
-                    "width": 180,
-                    "height": 20,
-                    "dataSource": "Form.comboFruit",
-                    "dataSourceTypeHint": "object",
-                    "textFormat": "@"
-                }
-            }
-        },
-        {
-            "objects": {
-                "lblTitle": {
-                    "type": "text",
-                    "text": "Array-based combo box (dataSourceTypeHint: arrayText) -- typed text overwrites element 0",
-                    "top": 5,
-                    "left": 10,
-                    "width": 600,
-                    "height": 16
-                },
-                "lblArr": {
-                    "type": "text",
-                    "text": "asFruit (array populated On Load)",
-                    "top": 30,
-                    "left": 10,
-                    "width": 300,
-                    "height": 16
-                },
-                "comboArr": {
-                    "type": "combo",
-                    "top": 50,
-                    "left": 10,
-                    "width": 180,
-                    "height": 20,
-                    "dataSource": "asFruit",
-                    "dataSourceTypeHint": "arrayText"
-                }
-            }
-        },
-        {
-            "objects": {
-                "lblTitle": {
-                    "type": "text",
-                    "text": "Choice list combo box -- saveAs is not applicable; automaticInsertion and excludedList are combo-specific",
-                    "top": 5,
-                    "left": 10,
-                    "width": 650,
-                    "height": 16
-                },
-                "lblPlain": {
-                    "type": "text",
-                    "text": "Plain choice list (no automaticInsertion)",
-                    "top": 30,
-                    "left": 10,
-                    "width": 260,
-                    "height": 16
-                },
-                "comboPlain": {
-                    "type": "combo",
-                    "top": 50,
-                    "left": 10,
-                    "width": 180,
-                    "height": 20,
-                    "dataSource": "Form.comboPlain",
-                    "choiceList": [
-                        "Red",
-                        "Green",
-                        "Blue"
-                    ]
-                },
-                "lblAutoIns": {
-                    "type": "text",
-                    "text": "automaticInsertion: true",
-                    "top": 30,
-                    "left": 210,
-                    "width": 260,
-                    "height": 16
-                },
-                "comboAutoIns": {
-                    "type": "combo",
-                    "top": 50,
-                    "left": 210,
-                    "width": 180,
-                    "height": 20,
-                    "dataSource": "Form.comboAutoIns",
-                    "choiceList": [
-                        "Red",
-                        "Green",
-                        "Blue"
-                    ],
-                    "automaticInsertion": true
-                },
-                "lblExcluded": {
-                    "type": "text",
-                    "text": "excludedList: [\"Green\"] (typing \"Green\" is rejected)",
-                    "top": 30,
-                    "left": 410,
-                    "width": 300,
-                    "height": 16
-                },
-                "comboExcluded": {
-                    "type": "combo",
-                    "top": 50,
-                    "left": 410,
-                    "width": 180,
-                    "height": 20,
-                    "dataSource": "Form.comboExcluded",
-                    "choiceList": [
-                        "Red",
-                        "Green",
-                        "Blue"
-                    ],
-                    "excludedList": [
-                        "Green"
-                    ]
-                }
-            }
-        },
-        {
-            "objects": {
-                "lblTitle": {
-                    "type": "text",
-                    "text": "requiredList test on a combo box (comboBoxOverview docs say NOT available for combo; propertiesRangeOfValues lists Combo Box as supported -- testing which is true)",
-                    "top": 5,
-                    "left": 10,
-                    "width": 650,
-                    "height": 30
-                },
-                "comboRequired": {
-                    "type": "combo",
-                    "top": 50,
-                    "left": 10,
-                    "width": 180,
-                    "height": 20,
-                    "dataSource": "Form.comboRequired",
-                    "choiceList": [
-                        "Red",
-                        "Green",
-                        "Blue"
-                    ],
-                    "requiredList": [
-                        "Red",
-                        "Green",
-                        "Blue"
-                    ]
-                }
-            }
-        }
-    ]
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "variable",
+	"windowSizingY": "variable",
+	"windowMinWidth": 0,
+	"windowMinHeight": 0,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"rightMargin": 20,
+	"bottomMargin": 20,
+	"events": [
+		"onLoad",
+		"onUnload"
+	],
+	"windowTitle": "Combos",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {
+				"Tab Control": {
+					"type": "tab",
+					"text": "Tab control",
+					"top": 162,
+					"left": 26,
+					"width": 478,
+					"height": 81,
+					"labels": [
+						"1",
+						"2",
+						"3",
+						"4"
+					],
+					"action": "gotoPage"
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Object-based combo box (dataSourceTypeHint: object) -- values + currentValue only, no index",
+					"top": 5,
+					"left": 10,
+					"width": 600,
+					"height": 16
+				},
+				"lblObj": {
+					"type": "text",
+					"text": "Form.comboFruit (typed text overwrites currentValue)",
+					"top": 30,
+					"left": 10,
+					"width": 300,
+					"height": 16
+				},
+				"comboFruit": {
+					"type": "combo",
+					"top": 50,
+					"left": 10,
+					"width": 180,
+					"height": 20,
+					"dataSource": "Form:C1466.comboFruit",
+					"dataSourceTypeHint": "object",
+					"textFormat": "@"
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Array-based combo box (dataSourceTypeHint: arrayText) -- typed text overwrites element 0",
+					"top": 5,
+					"left": 10,
+					"width": 600,
+					"height": 16
+				},
+				"lblArr": {
+					"type": "text",
+					"text": "asFruit (array populated On Load)",
+					"top": 30,
+					"left": 10,
+					"width": 300,
+					"height": 16
+				},
+				"comboArr": {
+					"type": "combo",
+					"top": 50,
+					"left": 10,
+					"width": 180,
+					"height": 20,
+					"dataSource": "asFruit",
+					"dataSourceTypeHint": "arrayText"
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Choice list combo box -- saveAs is not applicable; automaticInsertion and excludedList are combo-specific",
+					"top": 5,
+					"left": 10,
+					"width": 650,
+					"height": 16
+				},
+				"lblPlain": {
+					"type": "text",
+					"text": "Plain choice list (no automaticInsertion)",
+					"top": 30,
+					"left": 10,
+					"width": 260,
+					"height": 16
+				},
+				"comboPlain": {
+					"type": "combo",
+					"top": 50,
+					"left": 10,
+					"width": 180,
+					"height": 20,
+					"dataSource": "Form:C1466.comboPlain",
+					"choiceList": [
+						"Red",
+						"Green",
+						"Blue"
+					]
+				},
+				"lblAutoIns": {
+					"type": "text",
+					"text": "automaticInsertion: true",
+					"top": 30,
+					"left": 210,
+					"width": 260,
+					"height": 16
+				},
+				"comboAutoIns": {
+					"type": "combo",
+					"top": 50,
+					"left": 210,
+					"width": 180,
+					"height": 20,
+					"dataSource": "Form:C1466.comboAutoIns",
+					"choiceList": [
+						"Red",
+						"Green",
+						"Blue"
+					],
+					"automaticInsertion": true
+				},
+				"lblExcluded": {
+					"type": "text",
+					"text": "excludedList: [\"Green\"] (typing \"Green\" is rejected)",
+					"top": 30,
+					"left": 410,
+					"width": 300,
+					"height": 16
+				},
+				"comboExcluded": {
+					"type": "combo",
+					"top": 50,
+					"left": 410,
+					"width": 180,
+					"height": 20,
+					"dataSource": "Form:C1466.comboExcluded",
+					"choiceList": [
+						"Red",
+						"Green",
+						"Blue"
+					],
+					"excludedList": [
+						"Green"
+					]
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "requiredList test on a combo box (comboBoxOverview docs say NOT available for combo; propertiesRangeOfValues lists Combo Box as supported -- testing which is true)",
+					"top": 5,
+					"left": 10,
+					"width": 650,
+					"height": 30
+				},
+				"comboRequired": {
+					"type": "combo",
+					"top": 50,
+					"left": 10,
+					"width": 180,
+					"height": 20,
+					"dataSource": "Form.comboRequired",
+					"choiceList": [
+						"Red",
+						"Green",
+						"Blue"
+					],
+					"requiredList": [
+						"Red",
+						"Green",
+						"Blue"
+					]
+				},
+				"Input": {
+					"type": "input",
+					"left": 318,
+					"top": 50,
+					"width": 46,
+					"height": 33
+				}
+			}
+		}
+	],
+	"geometryStamp": 4,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

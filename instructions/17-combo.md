@@ -34,7 +34,7 @@ A combo box shares its three data source shapes (object, array, choice list) wit
 | Hierarchical choice list | Supported (`dataSourceTypeHint: "integer"` alone) | **Not supported** -- only the first level of a hierarchical list is shown/selectable, and there is no dedicated hierarchical mode |
 | `saveAs` / Data Type (list) (reference storage) | Supported -- data source can hold a numeric item reference instead of the literal value | **Not supported** -- `saveAs` is not in the combo box's supported properties list; a choice-list combo box always stores the literal typed/selected text |
 | Standard action | Supported (`gotoPage`, submenu actions) | **Not supported** -- not listed as a combo box feature at all |
-| `Required List` (`requiredList`) | N/A (drop-down is already a closed list) | Documented as **not available** for combo boxes in the Combo Box overview page -- to force a finite, keyboard-entry-free list of required values, use a drop-down list instead. (Note: the generic Range of Values property page's "Objects Supported" line for `requiredList` also lists Combo Box, which conflicts with this explicit statement -- treat the dedicated combo box page as authoritative until interactively verified otherwise.) |
+| `Required List` (`requiredList`) | N/A (drop-down is already a closed list) | Documented as **not available** for combo boxes in the Combo Box overview page, and interactively confirmed: setting `requiredList` on a combo box has **no effect** -- keyboard entry of arbitrary text remains fully possible and `On Validate` raises no error, even though the generic Range of Values property page's "Objects Supported" line for `requiredList` lists Combo Box. To force a finite, keyboard-entry-free list of required values, use a drop-down list instead. |
 | `Focusable` | Explicit `focusable` property (like a button) | Not a listed property -- a combo box is an ordinary enterable field and is always part of the tab order the same way an input is |
 | `On Clicked` | Fires on mouse-down, like a button | **Not a supported event at all** -- a combo box is not an "active" object; use `On Data Change`/`On Validate` like a normal input |
 | Combo-specific options | -- | `automaticInsertion` (add typed-but-unlisted values to the in-memory list) and `excludedList` (reject specific values from being typed/selected), neither of which exists for drop-down lists |
@@ -102,7 +102,7 @@ Works the same way as a drop-down list's choice-list mode (inline array/collecti
 
 Reference: https://developer.4d.com/docs/FormObjects/properties_DataSource#automatic-insertion
 
-When `automaticInsertion` is `true` and the user types a value not already present in the associated list, that value is added to the **in-memory** list (so it appears as a pop-up choice from then on). When `false` (default), the typed value is stored in the data source but the list itself is left unchanged. This applies both to a choice-list combo box and to one whose list comes from an object/array data source. If the choice list originated from a Design-mode-defined toolbox list, the on-disk list definition is never modified by automatic insertion -- only the form's in-memory copy changes.
+When `automaticInsertion` is `true` and the user types a value not already present in the associated list, that value is added to the **in-memory** list as soon as the entry is validated (e.g. pressing Return) -- interactively confirmed to append the new value at the **bottom** of the pop-up list, so it appears as a selectable choice from then on. When `false` (default), the typed value is stored in the data source but the list itself is left unchanged. This applies both to a choice-list combo box and to one whose list comes from an object/array data source. If the choice list originated from a Design-mode-defined toolbox list, the on-disk list definition is never modified by automatic insertion -- only the form's in-memory copy changes.
 
 ### Excluded List
 
@@ -117,7 +117,7 @@ When `automaticInsertion` is `true` and the user types a value not already prese
 
 Reference: https://developer.4d.com/docs/FormObjects/properties_RangeOfValues#excluded-list
 
-`excludedList` names values that cannot be entered into the combo box -- if the user types (or otherwise enters) an excluded value, 4D rejects it and displays an error message. If the excluded list is hierarchical, only its first-level items are considered. This property has no drop-down list equivalent (a drop-down list only ever offers items already in its own list, so there is nothing to "exclude").
+`excludedList` names values that cannot be entered into the combo box -- if the user types an excluded value and validates the entry, 4D rejects it and displays an alert dialog reading **"That value is not allowed."** (interactively confirmed). If the excluded list is hierarchical, only its first-level items are considered. This property has no drop-down list equivalent (a drop-down list only ever offers items already in its own list, so there is nothing to "exclude").
 
 ## Supported Properties Summary
 
@@ -135,9 +135,9 @@ Notably absent compared to the drop-down list's event set: **On Clicked** (a com
 
 Like the drop-down list, `FORM SCREENSHOT` called with a form name (`FORM SCREENSHOT(formName; formPict; pageNum)`) renders the **Form Editor's static template** for a given page, not a live/running form -- it never executes `On Load` and never reflects any `Form.xxx`/array/field value assigned by form-object-method code. Every combo box kind (object-based, array-based, choice list, with or without `automaticInsertion`/`excludedList`) renders the **literal `dataSource` expression text** as its label in a CLI screenshot (e.g. `Form.comboFruit`, `asFruit`), never a resolved value.
 
-Some combo-box-specific behaviors are inherently interactive and **cannot** be observed via `FORM SCREENSHOT` at all, no matter how the harness is invoked -- they require actually running the form in the interactive 4D application (`4D.app/Contents/MacOS/4D`, launched normally, not headless; never `tool4d`, and never the static-template screenshot path):
+Some combo-box-specific behaviors are inherently interactive and cannot be observed via `FORM SCREENSHOT` at all, no matter how the harness is invoked -- they require actually running the form in the interactive 4D application (`4D.app/Contents/MacOS/4D`, launched normally, not headless; never `tool4d`, and never the static-template screenshot path). Interactively confirmed results for this form:
 
-- Whether typing an excluded value into an `excludedList` combo box is actually rejected, and what the resulting error message looks like.
-- Whether `automaticInsertion` actually adds a newly typed value to the in-memory list (observable by reopening the pop-up after typing a new value).
-- Whether a `requiredList` on a combo box behaves as "not available" (per the Combo Box overview page) or actually restricts entry to list values with keyboard typing disabled (per the generic Range of Values page) -- the two official doc pages disagree, and only interactive testing resolves it.
-- The visual difference in chrome between a combo box (plain bordered rectangle with a small trailing chevron, since it is fundamentally an input) and a drop-down list (native OS pop-up-menu/pill chrome).
+- Typing an excluded value (`excludedList`) and validating the entry triggers an alert dialog reading "That value is not allowed."; the value is not accepted.
+- `automaticInsertion` adds a newly typed value to the in-memory list as soon as the entry is validated (Return), appending it at the bottom of the pop-up list.
+- `requiredList` on a combo box has no effect: arbitrary text can still be typed and validates without error -- confirming the Combo Box overview page's "not available" statement over the generic Range of Values page's "Objects Supported" listing.
+- The visual chrome differs from a drop-down list: a combo box renders as a plain bordered rectangle with a small trailing chevron (an enterable field with an attached pop-up), rather than the drop-down list's native OS pop-up-menu/pill chrome.
