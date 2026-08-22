@@ -131,6 +131,14 @@
 - **Compiler note**: `dataSourceTypeHint` is only an initialization-time *suggestion* -- it lets 4D auto-create a default value of the suggested shape when the data source doesn't exist yet, but it cannot override an already-typed variable. If the data source is a process variable, it must already be declared (`var varName : Type`) and initialized with the correct shape *before* the form loads -- critical for compiled mode, where types must be statically resolvable; don't rely on the form's own `On Load` to establish a process variable's type
 - `FORM SCREENSHOT`'s static template renders a **single tab showing the literal `dataSource` expression text** for object-based, array-based, and hierarchical-list-by-code kinds (same rule as drop-down/combo) -- but for the dataSource-less static `labels` list, the template is the **first observed exception**: it renders the actual real tab strip with every configured label, because the content is fully known at design time with nothing to resolve from a runtime expression
 
+### Group Box Object JSON
+- A group box (`type: "groupBox"`) is a purely static, non-interactive framed container for visually assembling other form objects -- **no data source, and no supported events at all** (the only object type studied so far whose official doc page has no "Supported Events" section)
+- The official doc's own inline JSON example uses `"title"` as the label key (and that example is itself malformed JSON) -- this is wrong. The actual JSON key, confirmed by CLI rendering, is **`text`** (same generic Title key as Button/Check Box/Radio Button/Text Area). `"title"` renders no label at all
+- Font Color's JSON key is `stroke` (not `fontColor`) and Horizontal Alignment's JSON key is `textAlign` (not `horizontalAlign`) -- same generic Text property grammar used by other objects, easy to get wrong by guessing
+- The title supports an XLIFF `":xliff:ResName"` reference, resolved correctly in the static template render
+- "Containment" of other objects is purely visual overlap (z-order) -- 4D forms are flat, a group box does not truly parent/own the objects placed inside its frame
+- No `action` (standard action), no `focusable`, no border-style property -- pure visual/textual styling only (font, color, alignment, bold/italic/underline)
+
 ### Event Cycle Architecture
 - Event cycle is **atomic, sequential, cooperative**
 - Animations pause during mouse-down waits on clickable objects
@@ -165,7 +173,7 @@
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, **picture pop-up menu**, and **tab control** in depth. The remaining object types (input, text, listbox, subform, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, **picture pop-up menu**, **tab control**, and **group box** in depth. The remaining object types (input, text, listbox, subform, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -232,3 +240,6 @@ Basic 1x5 icon grid (no selection / pre-selected, showing the static template al
 
 ### 13. TabControls
 Object-based, array-based, static `labels` list, `labelsPlacement: "bottom"` (thin and tall variants), manual `FORM GOTO PAGE` (no standard action), and a hierarchical-list-reference placeholder page, one kind per page.
+
+### 14. GroupBoxes
+`text` vs. `title` JSON key comparison (resolving the official doc's own key error), a group box visually overlapping input/label objects, font/color/alignment styling (`bold`, `stroke`, `textAlign`), a bare frame with no title, and an XLIFF-referenced title, one variant per page.
