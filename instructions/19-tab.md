@@ -5,6 +5,7 @@ Also: https://developer.4d.com/docs/FormObjects/dropdownListOverview (shared dat
 Also: https://developer.4d.com/docs/FormObjects/propertiesDataSource (JSON grammar for `labels`, `choiceList`)
 Also: https://developer.4d.com/docs/FormObjects/properties_Object.md#expression-type (`dataSourceTypeHint` semantics)
 Also: https://developer.4d.com/docs/Project/compiler, https://developer.4d.com/docs/Concepts/data-types, https://developer.4d.com/docs/Concepts/variables (typed/process variable and compilation background for the note below)
+Also: https://blog.4d.com/use-collections-and-lists-within-forms-objects/ (object as the modern, recommended data source shape)
 
 ## Basic Definition
 

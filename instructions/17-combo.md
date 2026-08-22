@@ -3,6 +3,7 @@
 Reference: https://developer.4d.com/docs/FormObjects/comboBoxOverview
 Also: https://developer.4d.com/docs/FormObjects/dropdownList_Overview (shared data source mechanics)
 Also: https://developer.4d.com/docs/FormObjects/properties_DataSource, https://developer.4d.com/docs/FormObjects/properties_RangeOfValues
+Also: https://blog.4d.com/use-collections-and-lists-within-forms-objects/ (object as the modern, recommended data source shape)
 
 ## Basic Definition
 
