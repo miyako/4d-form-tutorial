@@ -167,6 +167,10 @@ The grid always displays internal cell borders. The `borderStyle` property contr
 - **Toolbar**: Background image with tool icons arranged in a grid
 - **Image map**: Any graphic where different regions trigger different actions
 
+## Related Object: Picture Pop-up Menu
+
+See `18-picture-popup.md`. A picture pop-up menu (`type: "picturePopup"`) shares the exact same `rowCount`/`columnCount` grid concept and the identical "1-based cell number, 0 = no selection" data source convention, but owns its picture directly (no separate background graphic to overlay) and presents its cells as a pop-up menu instead of leaving them all visible as an on-form overlay.
+
 ## CSS Styling
 
 Very limited CSS support -- only basic properties like `borderStyle`:

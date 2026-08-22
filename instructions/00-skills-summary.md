@@ -101,6 +101,44 @@
 - Know that `FORM SCREENSHOT` on a form name renders the Form Editor's static template: every drop-down kind (object/array/choice-list/hierarchical) renders the literal `dataSource` expression text as its label, never a resolved value, first-choiceList-item, or blank; only a `dataSource`-less standard-action dropdown (e.g. `gotoPage`) shows its own object name in quotes as placeholder
 - `Button Style` (`style`) is officially listed as supported for drop-down lists and accepts the full button style enum, but empirically produces **no visible difference** -- every style renders as the same native pop-up-menu chrome; unlike buttons/checkboxes/radio buttons, a drop-down's appearance is controlled by the platform, not this property
 
+### Combo Box Object JSON
+- A combo box (`type: "combo"`) is a drop-down list that is also an **enterable** field -- shares the object/array/choice-list data source shapes with drop-down, but has no `index`, no hierarchical mode, no `saveAs`/reference storage, no standard action support, and no `focusable`/`On Clicked` (it behaves like an ordinary input, not an "active" object)
+- Object-based: `values` (Collection) + `currentValue` only -- no `index`; `currentValue` is bidirectional and simply holds whatever text is typed or selected
+- Array-based: typed/selected text is written into **element `0`** of the array -- the array variable itself is not used as a selection index (unlike the drop-down list's array-based mode)
+- Choice list: same `choiceList` mechanics as drop-down (inline list or named toolbox list), but always stores the literal text -- no `saveAs: "reference"` option exists for combo box
+- Combo-specific properties: `automaticInsertion` (typed values not in the list get added to the in-memory list; works for choice-list, object, and array data sources) and `excludedList` (named values are rejected on entry, with an error message)
+- The Combo Box overview page states `requiredList` is **not available** for combo boxes, and this is interactively confirmed: `requiredList` has no effect on a combo box (arbitrary text still validates without error), despite the generic Range of Values property page's "Objects Supported" line listing Combo Box for that property. Use a drop-down list for a real closed/required list
+- Interactively confirmed: `excludedList` rejection shows an alert "That value is not allowed."; `automaticInsertion` appends the new value at the bottom of the pop-up list as soon as the entry is validated (Return)
+- The official Combo Box overview page's prose recommends `On Data Change` for handling entries, yet that event is **absent** from the same page's own "Supported Events" list -- another documentation inconsistency
+- Like dropdown: `FORM SCREENSHOT`'s static template renders every combo box kind's literal `dataSource` expression text as its label, never a resolved value
+
+### Picture Pop-up Menu Object JSON
+- `type` is `"picturePopup"` (not `"picturePopupMenu"`, despite the doc/object display name) -- a Button Grid rendered as a pop-up menu instead of a static overlay: same `rowCount`/`columnCount` frame grid, but clicking opens a native OS pop-up menu, and choosing an entry assigns its position to the data source
+- No animation properties (no `switchBackWhenReleased`, `frameDelay`, etc.) -- only one frame (the current selection) is ever visible on the closed object
+- Data source is **1-based** position (0 = no selection), the identical convention to Button Grid's cell value -- unlike Picture Button's 0-based frame index. Bidirectional: assigning selects, user choice writes back. Initialize to `0`
+- Supports the `gotoPage` standard action, structurally identical to drop-down's `gotoPage` mode (no `dataSource` needed, Nth entry navigates to Nth page) -- and shares the same one-directional-binding caveat: code-driven `FORM GOTO PAGE` does not update the object's displayed selection
+- No `pictureFormat`, no `focusable`, no font/text properties -- pure picture-driven object
+- `FORM SCREENSHOT`'s static template always renders **frame 0** of the picture at the object's declared size, regardless of the data source's assigned value and regardless of whether `dataSource` is even present -- unlike drop-down/combo, whose template instead shows the literal `dataSource` expression text. This is because the object's appearance always comes from the picture itself, never from a text fallback
+- If the object's declared `width`/`height` differs from the source frame's native pixel size, the frame is always **stretched to fill** the bounding box (both up- and down-scaling) -- no letterboxing, cropping, or aspect-ratio preservation, consistent with there being no `pictureFormat` choice on this object
+
+### Tab Control Object JSON
+- A tab control (`type: "tab"`) is structurally close to a drop-down list -- object-based shape is **identical** (`{values, index, currentValue}`, `values` 0-based Collection), array-based shape is **identical** (1-based, array variable itself = selected tab number, bidirectional), and hierarchical-list-by-code is triggered the same way (`dataSourceTypeHint: "integer"` alone) -- but a tab control shows all its choices simultaneously as a row of tabs rather than a closed pop-up
+- Fourth kind unique to tab control: **static list** via the `labels` JSON property (a plain inline array/collection of label strings) -- has **no `dataSource` at all**, fully resolved at form-design time; this is the simplest, lowest-effort choice for tabs that don't need icons
+- Icons per tab require a real **hierarchical list** built by code (`New list`/`Load list`, `APPEND TO LIST`, `SET LIST ITEM ICON`) attached via `dataSourceTypeHint: "integer"` -- the plain `labels` array does not support icons; use array or `labels` when no icon is needed, they're more intuitive to manage from code
+- No `saveAs`/reference-storage option (unlike drop-down choice list), no `focusable`, no plain `choiceList` property (drop-down/combo/hierarchical-list-style) -- only `labels` for a static string list
+- Supports `gotoPage` standard action (automatic page navigation matching the clicked tab number) exactly like drop-down/picture-popup/button-grid; without it, the object method must call `FORM GOTO PAGE(dataSource)` on `On Clicked` manually (e.g. for a tab control that drives subform data instead of page navigation)
+- `labelsPlacement: "top"`/`"bottom"` (Tab Control Direction) only renders differently on macOS; Windows always reverts to top. The static template honors this correctly, but only visibly so when the object is tall enough to contain the content area below the tab strip -- a thin, strip-only-height object shows no visible difference between the two
+- **Compiler note**: `dataSourceTypeHint` is only an initialization-time *suggestion* -- it lets 4D auto-create a default value of the suggested shape when the data source doesn't exist yet, but it cannot override an already-typed variable. If the data source is a process variable, it must already be declared (`var varName : Type`) and initialized with the correct shape *before* the form loads -- critical for compiled mode, where types must be statically resolvable; don't rely on the form's own `On Load` to establish a process variable's type
+- `FORM SCREENSHOT`'s static template renders a **single tab showing the literal `dataSource` expression text** for object-based, array-based, and hierarchical-list-by-code kinds (same rule as drop-down/combo) -- but for the dataSource-less static `labels` list, the template is the **first observed exception**: it renders the actual real tab strip with every configured label, because the content is fully known at design time with nothing to resolve from a runtime expression
+
+### Group Box Object JSON
+- A group box (`type: "groupBox"`) is a purely static, non-interactive framed container for visually assembling other form objects -- **no data source, and no supported events at all** (the only object type studied so far whose official doc page has no "Supported Events" section)
+- The official doc's own inline JSON example uses `"title"` as the label key (and that example is itself malformed JSON) -- this is wrong. The actual JSON key, confirmed by CLI rendering, is **`text`** (same generic Title key as Button/Check Box/Radio Button/Text Area). `"title"` renders no label at all
+- Font Color's JSON key is `stroke` (not `fontColor`) and Horizontal Alignment's JSON key is `textAlign` (not `horizontalAlign`) -- same generic Text property grammar used by other objects, easy to get wrong by guessing
+- The title supports an XLIFF `":xliff:ResName"` reference, resolved correctly in the static template render
+- "Containment" of other objects is purely visual overlap (z-order) -- 4D forms are flat, a group box does not truly parent/own the objects placed inside its frame
+- No `action` (standard action), no `focusable`, no border-style property -- pure visual/textual styling only (font, color, alignment, bold/italic/underline)
+
 ### Event Cycle Architecture
 - Event cycle is **atomic, sequential, cooperative**
 - Animations pause during mouse-down waits on clickable objects
@@ -135,7 +173,7 @@
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, and **dropdown** in depth. The remaining object types (input, text, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, **picture pop-up menu**, **tab control**, and **group box** in depth. The remaining object types (input, text, listbox, subform, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -193,3 +231,15 @@ All ruler display options: plain, graduation, labels top/bottom, custom step/max
 
 ### 10. Dropdowns
 Object-based (indexed selection + `-1` placeholder), array-based, choice list (`saveAs` value vs. reference), standard action (`gotoPage`), and hierarchical drop-down lists, one kind per page.
+
+### 11. Combos
+Object-based (`values`/`currentValue`, no index), array-based (typed text goes to element 0), plain choice list, `automaticInsertion`, `excludedList`, and a `requiredList`-on-combo edge case (docs disagree on whether this is even valid), one kind per page.
+
+### 12. PicturePopups
+Basic 1x5 icon grid (no selection / pre-selected, showing the static template always renders frame 0), `gotoPage` standard action with no data source, `borderStyle`, object-size-vs-frame-size scaling tests (both upscale and downscale), and a generated 2x2 grid image to confirm row-by-row frame numbering.
+
+### 13. TabControls
+Object-based, array-based, static `labels` list, `labelsPlacement: "bottom"` (thin and tall variants), manual `FORM GOTO PAGE` (no standard action), and a hierarchical-list-reference placeholder page, one kind per page.
+
+### 14. GroupBoxes
+`text` vs. `title` JSON key comparison (resolving the official doc's own key error), a group box visually overlapping input/label objects, font/color/alignment styling (`bold`, `stroke`, `textAlign`), a bare frame with no title, and an XLIFF-referenced title, one variant per page.
