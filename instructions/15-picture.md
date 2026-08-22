@@ -108,7 +108,7 @@ An animated GIF placed in a static picture object plays its animation **at runti
 | Object Name | (JSON key) | Object identifier |
 | Type | `"type": "picture"` | Fixed |
 
-Static pictures have **no data source** and no configurable event set of their own beyond the generic object identity/positioning properties -- they are purely visual/static, unlike picture buttons or picture pop-up menus which share the same `picture`/pathname mechanics but add interactivity.
+Static pictures have **no data source** and no configurable event set of their own beyond the generic object identity/positioning properties -- they are purely visual/static, unlike picture buttons or picture pop-up menus which share the same `picture`/pathname mechanics but add interactivity. See `06-picture-button.md` and `18-picture-popup.md` for those object types.
 
 ## Comparison with Related Picture-Based Objects
 

@@ -112,6 +112,15 @@
 - The official Combo Box overview page's prose recommends `On Data Change` for handling entries, yet that event is **absent** from the same page's own "Supported Events" list -- another documentation inconsistency
 - Like dropdown: `FORM SCREENSHOT`'s static template renders every combo box kind's literal `dataSource` expression text as its label, never a resolved value
 
+### Picture Pop-up Menu Object JSON
+- `type` is `"picturePopup"` (not `"picturePopupMenu"`, despite the doc/object display name) -- a Button Grid rendered as a pop-up menu instead of a static overlay: same `rowCount`/`columnCount` frame grid, but clicking opens a native OS pop-up menu, and choosing an entry assigns its position to the data source
+- No animation properties (no `switchBackWhenReleased`, `frameDelay`, etc.) -- only one frame (the current selection) is ever visible on the closed object
+- Data source is **1-based** position (0 = no selection), unlike Picture Button's 0-based frame index -- matches the array-based drop-down convention, not Picture Button's. Bidirectional: assigning selects, user choice writes back. Initialize to `0`
+- Supports the `gotoPage` standard action, structurally identical to drop-down's `gotoPage` mode (no `dataSource` needed, Nth entry navigates to Nth page) -- and shares the same one-directional-binding caveat: code-driven `FORM GOTO PAGE` does not update the object's displayed selection
+- No `pictureFormat`, no `focusable`, no font/text properties -- pure picture-driven object
+- `FORM SCREENSHOT`'s static template always renders **frame 0** of the picture at the object's declared size, regardless of the data source's assigned value and regardless of whether `dataSource` is even present -- unlike drop-down/combo, whose template instead shows the literal `dataSource` expression text. This is because the object's appearance always comes from the picture itself, never from a text fallback
+- If the object's declared `width`/`height` differs from the source frame's native pixel size, the frame is always **stretched to fill** the bounding box (both up- and down-scaling) -- no letterboxing, cropping, or aspect-ratio preservation, consistent with there being no `pictureFormat` choice on this object
+
 ### Event Cycle Architecture
 - Event cycle is **atomic, sequential, cooperative**
 - Animations pause during mouse-down waits on clickable objects
@@ -146,7 +155,7 @@
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, and **combo box** in depth. The remaining object types (input, text, listbox, subform, picturePopupMenu, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, and **picture pop-up menu** in depth. The remaining object types (input, text, listbox, subform, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -207,3 +216,6 @@ Object-based (indexed selection + `-1` placeholder), array-based, choice list (`
 
 ### 11. Combos
 Object-based (`values`/`currentValue`, no index), array-based (typed text goes to element 0), plain choice list, `automaticInsertion`, `excludedList`, and a `requiredList`-on-combo edge case (docs disagree on whether this is even valid), one kind per page.
+
+### 12. PicturePopups
+Basic 1x5 icon grid (no selection / pre-selected, showing the static template always renders frame 0), `gotoPage` standard action with no data source, `borderStyle`, object-size-vs-frame-size scaling tests (both upscale and downscale), and a generated 2x2 grid image to confirm row-by-row frame numbering.
