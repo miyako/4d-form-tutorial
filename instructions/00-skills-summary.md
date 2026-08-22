@@ -121,6 +121,16 @@
 - `FORM SCREENSHOT`'s static template always renders **frame 0** of the picture at the object's declared size, regardless of the data source's assigned value and regardless of whether `dataSource` is even present -- unlike drop-down/combo, whose template instead shows the literal `dataSource` expression text. This is because the object's appearance always comes from the picture itself, never from a text fallback
 - If the object's declared `width`/`height` differs from the source frame's native pixel size, the frame is always **stretched to fill** the bounding box (both up- and down-scaling) -- no letterboxing, cropping, or aspect-ratio preservation, consistent with there being no `pictureFormat` choice on this object
 
+### Tab Control Object JSON
+- A tab control (`type: "tab"`) is structurally close to a drop-down list -- object-based shape is **identical** (`{values, index, currentValue}`, `values` 0-based Collection), array-based shape is **identical** (1-based, array variable itself = selected tab number, bidirectional), and hierarchical-list-by-code is triggered the same way (`dataSourceTypeHint: "integer"` alone) -- but a tab control shows all its choices simultaneously as a row of tabs rather than a closed pop-up
+- Fourth kind unique to tab control: **static list** via the `labels` JSON property (a plain inline array/collection of label strings) -- has **no `dataSource` at all**, fully resolved at form-design time; this is the simplest, lowest-effort choice for tabs that don't need icons
+- Icons per tab require a real **hierarchical list** built by code (`New list`/`Load list`, `APPEND TO LIST`, `SET LIST ITEM ICON`) attached via `dataSourceTypeHint: "integer"` -- the plain `labels` array does not support icons; use array or `labels` when no icon is needed, they're more intuitive to manage from code
+- No `saveAs`/reference-storage option (unlike drop-down choice list), no `focusable`, no plain `choiceList` property (drop-down/combo/hierarchical-list-style) -- only `labels` for a static string list
+- Supports `gotoPage` standard action (automatic page navigation matching the clicked tab number) exactly like drop-down/picture-popup/button-grid; without it, the object method must call `FORM GOTO PAGE(dataSource)` on `On Clicked` manually (e.g. for a tab control that drives subform data instead of page navigation)
+- `labelsPlacement: "top"`/`"bottom"` (Tab Control Direction) only renders differently on macOS; Windows always reverts to top. The static template honors this correctly, but only visibly so when the object is tall enough to contain the content area below the tab strip -- a thin, strip-only-height object shows no visible difference between the two
+- **Compiler note**: `dataSourceTypeHint` is only an initialization-time *suggestion* -- it lets 4D auto-create a default value of the suggested shape when the data source doesn't exist yet, but it cannot override an already-typed variable. If the data source is a process variable, it must already be declared (`var varName : Type`) and initialized with the correct shape *before* the form loads -- critical for compiled mode, where types must be statically resolvable; don't rely on the form's own `On Load` to establish a process variable's type
+- `FORM SCREENSHOT`'s static template renders a **single tab showing the literal `dataSource` expression text** for object-based, array-based, and hierarchical-list-by-code kinds (same rule as drop-down/combo) -- but for the dataSource-less static `labels` list, the template is the **first observed exception**: it renders the actual real tab strip with every configured label, because the content is fully known at design time with nothing to resolve from a runtime expression
+
 ### Event Cycle Architecture
 - Event cycle is **atomic, sequential, cooperative**
 - Animations pause during mouse-down waits on clickable objects
@@ -155,7 +165,7 @@
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, and **picture pop-up menu** in depth. The remaining object types (input, text, listbox, subform, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, **picture pop-up menu**, and **tab control** in depth. The remaining object types (input, text, listbox, subform, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -219,3 +229,6 @@ Object-based (`values`/`currentValue`, no index), array-based (typed text goes t
 
 ### 12. PicturePopups
 Basic 1x5 icon grid (no selection / pre-selected, showing the static template always renders frame 0), `gotoPage` standard action with no data source, `borderStyle`, object-size-vs-frame-size scaling tests (both upscale and downscale), and a generated 2x2 grid image to confirm row-by-row frame numbering.
+
+### 13. TabControls
+Object-based, array-based, static `labels` list, `labelsPlacement: "bottom"` (thin and tall variants), manual `FORM GOTO PAGE` (no standard action), and a hierarchical-list-reference placeholder page, one kind per page.
