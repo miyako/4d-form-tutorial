@@ -47,7 +47,7 @@ The data source holds the **1-based position** of the selected menu entry, numbe
 - `2` = second frame
 - ... and so on, row by row
 
-This is **1-based**, unlike Picture Button's 0-based frame index. It matches the "array variable = selected element number, 0 = no selection" convention used by array-based drop-down lists (see `16-dropdown.md`), not Picture Button's pure 0-based indexing.
+This is **1-based**, unlike Picture Button's 0-based frame index. It is the exact same numbering convention as Button Grid's cell value (see `05-button-grid.md`) -- both are "1 to `rowCount * columnCount`, 0 = no selection" -- which makes sense since a picture pop-up menu is conceptually a Button Grid whose cells are presented as pop-up menu entries instead of an on-form transparent overlay.
 
 The data source is bidirectional: assigning a value to it selects the corresponding menu entry (for read-back / initialization purposes); the user choosing a menu entry writes that entry's position back to the data source.
 
@@ -101,6 +101,22 @@ No `pictureFormat` (scaling/tiling/truncation), no `focusable`, no font/text pro
 
 If the object's declared `width`/`height` does not match the source frame's native pixel dimensions, the displayed frame is **stretched (scaled) to exactly fill the object's bounding box** -- both upscaling and downscaling. There is no letterboxing, cropping, or aspect-ratio preservation; this is consistent with Picture Button's grid rendering and with the general absence of a `pictureFormat` property on this object type (there is no "scaled/tiled/truncated" choice to make -- the single displayed frame is always stretched to fit).
 
+## Comparison with Button Grid
+
+Button Grid is the closest structural relative -- both divide a grid area into `rowCount * columnCount` cells and share the **identical** "1 to N, 0 = no selection" data source convention -- but the two objects are fundamentally different in presentation and content ownership:
+
+| Feature | Button Grid | Picture Pop-up Menu |
+|---------|-------------|----------------------|
+| `picture` property | None -- purely transparent, has no picture of its own | Yes -- owns and displays the source picture |
+| Visual content | None by itself; must be manually overlaid on a separate background picture/graphic object | Self-contained; the picture *is* the object |
+| Presentation | Static on-form overlay; all cells occupy fixed screen regions simultaneously | Pop-up (OS native menu); only the selected frame is shown when closed, all frames are listed as menu entries when open |
+| Cell/position numbering | 1-based, top-left to bottom-right, row by row; 0 = no selection | 1-based, top-left to bottom-right, row by row; 0 = no selection (**identical** convention) |
+| Data source | Integer, bidirectional | Integer, bidirectional |
+| Standard action | Yes (`gotoPage`) | Yes (`gotoPage`) |
+| Typical use | Custom hit-regions on a static image (e.g. a map, a color palette) | Icon-driven pop-up selection (a compact space-saving alternative to a Button Grid or a text drop-down) |
+
+In effect, a picture pop-up menu behaves like a Button Grid that supplies its own background picture and collapses its cells into a pop-up menu instead of leaving them all visible and clickable at once.
+
 ## Comparison with Related Picture-Based Objects
 
 | Feature | Static Picture | Picture Button | Picture Pop-up Menu |
@@ -110,7 +126,7 @@ If the object's declared `width`/`height` does not match the source frame's nati
 | `pictureFormat` (scaled/tiled/truncated) | Yes | No (frame always stretched to object size) | No (frame always stretched to object size) |
 | Frame numbering | N/A | 0-based | 1-based (0 = no selection) |
 | Presentation | Static display | Fixed on-form control | Pop-up (OS native menu) |
-| Standard action | No | No | Yes (`gotoPage`) |
+| Standard action | No | Yes (general `action` property) | Yes (`gotoPage`) |
 | Animation properties | No | Yes (`frameDelay`, `switchContinuously`, etc.) | No |
 | Typical use | Decoration, background, logos | Buttons with custom art | Icon-driven popup selection |
 | Data source | None | 0-based frame index | 1-based selection position |
