@@ -1,3 +1,10 @@
+---
+object: "pictureButton"
+json_type: "pictureButton"
+keywords: ["picture button", "rowCount", "columnCount", "frame", "command button", "choice selector", "animation", "frameDelay", "switchContinuously"]
+summary: "Picture button object: multi-frame source images, 0-based frame numbering, command-button vs choice-selector modes, animation."
+---
+
 # 4D Picture Button Object
 
 Reference: https://developer.4d.com/docs/FormObjects/pictureButtonOverview

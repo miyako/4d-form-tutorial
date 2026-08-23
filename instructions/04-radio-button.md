@@ -1,3 +1,10 @@
+---
+object: "radio"
+json_type: "radio"
+keywords: ["radio button", "radioGroup", "mutual exclusion", "Form.property"]
+summary: "Radio button object: 12 styles, radioGroup semantics vs Form Editor groups, default selection behavior."
+---
+
 # 4D Radio Button Object
 
 Reference: https://developer.4d.com/docs/FormObjects/radiobuttonOverview

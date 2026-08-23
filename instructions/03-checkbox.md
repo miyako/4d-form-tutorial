@@ -1,3 +1,10 @@
+---
+object: "checkbox"
+json_type: "checkbox"
+keywords: ["checkbox", "three-state", "tri-state", "disclosure", "collapseExpand", "Form.property", "standard action"]
+summary: "Checkbox object: 12 styles, three-state mode, data source rules, standard actions, height-based size variants."
+---
+
 # 4D Checkbox Object
 
 Reference: https://developer.4d.com/docs/FormObjects/checkboxOverview

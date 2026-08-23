@@ -1,3 +1,10 @@
+---
+object: "tab"
+json_type: "tab"
+keywords: ["tab control", "labels", "dataSourceTypeHint", "hierarchical list", "gotoPage", "labelsPlacement", "compiler"]
+summary: "Tab control object: object/array/hierarchical/static-labels data-source kinds, gotoPage, labelsPlacement, compiler typing note."
+---
+
 # 4D Tab Control Object
 
 Reference: https://developer.4d.com/docs/FormObjects/tabControl
@@ -5,6 +12,7 @@ Also: https://developer.4d.com/docs/FormObjects/dropdownListOverview (shared dat
 Also: https://developer.4d.com/docs/FormObjects/propertiesDataSource (JSON grammar for `labels`, `choiceList`)
 Also: https://developer.4d.com/docs/FormObjects/properties_Object.md#expression-type (`dataSourceTypeHint` semantics)
 Also: https://developer.4d.com/docs/Project/compiler, https://developer.4d.com/docs/Concepts/data-types, https://developer.4d.com/docs/Concepts/variables (typed/process variable and compilation background for the note below)
+Also: https://blog.4d.com/use-collections-and-lists-within-forms-objects/ (object as the modern, recommended data source shape)
 
 ## Basic Definition
 

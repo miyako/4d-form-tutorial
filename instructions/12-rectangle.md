@@ -1,3 +1,10 @@
+---
+object: "rectangle"
+json_type: "rectangle"
+keywords: ["rectangle", "shape", "stroke"]
+summary: "Rectangle shape object: basic static rectangle definition."
+---
+
 # 4D Rectangle Object
 
 Reference: https://developer.4d.com/docs/FormObjects/shapesOverview#rectangle

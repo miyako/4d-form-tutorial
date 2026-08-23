@@ -1,3 +1,10 @@
+---
+object: "button"
+json_type: "button"
+keywords: ["button", "bevel", "roundedBevel", "gradientBevel", "texturedBevel", "office", "help style", "circular", "defaultButton", "keyboard shortcut", "popup placement", "focusable", "tooltip", "icon", "textPlacement"]
+summary: "Button object: all 11 styles, visual/text properties, defaultButton, shortcuts, popup placement, sizing caveats, icon+text layout."
+---
+
 # 4D Button Object
 
 Reference: https://developer.4d.com/docs/FormObjects/buttonOverview

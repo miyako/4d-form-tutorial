@@ -1,3 +1,10 @@
+---
+object: "line"
+json_type: "line"
+keywords: ["line", "shape", "startPoint"]
+summary: "Line shape object: basic static line definition with start point."
+---
+
 # 4D Line Object
 
 Reference: https://developer.4d.com/docs/FormObjects/shapesOverview#line

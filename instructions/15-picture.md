@@ -1,3 +1,10 @@
+---
+object: "picture"
+json_type: "picture"
+keywords: ["static picture", "pictureFormat", "scaled", "tiled", "truncatedCenter", "dark mode", "@nx", "_dark", "SVG", "WEBP"]
+summary: "Static picture object: pictureFormat modes, resource paths, high-res/dark-mode naming conventions, SVG/WEBP support."
+---
+
 # 4D Static Picture Object
 
 Reference: https://developer.4d.com/docs/FormObjects/staticPicture

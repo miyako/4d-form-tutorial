@@ -1,3 +1,10 @@
+---
+object: "picturePopup"
+json_type: "picturePopup"
+keywords: ["picture popup", "picture pop-up menu", "rowCount", "columnCount", "gotoPage", "1-based position"]
+summary: "Picture pop-up menu object: button-grid-style frame grid rendered as a native pop-up menu, 1-based position data source."
+---
+
 # 4D Picture Pop-up Menu Object
 
 Reference: https://developer.4d.com/docs/FormObjects/picturePopupMenuOverview

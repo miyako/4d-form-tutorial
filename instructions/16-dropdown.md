@@ -1,3 +1,10 @@
+---
+object: "dropdown"
+json_type: "dropdown"
+keywords: ["dropdown", "dropdown list", "dataSourceTypeHint", "choiceList", "saveAs", "hierarchical list", "gotoPage", "standard action", "object-based", "array-based"]
+summary: "Dropdown list object: five data-source kinds (object/array/choice-list/hierarchical/standard-action), binding rules, screenshot rendering caveats."
+---
+
 # 4D Dropdown List Object
 
 Reference: https://developer.4d.com/docs/FormObjects/dropdownListOverview

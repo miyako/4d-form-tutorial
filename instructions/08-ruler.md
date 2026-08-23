@@ -1,3 +1,10 @@
+---
+object: "ruler"
+json_type: "ruler"
+keywords: ["ruler", "min", "max", "step", "showGraduations", "graduationStep", "labelsPlacement", "scale"]
+summary: "Ruler object: scale properties, orientation, integer-only values, event model (On Data Change vs On Clicked)."
+---
+
 # 4D Ruler Object
 
 Reference: https://developer.4d.com/docs/FormObjects/ruler

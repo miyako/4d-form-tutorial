@@ -1,3 +1,10 @@
+---
+object: "stepper"
+json_type: "stepper"
+keywords: ["stepper", "min", "max", "step", "vertical", "arrow keys", "dataSourceTypeHint"]
+summary: "Stepper object: vertical-only control, min/max/step, keyboard interaction, date/time support."
+---
+
 # 4D Stepper Object
 
 Reference: https://developer.4d.com/docs/FormObjects/stepper

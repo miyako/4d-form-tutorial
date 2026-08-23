@@ -1,3 +1,10 @@
+---
+object: "spinner"
+json_type: "spinner"
+keywords: ["spinner", "running", "stopped", "circular"]
+summary: "Spinner object: binary running/stopped state, circular shape, minimal configuration."
+---
+
 # 4D Spinner Object
 
 Reference: https://developer.4d.com/docs/FormObjects/spinner

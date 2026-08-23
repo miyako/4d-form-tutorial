@@ -1,3 +1,10 @@
+---
+object: "groupBox"
+json_type: "groupBox"
+keywords: ["group box", "text", "title", "stroke", "textAlign", "static container"]
+summary: "Group box object: static non-interactive framed container, correct JSON title key, no events/data source."
+---
+
 # 4D Group Box Object
 
 Reference: https://developer.4d.com/docs/FormObjects/groupBox

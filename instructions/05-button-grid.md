@@ -1,3 +1,10 @@
+---
+object: "buttonGrid"
+json_type: "buttonGrid"
+keywords: ["button grid", "rowCount", "columnCount", "transparent overlay", "gotoPage", "cell numbering"]
+summary: "Button grid object: grid overlay concept, 1-based cell numbering, gotoPage standard action."
+---
+
 # 4D Button Grid Object
 
 Reference: https://developer.4d.com/docs/FormObjects/buttonGridOverview
