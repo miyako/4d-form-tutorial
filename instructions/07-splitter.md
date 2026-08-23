@@ -1,3 +1,10 @@
+---
+object: "splitter"
+json_type: "splitter"
+keywords: ["splitter", "borderStyle", "orientation", "pusher", "splitterMode", "sizing", "grow", "move", "fixed"]
+summary: "Splitter object: orientation rules, pusher mode, coverage rule, sizing interactions, data source semantics."
+---
+
 # 4D Splitter Object
 
 Reference: https://developer.4d.com/docs/FormObjects/splitters

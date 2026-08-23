@@ -1,3 +1,10 @@
+---
+role: appendix
+on_demand: true
+load_when: ["what have you built", "what can you do", "capability summary", "showcase forms", "what have you learned", "status report", "what's covered so far"]
+note: "Do NOT load this file for routine object/task work — it duplicates content already covered per-object in 01-20. Use 00-router.md to find the relevant object file instead. Only open this file for meta questions about overall capabilities/progress."
+---
+
 # 4D Forms — Skills Summary
 
 ## What I Can Do

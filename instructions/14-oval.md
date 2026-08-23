@@ -1,3 +1,10 @@
+---
+object: "oval"
+json_type: "oval"
+keywords: ["oval", "shape", "stroke"]
+summary: "Oval shape object: basic static oval definition."
+---
+
 # 4D Oval Object
 
 Reference: https://developer.4d.com/docs/FormObjects/shapesOverview#oval

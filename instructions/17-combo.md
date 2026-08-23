@@ -1,3 +1,10 @@
+---
+object: "combo"
+json_type: "combo"
+keywords: ["combo box", "enterable", "automaticInsertion", "excludedList", "requiredList", "choiceList"]
+summary: "Combo box object: enterable drop-down variant, object/array/choice-list data sources, automaticInsertion/excludedList."
+---
+
 # 4D Combo Box Object
 
 Reference: https://developer.4d.com/docs/FormObjects/comboBoxOverview

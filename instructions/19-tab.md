@@ -1,3 +1,10 @@
+---
+object: "tab"
+json_type: "tab"
+keywords: ["tab control", "labels", "dataSourceTypeHint", "hierarchical list", "gotoPage", "labelsPlacement", "compiler"]
+summary: "Tab control object: object/array/hierarchical/static-labels data-source kinds, gotoPage, labelsPlacement, compiler typing note."
+---
+
 # 4D Tab Control Object
 
 Reference: https://developer.4d.com/docs/FormObjects/tabControl
