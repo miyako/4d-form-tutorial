@@ -542,7 +542,43 @@ $selectedValue:=Substring($text; $start; $end-$start)
 
 Reference: https://developer.4d.com/docs/commands/theme/Styled-Text
 
-When `styledText: true`, the full **Styled Text** command theme is available for programmatic rich text editing at runtime. These commands can set or get bold, italic, color, font, size, and other attributes on a specific character range — enabling rich text editor functionality. Key commands include `ST SET ATTRIBUTES`, `ST GET ATTRIBUTES`, `ST SET TEXT`, `ST INSERT EXPRESSION`.
+When `styledText: true`, the full **Styled Text** command theme is available for programmatic rich text editing at runtime. These commands can set or get bold, italic, color, font, size, and other attributes on a specific character range — enabling rich text editor functionality.
+
+**Important constraints (confirmed by test):**
+
+1. **In/out parameter**: ST commands require a **variable or field**, not an expression like `Form.xxx`. Pattern:
+   ```4d
+   var $st : Text
+   $st:="Hello World"
+   ST SET ATTRIBUTES($st; 1; 6; Attribute bold style; 1)
+   Form.st_bold:=$st
+   ```
+
+2. **Colors must be numeric `0x00RRGGBB`**: `ST SET ATTRIBUTES` is **not** in the list of commands extended to accept CSS color strings (see https://blog.4d.com/css-color-strings-for-better-readability/). Passing `"#FF0000"` raises error [7] "A Numeric argument was expected."
+   ```4d
+   // WRONG: ST SET ATTRIBUTES($st; 1; 6; Attribute text color; "#FF0000")
+   // RIGHT:
+   ST SET ATTRIBUTES($st; 1; 6; Attribute text color; 0x00FF0000)
+   ```
+
+3. **`ST GET ATTRIBUTES` returns Integer for color** (same `0x00RRGGBB` format). Returns **-1** for attributes not explicitly set on the range (inherited/default).
+
+4. **Multiple attributes in one call** work — all values must be the same numeric type:
+   ```4d
+   ST SET ATTRIBUTES($st; 1; 10; Attribute bold style; 1; Attribute text color; 0x000000FF; Attribute underline style; 1)
+   ```
+
+**Key commands tested:**
+
+| Command | Purpose | Notes |
+|---------|---------|-------|
+| `ST SET ATTRIBUTES` | Set style on range | Attributes: bold, italic, underline, strikethrough, font name, text size, text color, background color |
+| `ST GET ATTRIBUTES` | Read style from range | Returns -1 for unset attributes |
+| `ST SET TEXT` | Insert/replace with styled HTML | `<span style="...">text</span>` — interprets HTML tags |
+| `ST SET PLAIN TEXT` | Insert/replace as literal text | Escapes `<` to `&lt;` — displays literal angle brackets |
+| `ST Get plain text` | Strip markup | Returns character stream matching position model |
+
+**Internal storage**: Styled text is stored as HTML. Setting `color: 0x00FF0000` produces `<span style="color:#FF0000">`. The data source contains the full HTML markup.
 
 `ST Get plain text` strips all HTML/style markup and returns the character stream that matches `GET HIGHLIGHT`'s character-position indices.
 
@@ -571,7 +607,9 @@ HIGHLIGHT TEXT(*; "myInput"; 3; 3)  // places cursor between B and C
 
 #### UTF-16 and Surrogate Pairs
 
-4D text is stored internally as **UTF-16 little-endian**. Characters outside the Basic Multilingual Plane (emoji, some CJK characters) are represented as **surrogate pairs** — two UTF-16 code units for a single visible character. `GET HIGHLIGHT` and `HIGHLIGHT TEXT` measure positions in **code units**, not grapheme clusters, so a single emoji consumes 2 positions in the range (e.g. range 1–3 for one emoji at position 1). `Substring` uses the same code-unit indexing, so the values from `GET HIGHLIGHT` can be passed directly to `Substring` without conversion — they are consistent with each other.
+4D text is stored internally as **UTF-16 little-endian**. Characters outside the Basic Multilingual Plane (emoji, some CJK characters) are represented as **surrogate pairs** — two UTF-16 code units for a single visible character. `GET HIGHLIGHT`, `HIGHLIGHT TEXT`, `Length`, `Substring`, and ST commands all measure positions in **code units**, not grapheme clusters.
+
+**Confirmed by test**: `"Hi 😀 there"` → `Length` = **11** (not 9). The emoji 😀 (U+1F600) consumes 2 code units. `ST SET ATTRIBUTES($st; 4; 6; ...)` correctly targets just the emoji. The values from `GET HIGHLIGHT` can be passed directly to `Substring` and ST range parameters without conversion — they are consistent with each other.
 
 This also means that `Length` returns code units, not visible characters. A string containing one emoji has `Length` = 2.
 
