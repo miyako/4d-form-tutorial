@@ -42,7 +42,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 1300,
-					"height": 210
+					"height": 185
 				}
 			}
 		},
@@ -51,7 +51,7 @@
 				"Inputa": {
 					"type": "input",
 					"left": 66,
-					"top": 81,
+					"top": 111,
 					"width": 184,
 					"height": 17,
 					"events": [],
@@ -60,7 +60,7 @@
 				"Inputb": {
 					"type": "input",
 					"left": 66,
-					"top": 118,
+					"top": 148,
 					"width": 184,
 					"height": 17,
 					"events": [
@@ -76,9 +76,9 @@
 				"info": {
 					"type": "input",
 					"left": 347,
-					"top": 32,
+					"top": 98,
 					"width": 184,
-					"height": 161,
+					"height": 49,
 					"events": [
 						"onDrop"
 					],
@@ -89,8 +89,8 @@
 				"Button": {
 					"type": "button",
 					"text": "Button",
-					"top": 19,
-					"left": 237,
+					"top": 104,
+					"left": 268,
 					"width": 59,
 					"height": 37,
 					"events": [
@@ -105,17 +105,17 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Non-enterable input: enterable=false",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
 				},
 				"txt2": {
 					"type": "input",
-					"dataSource": "Form.txt2",
+					"dataSource": "Form:C1466.txt2",
 					"dataSourceTypeHint": "text",
 					"enterable": false,
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 220,
 					"height": 20
@@ -127,18 +127,18 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Multiline input: multiline=\"yes\", wordwrap=\"normal\"",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
 				},
 				"txt3": {
 					"type": "input",
-					"dataSource": "Form.txt3",
+					"dataSource": "Form:C1466.txt3",
 					"dataSourceTypeHint": "text",
 					"multiline": "yes",
 					"wordwrap": "normal",
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 220,
 					"height": 80
@@ -150,7 +150,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Entry filter: entryFilter=\"&9\" (numbers only)",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
@@ -160,7 +160,7 @@
 					"dataSource": "Form.txt4",
 					"dataSourceTypeHint": "text",
 					"entryFilter": "&9",
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 220,
 					"height": 20
@@ -172,7 +172,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Picture input: dataSourceTypeHint=\"picture\", pictureFormat=\"scaled\"",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
@@ -182,7 +182,7 @@
 					"dataSource": "Form.pic1",
 					"dataSourceTypeHint": "picture",
 					"pictureFormat": "scaled",
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 150,
 					"height": 100
@@ -194,7 +194,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Boolean input as text: booleanFormat=\"Assigned;Unassigned\"",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
@@ -204,7 +204,7 @@
 					"dataSource": "Form.bool1",
 					"dataSourceTypeHint": "boolean",
 					"booleanFormat": "Assigned;Unassigned",
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 150,
 					"height": 20
@@ -216,7 +216,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Date input: dateFormat=\"systemLong\"",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
@@ -226,7 +226,7 @@
 					"dataSource": "Form.date1",
 					"dataSourceTypeHint": "date",
 					"dateFormat": "systemLong",
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 220,
 					"height": 20
@@ -238,7 +238,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Number input: numberFormat custom pattern",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
@@ -248,7 +248,7 @@
 					"dataSource": "Form.num1",
 					"dataSourceTypeHint": "number",
 					"numberFormat": "###,##0.00",
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 220,
 					"height": 20
@@ -260,7 +260,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Input with choiceList: [\"Red\",\"Green\",\"Blue\"]",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
@@ -274,7 +274,7 @@
 						"Green",
 						"Blue"
 					],
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 220,
 					"height": 20
@@ -286,7 +286,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Alpha format on input (docs say NOT supported for Input): textFormat=\"(###) ### ####\"",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
@@ -296,7 +296,7 @@
 					"dataSource": "Form.alpha1",
 					"dataSourceTypeHint": "text",
 					"textFormat": "(###) ### ####",
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 220,
 					"height": 20
@@ -308,7 +308,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Styling: cornerRadius=10, borderStyle=\"solid\", fill=\"#EEF6FF\"",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 500,
 					"height": 16
@@ -320,7 +320,7 @@
 					"cornerRadius": 10,
 					"borderStyle": "solid",
 					"fill": "#EEF6FF",
-					"top": 30,
+					"top": 60,
 					"left": 10,
 					"width": 220,
 					"height": 30
@@ -332,7 +332,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Q1: Automatic drop into an entryFilter-restricted destination. Select all text in srcFilter, drag it, drop it onto dstFilter (entryFilter=\"&9\", digits only).",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 560,
 					"height": 32
@@ -341,7 +341,7 @@
 					"type": "input",
 					"dataSource": "Form.srcFilter",
 					"dataSourceTypeHint": "text",
-					"top": 45,
+					"top": 75,
 					"left": 10,
 					"width": 220,
 					"height": 20
@@ -351,7 +351,7 @@
 					"dataSource": "Form.dstFilter",
 					"dataSourceTypeHint": "text",
 					"entryFilter": "&9",
-					"top": 45,
+					"top": 75,
 					"left": 260,
 					"width": 220,
 					"height": 20
@@ -363,7 +363,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Q2: Automatic drop onto a non-enterable (enterable=false) destination, dragging/dropping left at default. Select all text in srcEnterable, drag it, drop it onto dstEnterable.",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 560,
 					"height": 32
@@ -372,7 +372,7 @@
 					"type": "input",
 					"dataSource": "Form.srcEnterable",
 					"dataSourceTypeHint": "text",
-					"top": 45,
+					"top": 75,
 					"left": 10,
 					"width": 220,
 					"height": 20
@@ -382,7 +382,7 @@
 					"dataSource": "Form.dstEnterable",
 					"dataSourceTypeHint": "text",
 					"enterable": false,
-					"top": 45,
+					"top": 75,
 					"left": 260,
 					"width": 220,
 					"height": 20
@@ -394,7 +394,7 @@
 				"lblTitle": {
 					"type": "text",
 					"text": "Q3: Does dragging a picture out of a picture-type input clear the source (move) or keep it (copy)? Drag the picture from srcPic and drop it onto dstPic; check whether srcPic still shows a picture afterward.",
-					"top": 5,
+					"top": 35,
 					"left": 10,
 					"width": 560,
 					"height": 32
@@ -403,7 +403,7 @@
 					"type": "input",
 					"dataSource": "Form.srcPic",
 					"dataSourceTypeHint": "picture",
-					"top": 45,
+					"top": 75,
 					"left": 10,
 					"width": 150,
 					"height": 100
@@ -412,7 +412,7 @@
 					"type": "input",
 					"dataSource": "Form.dstPic",
 					"dataSourceTypeHint": "picture",
-					"top": 45,
+					"top": 75,
 					"left": 260,
 					"width": 150,
 					"height": 100
@@ -427,6 +427,6 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 29,
+	"geometryStamp": 33,
 	"formClass": "MyInputsFormController"
 }
