@@ -289,6 +289,24 @@ Reference: https://developer.4d.com/docs/Events/onAfterKeystroke, https://develo
 
 A modern application should use `On After Edit` instead: it fires after **every** transitional edit action, whether that action was a single keystroke, a paste, a cut, an automatic drop, an FEP-composed edit, or an Undo -- one consistent event regardless of the mechanism that produced the change, rather than needing to separately special-case pastes/cuts/drops/FEP/Undo alongside keystroke handling. This is the event that fires for an automatically dropped text or picture -- `On Data Change` does not fire until the object is subsequently validated (tab/Return/click-out).
 
+### `FILTER KEYSTROKE` — Intercepting Individual Keystrokes
+
+Reference: https://developer.4d.com/docs/commands/filter-keystroke
+
+When the keyboard layout is simple (i.e. no FEP composition), it is possible to intercept and override individual keystrokes using `On Before Keystroke` + `FILTER KEYSTROKE`. `On Before Keystroke` fires **before** the character is inserted into the input; calling `FILTER KEYSTROKE` inside this event replaces the character that is about to be inserted (or suppresses it entirely by passing an empty string or a null character).
+
+This uses the same underlying mechanism as entry filters (`entryFilter`), but gives programmatic control — you can implement conditional logic, character transformations, or custom validation that a static filter pattern cannot express.
+
+```4d
+// Example: force uppercase on every keystroke
+Case of
+  : (FORM Event.code=On Before Keystroke)
+    FILTER KEYSTROKE(Uppercase(Keystroke))
+End case
+```
+
+**FEP caveat**: keystroke events (`On Before Keystroke`, `On After Keystroke`) are **not posted** during a Front-End Processor edit session (e.g. Japanese Input Method Editor, Chinese Pinyin). The FEP composes characters internally from multiple physical keystrokes before committing the final character — individual keystrokes are consumed by the FEP and never reach the 4D event system. Use `On After Edit` instead to process text changes from FEP input. For this reason, assigning a `keyboardDialect` to the input (which disables FEP — see above) is a natural companion to keystroke-level processing.
+
 ## On Selection Change
 
 Reference: https://developer.4d.com/docs/Events/onSelectionChange
