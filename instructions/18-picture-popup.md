@@ -78,6 +78,8 @@ A picture pop-up menu supports the `gotoPage` standard action, structurally iden
 
 No `dataSource` is needed for this mode. Selecting the Nth menu entry (Nth frame) navigates to the Nth form page. As with drop-down lists, this binding is **one-directional**: navigating to a page by code (`FORM GOTO PAGE`) does not update which entry the picture pop-up menu displays as selected -- if the object exposes the current selection visually (rare, since only the last-selected frame shows on the closed object), keep it in sync explicitly via `FORM Get current page` or drive navigation through `INVOKE ACTION` instead of `FORM GOTO PAGE` directly. Setting the standard action to `"None"` (no action) hands the click event to a form/object method for custom handling instead of automatic page navigation.
 
+Placed on **page 0**, a `gotoPage` picture pop-up menu becomes a persistent, icon-driven navigation control, since page-0 objects are always visible regardless of which page is displayed (see `19-tab.md`'s page-0 navigation pattern, shared identically by drop-down list and button grid). A companion plain button with `"action": "gotoPage?value=N"` (see `02-button.md`) can add fixed one-off page jumps that don't warrant their own menu entry.
+
 ## Supported Properties
 
 | Property | JSON Name | Notes |

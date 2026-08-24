@@ -1,0 +1,435 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "variable",
+	"windowSizingY": "variable",
+	"windowMinWidth": 0,
+	"windowMinHeight": 0,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"rightMargin": 20,
+	"bottomMargin": 20,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onPageChange"
+	],
+	"method": "method.4dm",
+	"windowTitle": "Inputs",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {
+				"navTab": {
+					"type": "tab",
+					"labels": [
+						"Page 1",
+						"Page 2",
+						"Page 3",
+						"Page 4",
+						"Page 5",
+						"Page 6",
+						"Page 7",
+						"Page 8",
+						"Page 9",
+						"Page 10",
+						"Page 11",
+						"Page 12",
+						"Page 13",
+						"Page 14"
+					],
+					"action": "gotoPage",
+					"top": 0,
+					"left": 0,
+					"width": 1300,
+					"height": 185
+				}
+			}
+		},
+		{
+			"objects": {
+				"Inputa": {
+					"type": "input",
+					"left": 66,
+					"top": 111,
+					"width": 184,
+					"height": 17,
+					"events": [],
+					"dropping": "none"
+				},
+				"Inputb": {
+					"type": "input",
+					"left": 66,
+					"top": 148,
+					"width": 184,
+					"height": 17,
+					"events": [
+						"onLoad",
+						"onDrop",
+						"onDataChange",
+						"onSelectionChange",
+						"onAfterEdit"
+					],
+					"method": "ObjectMethods/Inputb.4dm",
+					"dragging": "none"
+				},
+				"info": {
+					"type": "input",
+					"left": 347,
+					"top": 98,
+					"width": 184,
+					"height": 49,
+					"events": [
+						"onDrop"
+					],
+					"enterable": false,
+					"dataSource": "Form:C1466.info",
+					"dragging": "none"
+				},
+				"Button": {
+					"type": "button",
+					"text": "Button",
+					"top": 104,
+					"left": 268,
+					"width": 59,
+					"height": 37,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button.4dm"
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Non-enterable input: enterable=false",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"txt2": {
+					"type": "input",
+					"dataSource": "Form:C1466.txt2",
+					"dataSourceTypeHint": "text",
+					"enterable": false,
+					"top": 60,
+					"left": 10,
+					"width": 220,
+					"height": 20
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Multiline input: multiline=\"yes\", wordwrap=\"normal\"",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"txt3": {
+					"type": "input",
+					"dataSource": "Form:C1466.txt3",
+					"dataSourceTypeHint": "text",
+					"multiline": "yes",
+					"wordwrap": "normal",
+					"top": 60,
+					"left": 10,
+					"width": 220,
+					"height": 80
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Entry filter: entryFilter=\"&9\" (numbers only)",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"txt4": {
+					"type": "input",
+					"dataSource": "Form:C1466.txt4",
+					"dataSourceTypeHint": "text",
+					"entryFilter": "&9",
+					"top": 60,
+					"left": 10,
+					"width": 220,
+					"height": 20
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Picture input: dataSourceTypeHint=\"picture\", pictureFormat=\"scaled\"",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"pic1": {
+					"type": "input",
+					"dataSource": "Form:C1466.pic1",
+					"dataSourceTypeHint": "picture",
+					"pictureFormat": "scaled",
+					"top": 60,
+					"left": 10,
+					"width": 150,
+					"height": 100
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Boolean input as text: booleanFormat=\"Assigned;Unassigned\"",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"bool1": {
+					"type": "input",
+					"dataSource": "Form:C1466.bool1",
+					"dataSourceTypeHint": "boolean",
+					"booleanFormat": "Assigned;Unassigned",
+					"top": 60,
+					"left": 10,
+					"width": 150,
+					"height": 20
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Date input: dateFormat=\"systemLong\"",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"date1": {
+					"type": "input",
+					"dataSource": "Form:C1466.date1",
+					"dataSourceTypeHint": "date",
+					"dateFormat": "systemLong",
+					"top": 60,
+					"left": 10,
+					"width": 220,
+					"height": 20
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Number input: numberFormat custom pattern",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"num1": {
+					"type": "input",
+					"dataSource": "Form.num1",
+					"dataSourceTypeHint": "number",
+					"numberFormat": "###,##0.00",
+					"top": 60,
+					"left": 10,
+					"width": 220,
+					"height": 20,
+					"enterable": true
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Input with choiceList: [\"Red\",\"Green\",\"Blue\"]",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"choice1": {
+					"type": "input",
+					"dataSource": "Form.choice1",
+					"dataSourceTypeHint": "text",
+					"choiceList": [
+						"Red",
+						"Green",
+						"Blue"
+					],
+					"top": 60,
+					"left": 10,
+					"width": 220,
+					"height": 20
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Alpha format on input (docs say NOT supported for Input): textFormat=\"(###) ### ####\"",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"alpha1": {
+					"type": "input",
+					"dataSource": "Form.alpha1",
+					"dataSourceTypeHint": "text",
+					"textFormat": "(###) ### ####",
+					"top": 60,
+					"left": 10,
+					"width": 220,
+					"height": 20
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Styling: borderRadius=10, borderStyle=\"solid\", fill=\"#EEF6FF\"",
+					"top": 35,
+					"left": 10,
+					"width": 500,
+					"height": 16
+				},
+				"styled1": {
+					"type": "input",
+					"dataSource": "Form.styled1",
+					"dataSourceTypeHint": "text",
+					"borderStyle": "solid",
+					"fill": "#EEF6FF",
+					"top": 60,
+					"left": 10,
+					"width": 220,
+					"height": 30,
+					"borderRadius": 10
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Q1: Automatic drop into an entryFilter-restricted destination. Select all text in srcFilter, drag it, drop it onto dstFilter (entryFilter=\"&9\", digits only).",
+					"top": 35,
+					"left": 10,
+					"width": 560,
+					"height": 32
+				},
+				"srcFilter": {
+					"type": "input",
+					"dataSource": "Form.srcFilter",
+					"dataSourceTypeHint": "text",
+					"top": 75,
+					"left": 10,
+					"width": 220,
+					"height": 20
+				},
+				"dstFilter": {
+					"type": "input",
+					"dataSource": "Form.dstFilter",
+					"dataSourceTypeHint": "text",
+					"entryFilter": "&9",
+					"top": 75,
+					"left": 260,
+					"width": 220,
+					"height": 20
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Q2: Automatic drop onto a non-enterable (enterable=false) destination, dragging/dropping left at default. Select all text in srcEnterable, drag it, drop it onto dstEnterable.",
+					"top": 35,
+					"left": 10,
+					"width": 560,
+					"height": 32
+				},
+				"srcEnterable": {
+					"type": "input",
+					"dataSource": "Form.srcEnterable",
+					"dataSourceTypeHint": "text",
+					"top": 75,
+					"left": 10,
+					"width": 220,
+					"height": 20
+				},
+				"dstEnterable": {
+					"type": "input",
+					"dataSource": "Form.dstEnterable",
+					"dataSourceTypeHint": "text",
+					"enterable": false,
+					"top": 75,
+					"left": 260,
+					"width": 220,
+					"height": 20
+				}
+			}
+		},
+		{
+			"objects": {
+				"lblTitle": {
+					"type": "text",
+					"text": "Q3: Does dragging a picture out of a picture-type input clear the source (move) or keep it (copy)? Drag the picture from srcPic and drop it onto dstPic; check whether srcPic still shows a picture afterward.",
+					"top": 35,
+					"left": 10,
+					"width": 560,
+					"height": 32
+				},
+				"srcPic": {
+					"type": "input",
+					"dataSource": "Form.srcPic",
+					"dataSourceTypeHint": "picture",
+					"top": 75,
+					"left": 10,
+					"width": 150,
+					"height": 100
+				},
+				"dstPic": {
+					"type": "input",
+					"dataSource": "Form.dstPic",
+					"dataSourceTypeHint": "picture",
+					"top": 75,
+					"left": 260,
+					"width": 150,
+					"height": 100
+				}
+			}
+		}
+	],
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"geometryStamp": 37,
+	"formClass": "MyInputsFormController"
+}

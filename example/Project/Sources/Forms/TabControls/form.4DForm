@@ -133,7 +133,10 @@
                     "width": 300,
                     "height": 24,
                     "dataSource": "arrManual",
-                    "dataSourceTypeHint": "arrayText"
+                    "dataSourceTypeHint": "arrayText",
+                    "events": [
+                        "onClicked"
+                    ]
                 }
             }
         },

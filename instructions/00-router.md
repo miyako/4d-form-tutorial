@@ -35,6 +35,7 @@ confirm relevance before reading the full body.
 | Picture pop-up menu | `18-picture-popup.md` |
 | Tab control | `19-tab.md` |
 | Group box | `20-group-box.md` |
+| Input / field / text entry | `21-input.md` |
 | Meta questions: "what have you built", capability/status summary, showcase form catalog | `99-skills-summary.md` (on-demand only, see its own front matter — do not load by default) |
 
 If a task spans multiple objects, open only the files for those objects — do not

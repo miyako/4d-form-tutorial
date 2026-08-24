@@ -1,8 +1,8 @@
 ---
 object: "tab"
 json_type: "tab"
-keywords: ["tab control", "labels", "dataSourceTypeHint", "hierarchical list", "gotoPage", "labelsPlacement", "compiler"]
-summary: "Tab control object: object/array/hierarchical/static-labels data-source kinds, gotoPage, labelsPlacement, compiler typing note."
+keywords: ["tab control", "labels", "dataSourceTypeHint", "hierarchical list", "gotoPage", "labelsPlacement", "compiler", "popup collapse", "page 0 navigation"]
+summary: "Tab control object: object/array/hierarchical/static-labels data-source kinds, gotoPage, labelsPlacement, compiler typing note, width-driven popup collapse, page-0 always-visible navigation tab pattern."
 ---
 
 # 4D Tab Control Object
@@ -127,7 +127,7 @@ When set, 4D automatically displays the form page matching the number of the sel
 
 ### `FORM GOTO PAGE` (manual)
 
-Without a standard action, the object method must call `FORM GOTO PAGE` explicitly on `On Clicked`, passing the tab control's own data source (array or object), then clean up on `On Unload`:
+Without a standard action, the tab object's `action` property is left **empty** -- there is no built-in behavior for 4D to run on click, so the object method must call `FORM GOTO PAGE` explicitly on `On Clicked`, passing the tab control's own data source (array or object), then clean up on `On Unload`:
 
 ```4d
 Case of 
@@ -142,6 +142,14 @@ Case of
     CLEAR VARIABLE(arrPages)
 End case
 ```
+
+Because `action` is empty, nothing wires the click to `FORM GOTO PAGE` except the developer's own `On Clicked` handler -- and that handler only runs if the tab object itself declares interest in the event:
+
+```json
+{ "events": ["onClicked"] }
+```
+
+Form-level lifecycle events (`On Load`, `On Unload`) are declared once in the *form's* top-level `events` array and apply regardless of which object last had focus. Per-object events such as `On Clicked` are different: the shared form method only receives `On Clicked` for a *specific* object if that object's own JSON declares `"events": ["onClicked"]`. Omitting it on the tab control means the `On Clicked` branch of the method above is simply never reached for that object -- no error, the click is just silently not reported to the method. This is unrelated to the `gotoPage` standard action, which is handled internally by 4D without any method code or `events` declaration at all.
 
 Manual navigation is the natural choice when the tab control does something other than plain page navigation -- e.g. driving a subform's displayed data (the official example: an alphabet-letter Rolodex tab control that reloads a subform's data set instead of switching form pages).
 
@@ -191,6 +199,39 @@ Notably absent compared to drop-down list: no `focusable`, no `saveAs`/reference
 - **Object-based, array-based, and hierarchical-list-by-code** tabs (all of which have a `dataSource`) render a **single tab** showing the **literal `dataSource` expression text** (e.g. `Form.tabObj`, `arrPages`, `Form.tabHierarchical`) -- consistent with the same rule already established for drop-down list and combo box (see `16-dropdown.md`, `17-combo.md`).
 - The **static `labels`** list, which has **no `dataSource` at all**, is the first case among these pop-up/tab-style objects where the static template renders the object's **actual configured content**: the real tab strip, with every label from the `labels` array shown as its own tab, exactly as it will appear at runtime. This is possible because the labels are fully known at form-design time, embedded directly in the JSON, with nothing left to resolve from a runtime expression.
 - `labelsPlacement: "bottom"` is correctly honored in the static template render: with a tall test object, the tab strip visibly renders at the bottom edge of the object's frame, with the enclosed content area rendered above it as a plain rectangle. On a tab-strip-height-only object there is no visible difference between `"top"` and `"bottom"` since there is no space for the strip to move.
+
+## Static Labels: Automatic Popup Collapse When Too Narrow
+
+A static `labels` tab is rendered as a native macOS `NSTabView`, which means it inherits that control's own **auto-collapse** behavior: if the object's `width` is not large enough to lay out every label as a full-size tab, 4D silently substitutes a single **pop-up button** control instead (showing only the currently selected label, with a small up/down disclosure indicator) -- confirmed empirically with a 14-label static list at `width: 590` and again at `width: 1400` (collapsed) versus `width: 1300` (rendered as a full horizontal strip of all 14 tabs). This is a **width-only** trigger, unrelated to `height` -- a tall object at an insufficient width still collapses to a popup. There is no documented property to force one presentation or the other; the only lever is giving the object enough `width` for the label count and font. Practical sizing rule: leave generous headroom over a naive `label_count * average_label_width` estimate, then verify by rendering, since the collapse threshold is not published and depends on label text length. Both the tab-strip and popup-collapsed presentations remain fully functional -- clicking either still fires `On Clicked` and drives `gotoPage`/`FORM GOTO PAGE` identically; the collapse is a purely visual space-saving fallback, not a functional regression.
+
+## Always-Visible Navigation Tab (Page 0 Pattern)
+
+Placing a `gotoPage` static-`labels` tab on **page 0** (index 0 in the `pages` array) turns it into a persistent navigation bar: objects on page 0 are always visible regardless of which page is currently displayed (see `01-form-concepts.md`), so the tab strip stays on screen and keeps highlighting the current page's tab while the rest of the form's content switches underneath it. Because `gotoPage` swaps the *entire* form page rather than nesting per-page content inside the tab's own bounding box, the object's `width`/`height` do not need to match the tab's true "content frame" for the mechanism to work -- but sizing the tab's rectangle to enclose the widest/tallest extent of every other page's objects (i.e., `width`/`height` at least as large as the maximum `left + width` / `top + height` found across all pages) gives the visual impression of a single framed container whose interior content changes per tab, which is the conventional tabbed-dialog look. With `N` pages of real content plus a dedicated page 0 for the tab itself, the tab's `labels` array should have exactly `N` entries (one per content page, page 1 through page N) since `gotoPage` maps the *K*-th tab to page *K*.
+
+This page-0 pattern is not specific to tab control -- it applies identically to **every** `gotoPage`-capable multi-value object: drop-down list (`16-dropdown.md`), button grid (`05-button-grid.md`), and picture pop-up menu (`18-picture-popup.md`) all auto-populate one submenu entry per form page the same way a tab auto-populates one tab per page, and placing any of them on page 0 makes that object an always-visible navigation control by the same page-0-is-always-visible mechanism, independent of which object type is providing the clickable surface.
+
+### Give Every Page Extra Top Margin
+
+Since a page-0 nav object always renders **on top of** whichever page is currently active (page 0 is drawn regardless of the active page, and the active page's own objects are drawn in the same coordinate space, not offset or nested inside the nav object's bounding box), any content object positioned at a low `top` value on an ordinary content page will visually collide with the nav tab's label strip -- the strip occupies a fixed band at the top of the form (its own `top`..`top+`*strip height*), and a content-page object with, say, `top: 5` renders directly underneath/behind it. This is easy to miss because a single-page test looks fine in isolation; the collision only becomes visible once the nav object and real page content share the same rendered frame.
+
+The fix is a **layout convention, not a property**: reserve a top margin on every content page (1 through N) at least as large as the nav object's rendered header/label-strip height, and shift all of that page's objects down by that amount before laying out the rest of the page's content. There is no automatic reflow or clipping -- 4D does not know the nav object and the content page are conceptually related, so the developer must apply this offset by hand to every page that can be reached while the nav object is visible. A practical margin is 24-30px for a standard-height tab/dropdown/button-grid/picture-popup header (verify by rendering, since the exact header height is a native OS control and not documented). Remember to also grow the nav object's own `height` if it was originally sized to enclose the maximum `top + height` across all pages (see above), since shifting every page's content down raises that maximum too.
+
+A **button** is not a multi-value object (it has no "selected item" concept), so it cannot auto-populate a page list -- but it can still drive navigation to one specific, fixed page via the parameterized standard-action syntax `"action": "gotoPage?value=N"` (see `02-button.md` and https://developer.4d.com/docs/commands/invoke-action). Placed on page 0 alongside (or instead of) a multi-value nav object, a `gotoPage?value=N` button is a natural companion for one-off jumps that don't warrant their own tab/menu entry -- e.g. a persistent "Home" button that always returns to page 1 regardless of the tab's current selection.
+
+### Defocusing After a Page Change
+
+Whenever a page becomes active (via a nav tab, `FORM GOTO PAGE`, or `INVOKE ACTION("gotoPage...")`), 4D **automatically gives keyboard focus to the first object in entry order on that page** if it's enterable, even without any user click. This has a display-correctness side effect: some format properties render differently while an object has focus versus while it doesn't (see `21-input.md`'s Number Format finding -- a `numberFormat`-formatted input shows its **raw, unformatted** value while focused, and only shows the formatted value once focus leaves). A page landing on such an object right after a tab switch will therefore momentarily look wrong/unformatted, purely because of the auto-focus, not because the format itself is broken.
+
+The fix is to handle `On Page Change` in the form method and clear the focus immediately with `GOTO OBJECT(*; "")` (empty object name):
+
+```4d
+Case of
+	: ($event.code=On Page Change)
+		GOTO OBJECT(*; "")
+End case
+```
+
+This requires `"onPageChange"` to be declared in the form's own top-level `events` array (see `01-form-concepts.md`'s per-object/per-form event-wiring rule) as well as the `"method"` property pointing at the file that handles it. See https://developer.4d.com/docs/commands/goto-object.
 
 ## Comparison with Drop-down List
 

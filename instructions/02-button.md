@@ -460,7 +460,23 @@ Reference: https://developer.4d.com/docs/FormObjects/propertiesAction#standard-a
 
 A button can have **both** a method and a standard action. The method runs first, then the standard action. This allows code to conditionally modify or block the built-in behavior.
 
-## CSS Styling
+### `gotoPage?value=N`: Fixed-Page Jump Button
+
+Unlike a multi-value object (drop-down list, tab control, button grid, picture pop-up menu -- see `19-tab.md`), where `action: "gotoPage"` alone auto-populates a submenu/selection with one entry per form page and the *clicked item's own position* supplies the target page number, a **button** is a single fixed control with no "position" of its own -- so its `action` must instead carry the target page **explicitly** as a parameter, using the standard action's URL-like syntax (see https://developer.4d.com/docs/Desktop/standard-actions): `"action": "gotoPage?value=2"` always jumps to page 2, regardless of anything else on the form. This is the general pattern for any parameterized standard action, not unique to page navigation (e.g. `"backgroundColor?value=red"`).
+
+```json
+{
+  "type": "button",
+  "text": "Page 2",
+  "action": "gotoPage?value=2"
+}
+```
+
+This makes a button on **page 0** (always visible, see `19-tab.md`'s page-0 navigation pattern) a simple, code-free way to add one-off "jump to page N" controls -- e.g. "Home"/"Back to page 1" buttons -- alongside or instead of a full multi-value nav tab/dropdown, with no method required.
+
+The same parameterized action string can be triggered from code instead of a click, via `INVOKE ACTION` (https://developer.4d.com/docs/commands/invoke-action): `INVOKE ACTION("gotoPage?value=3")` runs the identical standard action programmatically in the current form (pass `ak main form` as the second parameter to target the frontmost document/dialog form instead). This is the recommended way to drive standard-action-based navigation from a form method while keeping any bound multi-value object's displayed selection in sync (see the one-directional-binding caveat in `16-dropdown.md`), rather than calling `FORM GOTO PAGE` directly.
+
+
 
 Button properties can be set via CSS stylesheets.
 

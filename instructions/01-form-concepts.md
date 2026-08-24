@@ -109,7 +109,7 @@ Every form must have:
 | `width` / `height` | Explicit form size (alternative to margins) |
 | `destination` | `"detailScreen"`, `"listScreen"`, `"detailPrinter"`, `"listPrinter"` |
 | `geometryStamp` | Incremented by the form editor on each save |
-| `method` | Path to the form method (e.g., `"method.4dm"`) |
+| `method` | Path to the form method (e.g., `"method.4dm"`). **Required** to actually bind it -- creating a `method.4dm` file at the conventional path and declaring the top-level `events` array (`onLoad`/`onUnload`) is not enough; without this explicit property the file is never invoked, `On Load`/`On Unload` never fire, and any initialization code inside it is silently dead |
 
 ### Destination
 
