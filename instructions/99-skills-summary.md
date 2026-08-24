@@ -177,7 +177,7 @@ note: "Do NOT load this file for routine object/task work — it duplicates cont
 - Understand `onLoad`/`onUnload` as gate events
 - Understand double-click behavior (replaces On Clicked for 2nd click) and `Clickcount`
 - Know the modifier key commands and their cross-platform mappings
-- Object-level events (e.g. `On Clicked`, `On Data Change`) only reach the shared form method for a *given object* if that object's own JSON declares `"events": [...]` naming the event; the form's top-level `events` array only governs form-lifecycle events (`onLoad`/`onUnload`), not per-object events. Standard actions (`"action": "gotoPage"`, etc.) are the exception -- 4D handles them internally with no method code or `events` declaration needed
+- Object-level events (e.g. `On Clicked`, `On Data Change`) only reach the shared form method for a *given object* if that object's own JSON declares `"events": [...]` naming the event; the form's top-level `events` array only governs form-lifecycle events (`onLoad`/`onUnload`), not per-object events. Standard actions (`"action": "gotoPage"`, etc.) are the exception -- 4D handles them internally with no method code or `events` declaration needed. When `action` is left empty (manual/custom behavior), nothing wires the click for you, so the object's `events` declaration is what makes the developer's own `On Clicked` handler actually run
 
 ### Form Classes (Concepts Only)
 - Understand two approaches: `formClass` property vs passing object to `DIALOG`

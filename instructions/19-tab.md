@@ -127,7 +127,7 @@ When set, 4D automatically displays the form page matching the number of the sel
 
 ### `FORM GOTO PAGE` (manual)
 
-Without a standard action, the object method must call `FORM GOTO PAGE` explicitly on `On Clicked`, passing the tab control's own data source (array or object), then clean up on `On Unload`:
+Without a standard action, the tab object's `action` property is left **empty** -- there is no built-in behavior for 4D to run on click, so the object method must call `FORM GOTO PAGE` explicitly on `On Clicked`, passing the tab control's own data source (array or object), then clean up on `On Unload`:
 
 ```4d
 Case of 
@@ -143,7 +143,7 @@ Case of
 End case
 ```
 
-This only works if the tab object itself declares interest in the event:
+Because `action` is empty, nothing wires the click to `FORM GOTO PAGE` except the developer's own `On Clicked` handler -- and that handler only runs if the tab object itself declares interest in the event:
 
 ```json
 { "events": ["onClicked"] }
