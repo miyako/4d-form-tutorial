@@ -282,6 +282,18 @@ Automatic drag and drop is handled **entirely internally by 4D** and does not di
 
 Beyond this automatic behavior, the developer can implement **custom drag and drop** to transfer arbitrary pasteboard data (any type except file promises) between the object and other areas of the application, or other applications entirely. Custom drag and drop is covered separately in more detail later.
 
+### Entry Filter Applies to Automatically Dropped Text
+
+An automatic drop into a destination input with an `entryFilter` (see above) is filtered exactly like keyboard entry: only the characters that pass the filter make it into the destination, and any non-conforming characters are silently dropped from the inserted text -- confirmed with a source input containing `"abc123"` dropped onto a destination with `entryFilter: "&9"` (digits only), where only `"123"` actually lands, the letters are discarded, and no error/alert is raised. This means the entry filter is applied to the drop's inserted text at the same point it would apply to typed keystrokes, not bypassed as a bulk/non-interactive insertion the way some other validation mechanisms are.
+
+### `enterable: false` Alone Blocks Automatic Dropping
+
+Setting `enterable: false` on a destination input is sufficient by itself to make a drop onto it impossible -- confirmed with a destination left at the default `dragging`/`dropping` values (neither explicitly set to `"none"`): dropping a dragged selection onto a non-enterable input has no effect at all, nothing is inserted, and the destination's own `dropping` property does not need to be explicitly set to `"none"` for this to hold. This follows the general rule that a non-enterable object cannot receive any user-driven data entry, keyboard or drag-and-drop alike -- `enterable: false` is a strictly broader restriction that `dropping: "none"` is unnecessary to add on top of.
+
+### Picture Drag Is a Copy, Not a Move
+
+Dragging a picture out of a picture-type input and dropping it on another picture-type input **copies** the picture rather than moving it -- confirmed with a source input preloaded with an image, dragged onto an empty destination input: the destination receives the picture, but the source **keeps its own copy** rather than being cleared. This is the opposite of automatic drag and drop between two text inputs (a move/cut, see above) -- text and picture data sources are handled by different default transfer semantics for the same automatic drag-and-drop gesture.
+
 ## Input Alternatives
 
 The overview page notes several cases where a different object type is a better fit than a plain input:
