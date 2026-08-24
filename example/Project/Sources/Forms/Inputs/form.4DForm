@@ -15,6 +15,7 @@
 		"onLoad",
 		"onUnload"
 	],
+	"method": "method.4dm",
 	"windowTitle": "Inputs",
 	"destination": "detailScreen",
 	"pages": [
