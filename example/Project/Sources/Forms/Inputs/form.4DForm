@@ -39,7 +39,8 @@
 					"method": "ObjectMethods/Input.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"contextMenu": "none"
 				},
 				"Input1": {
 					"type": "input",
@@ -52,7 +53,6 @@
 					"dataSource": "Form:C1466.today",
 					"borderStyle": "none",
 					"hideFocusRing": true,
-					"method": "ObjectMethods/Input1.4dm",
 					"events": [
 						"onClick"
 					]

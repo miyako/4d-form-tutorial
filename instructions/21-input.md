@@ -332,11 +332,15 @@ Reference: https://developer.4d.com/docs/Events/onMouseUp
 
 Reference: https://developer.4d.com/docs/FormObjects/propertiesEntry#context-menu, https://developer.4d.com/docs/commands/object-set-context-menu, https://developer.4d.com/docs/commands/object-get-context-menu
 
-The contextual menu (`contextMenu: "automatic"`, the default) only appears on Control+click or right-click when **both** conditions hold: the `contextMenu` property is not set to `"none"`, and the input is `enterable`. A non-enterable input does not show the contextual menu even if `contextMenu` is `"automatic"` — the built-in context menu is part of the entry system and is ignored for non-enterable objects.
+The built-in contextual menu (`contextMenu: "automatic"`, the default) appears on Control+click or right-click. **Correction**: it works on both enterable and non-enterable inputs — earlier documentation incorrectly stated it required `enterable: true`. A non-enterable, focusable input with `contextMenu: "automatic"` will show the standard context menu including Copy, which is sufficient for a copy-only read-only input.
 
-### Custom Context Menu for Non-Enterable Inputs
+The exact contents of the menu depend on the data source's expression type (plain text vs. picture vs. multi-style/styled text) and on the current Clipboard/pasteboard content. A picture-type input's menu adds **Import...** and **Save as...** commands (plus temporary picture-format overrides); a multi-style text input's menu adds font/size/style/color commands, generating `On After Edit` when a style attribute is changed through the menu.
 
-To provide a "Copy" popup menu on a non-enterable, focusable (copy-only) input, implement the context menu by code in the object method. The object must have a `method` property pointing to its `.4dm` file and subscribe to `onClick` in its `events` array, then detect a contextual click (right-click / Ctrl+click) using the `Contextual click` command:
+### Custom Context Menu with Standard Actions
+
+For a fully customized context menu, set `contextMenu: "none"` to suppress the built-in menu, then implement a custom popup in the object method. Instead of manually accessing the pasteboard, use `SET MENU ITEM PROPERTY` to associate a **standard action** with each menu item — this lets 4D handle the action natively:
+
+Reference: https://developer.4d.com/docs/commands/set-menu-item-property, https://developer.4d.com/docs/commands/get-menu-item-property
 
 ```4d
 var $event : Object
@@ -346,26 +350,31 @@ Case of
   : (($event.code=On Clicked) && (Contextual click))
     var $menu : Text
     $menu:=Create menu
-    APPEND MENU ITEM($menu; "Copy")
-    SET MENU ITEM PARAMETER($menu; -1; "copy")
+    APPEND MENU ITEM($menu; ak standard action title)
+    SET MENU ITEM PROPERTY($menu; -1; Associated standard action; ak copy)
     var $parameter : Text
     $parameter:=Dynamic pop up menu($menu)
     RELEASE MENU($menu)
 
-    If ($parameter="copy")
-      var $ptr : Pointer
-      $ptr:=OBJECT Get pointer(Object named; $event.objectName)
-      SET TEXT TO PASTEBOARD(String($ptr->))
-    End If 
-
 End case 
 ```
 
-Reference: https://developer.4d.com/docs/commands/set-text-to-pasteboard, https://developer.4d.com/docs/commands/object-get-pointer, https://developer.4d.com/docs/commands/dynamic-pop-up-menu
+Key points:
+- `ak standard action title` automatically names the menu item from the standard action (e.g. "Copy"), including localization
+- `SET MENU ITEM PROPERTY($menu; -1; Associated standard action; ak copy)` binds the Copy standard action to the last appended item — no manual pasteboard code needed
+- The object must have `method` pointing to its `.4dm` file, `events: ["onClick"]`, and `contextMenu: "none"`
 
-The pattern uses `OBJECT Get pointer(Object named; $event.objectName)` to dereference the data source generically (works regardless of expression type), then `String()` to convert to text for the pasteboard. See the "Inputs" form's `Input` and `Input1` object methods for a working example.
+### Comparison: Built-in vs. Custom
 
-The exact contents of the menu are not fixed -- they depend on the data source's expression type (plain text vs. picture vs. multi-style/styled text) and on the current Clipboard/pasteboard content (e.g. whether Paste is enabled depends on what is currently on the Clipboard). A picture-type input's menu adds **Import...** and **Save as...** commands (plus temporary picture-format overrides); a multi-style text input's menu adds font/size/style/color commands, generating `On After Edit` when a style attribute is changed through the menu.
+The "Inputs" form demonstrates both approaches side by side:
+
+| | `Input` (custom) | `Input1` (built-in) |
+|---|---|---|
+| `contextMenu` | `"none"` | `"automatic"` (default) |
+| `method` | `"ObjectMethods/Input.4dm"` | not needed |
+| `events` | `["onClick"]` | not needed |
+| How Copy works | Custom popup with standard action | OS-provided context menu |
+| When to use | Full control over menu items | Simplest approach for standard behavior |
 
 ## Drag and Drop
 
