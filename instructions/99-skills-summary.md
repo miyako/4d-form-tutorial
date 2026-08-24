@@ -146,6 +146,17 @@ note: "Do NOT load this file for routine object/task work — it duplicates cont
 - "Containment" of other objects is purely visual overlap (z-order) -- 4D forms are flat, a group box does not truly parent/own the objects placed inside its frame
 - No `action` (standard action), no `focusable`, no border-style property -- pure visual/textual styling only (font, color, alignment, bold/italic/underline)
 
+### Input Object JSON
+- An input (`type: "input"`) is the general-purpose field/expression object -- its `dataSource` can be Text, Date, Time, Number, Boolean, Picture, or Object, unlike drop-down/combo/tab which are restricted to a small set of shapes
+- Each expression type unlocks its own display-format property: `textFormat` (Alpha), `dateFormat`, `timeFormat`, `numberFormat`, `booleanFormat` (text-when-true/false), `pictureFormat` (scaled/truncated/proportional/tiled) -- only one is relevant at a time, matching `dataSourceTypeHint`
+- The official Alpha Format property page's "Objects Supported" list **omits Input**, despite Input's own overview page listing Alpha Format as a supported property -- the same class of doc inconsistency previously found with Group Box's Title property
+- `multiline` (`"yes"`/`"no"`/`"automatic"`, text type only) and `wordwrap` (`"normal"`/`"none"`, only active when `multiline: "yes"`) control line-wrapping behavior
+- `entryFilter` constrains data entry character-by-character (built-in codes like `&9` digits-only, `~A` forced-uppercase letters, or a custom `|namedFilter`) -- independent of and complementary to display formats
+- An input can carry `choiceList` (same mechanism as drop-down/combo) while remaining `type: "input"`, turning it into a constrained pop-up without changing its object type
+- A picture-type input (`dataSourceTypeHint: "picture"`) is the only input variant handling image data; as a **process variable** it has a stricter typing rule than other expression types -- it must be declared (`var varName : Picture`) and initialized *before* the form loads (not in the form's own `On Load`), or it renders incorrectly in interpreted mode
+- Expressions can be **assignable or non-assignable** -- a formula or method-name `dataSource` displays and re-evaluates fine but has nothing to write user entry back to, making the object effectively read-only regardless of `enterable`
+- `FORM SCREENSHOT`'s static template renders the **literal `dataSource` expression text** for every expression type tested, including `picture` and `boolean` -- a picture-type input shows literal text like `Form.pic1`, never the actual image, in contrast to the static Picture object and Picture Pop-up Menu which always render real image content (frame 0) regardless of data source. `enterable: false` and a `choiceList` produce no visible difference from a plain input in the static template; purely visual properties (`cornerRadius`, `fill`) do render as expected
+
 ### Event Cycle Architecture
 - Event cycle is **atomic, sequential, cooperative**
 - Animations pause during mouse-down waits on clickable objects
@@ -180,7 +191,7 @@ note: "Do NOT load this file for routine object/task work — it duplicates cont
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 
 ### Other Form Object Types
-- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, **picture pop-up menu**, **tab control**, and **group box** in depth. The remaining object types (input, text, listbox, subform, etc.) have not been covered yet.
+- I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, **picture pop-up menu**, **tab control**, **group box**, and **input** in depth. The remaining object types (text, listbox, subform, etc.) have not been covered yet.
 
 ### Runtime Behavior
 - I have not used 4D runtime commands in practice. I know some exist (e.g., `OBJECT SET ENABLED`, `OBJECT SET TITLE`) from documentation links, but I have not tested them or learned their full behavior.
@@ -250,3 +261,6 @@ Object-based, array-based, static `labels` list, `labelsPlacement: "bottom"` (th
 
 ### 14. GroupBoxes
 `text` vs. `title` JSON key comparison (resolving the official doc's own key error), a group box visually overlapping input/label objects, font/color/alignment styling (`bold`, `stroke`, `textAlign`), a bare frame with no title, and an XLIFF-referenced title, one variant per page.
+
+### 15. Inputs
+Basic text with placeholder, non-enterable display, multiline/wordwrap, entry filter, picture-type with `pictureFormat: "scaled"`, boolean-as-text, date/number formats, `choiceList`, Alpha Format (Objects Supported omission test), and cornerRadius/borderStyle/fill styling, one variant per page.
