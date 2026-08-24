@@ -460,14 +460,31 @@ button {
 
 Reference: https://developer.4d.com/docs/Concepts/paths#filesystem-pathnames, https://developer.4d.com/docs/commands/file, https://developer.4d.com/docs/API/FileClass
 
-4D internally uses **POSIX paths** (forward slashes, filesystem-relative like `/RESOURCES/...`) for JSON properties, `File()`, and `Folder()`. However, many legacy commands (`READ PICTURE FILE`, `WRITE PICTURE FILE`, `DOCUMENT TO BLOB`, etc.) expect a **platform path** (macOS: `/Users/.../`, Windows: `C:\...`).
+### 4D Filesystem Pathnames
 
-The `File` object bridges the two:
+4D defines virtual **filesystem pathnames** that map to project-relative folders. These are not real POSIX paths — they are 4D-specific aliases resolved at runtime:
+
+| Filesystem | Designates |
+|-----------|-----------|
+| `/DATA` | Current data folder |
+| `/LOGS` | Logs folder (inside data) |
+| `/PACKAGE` | Project root folder |
+| `/PROJECT` | Project folder |
+| `/RESOURCES` | Current project resources folder |
+| `/SOURCES` | Project sources folder |
+
+These provide **OS independence** (no hardcoded platform paths) and **security** (sandboxed — code cannot access above the filesystem root).
+
+### `File()` and `.platformPath`
+
+`File()` and `Folder()` accept only **absolute pathnames** — either a filesystem pathname or a full platform path (with `fk platform path` constant). Relative paths are not accepted.
+
+Many legacy commands (`READ PICTURE FILE`, `WRITE PICTURE FILE`, `DOCUMENT TO BLOB`, etc.) expect a **platform path** (macOS: `/Users/.../`, Windows: `C:\...`), not a filesystem pathname. The `File` object bridges the two:
 
 ```4d
 var $file : 4D.File
-$file:=File("/RESOURCES/Images/grid2x2.png")  // POSIX filesystem path
-READ PICTURE FILE($file.platformPath; $image) // .platformPath for legacy commands
+$file:=File("/RESOURCES/Images/grid2x2.png")  // 4D filesystem pathname
+READ PICTURE FILE($file.platformPath; $image) // .platformPath → native OS path
 ```
 
 This is cleaner than manually building platform paths with `Get 4D folder` + `Folder separator`:
@@ -481,12 +498,17 @@ READ PICTURE FILE(Get 4D folder(Current resources folder)+"Images"+Folder separa
 
 | Property | Returns | Use for |
 |----------|---------|---------|
-| `.path` | POSIX filesystem path (`/RESOURCES/...`) | 4D API calls that accept filesystem paths |
-| `.platformPath` | Native OS path | Legacy commands expecting platform paths |
+| `.path` | 4D filesystem path (`/RESOURCES/...`) | 4D API calls that accept filesystem paths |
+| `.platformPath` | Native OS path (`/Users/.../` or `C:\...`) | Legacy commands expecting platform paths |
 | `.name` | Filename with extension | Display, logging |
 | `.exists` | Boolean | Guard before reading |
 
-The same pattern applies to `Folder()` for directory references.
+The same pattern applies to `Folder()` for directory references. Use `.file()` and `.folder()` on a folder object for **relative** navigation within a known root:
+
+```4d
+$folder:=Folder("/RESOURCES/Images")
+$file:=$folder.file("grid2x2.png")  // relative path within the folder
+```
 
 ## Data Sources
 
