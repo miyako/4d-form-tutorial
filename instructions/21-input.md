@@ -356,7 +356,7 @@ Key behaviors:
 
 ### Custom Context Menu with Standard Actions
 
-For a fully customized context menu, set `contextMenu: "none"` to suppress the built-in menu, then implement a custom popup in the object method. Instead of manually accessing the pasteboard, use `SET MENU ITEM PROPERTY` to associate a **standard action** with each menu item — this lets 4D handle the action natively:
+For a fully customized context menu, set `contextMenu: "none"` to suppress the built-in menu, then implement a custom popup in the object method. Use `SET MENU ITEM PROPERTY` to associate a **standard action** with each menu item — this lets 4D handle the action natively:
 
 Reference: https://developer.4d.com/docs/commands/set-menu-item-property, https://developer.4d.com/docs/commands/get-menu-item-property
 
@@ -381,6 +381,54 @@ Key points:
 - `ak standard action title` automatically names the menu item from the standard action (e.g. "Copy"), including localization
 - `SET MENU ITEM PROPERTY($menu; -1; Associated standard action; ak copy)` binds the Copy standard action to the last appended item — no manual pasteboard code needed
 - The object must have `method` pointing to its `.4dm` file, `events: ["onClick"]`, and `contextMenu: "none"`
+
+**However**, when `%password` is active, the `ak copy` standard action is blocked. To allow copying from a password-masked input, use manual pasteboard access with selection awareness:
+
+### Copying Selected Text from a Password-Masked Input
+
+Reference: https://developer.4d.com/docs/commands/get-highlight, https://developer.4d.com/docs/commands/get-edited-text
+
+When the `%password` font blocks the Copy standard action, implement copy manually using:
+
+- **`Get edited text`** — returns the text currently being edited (pre-validation), not the committed/stored data source value. This is important because during an edit session the displayed content may differ from the stored value.
+- **`GET HIGHLIGHT`** — returns the selection start and end positions in the focused object
+- **`Substring`** — extracts only the selected portion
+
+```4d
+var $event : Object
+$event:=FORM Event
+
+Case of 
+  : (($event.code=On Clicked) && (Contextual click))
+    var $focusObjectName : Text
+    $focusObjectName:=OBJECT Get name(Object with focus)
+    var $start; $end : Integer
+    GET HIGHLIGHT(*; $focusObjectName; $start; $end)
+    var $selectedValue : Text
+    $selectedValue:=Substring(Get edited text; $start; $end-$start)
+
+    If ($selectedValue#"")
+      var $menu : Text
+      $menu:=Create menu
+      APPEND MENU ITEM($menu; "Copy")
+      SET MENU ITEM PARAMETER($menu; -1; "copy")
+      var $parameter : Text
+      $parameter:=Dynamic pop up menu($menu)
+      RELEASE MENU($menu)
+
+      If ($parameter="copy")
+        SET TEXT TO PASTEBOARD($selectedValue)
+      End If 
+    End If 
+
+End case 
+```
+
+Key differences from the naive approach (using `OBJECT Get pointer` + `String`):
+- **Only copies the selected text**, not the entire value — respects user intent
+- **Uses `Get edited text`**, not the stored data source — captures the current edit state
+- **Only shows the menu when text is selected** (`$selectedValue#""`) — no misleading empty-copy option
+- **Works despite `%password`** because it bypasses the standard action system entirely
 
 ### Comparison: Built-in vs. Custom
 
