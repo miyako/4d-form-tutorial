@@ -136,6 +136,52 @@ A picture-type input (`dataSourceTypeHint: "picture"`) is the only input variant
 
 `onAfterEdit`, `onAfterKeystroke`, `onBeforeKeystroke`, `onBeginDragOver`, `onClicked`, `onDataChange`, `onDoubleClicked`, `onDragOver`, `onDrop`, `onGettingFocus`, `onHeader`, `onLoad`, `onLosingFocus`, `onMouseEnter`, `onMouseLeave`, `onMouseMove`, `onMouseUp` (Picture type only), `onPrintingBreak`, `onPrintingDetail`, `onPrintingFooter`, `onScroll` (Picture type only), `onSelectionChange`, `onUnload`, `onValidate`.
 
+## On Data Change: The General-Purpose Event
+
+Reference: https://developer.4d.com/docs/Events/onDataChange
+
+`On Data Change` is the general-purpose event for reacting to a value change on an input. Two rules govern when it fires:
+
+- It fires only when the data source is touched **through the user interface** (typing, pasting, dragging in a value). A code-driven assignment to the same variable/field/object property (e.g. `Form.myText:="new value"` in a method) does **not** trigger `On Data Change`.
+- It fires even when the newly entered value is **identical** to the previous value -- unlike a typical "changed" semantics, `On Data Change` really means "the user interface touched this data source," not "the value is different from before."
+
+## On Clicked on Input
+
+An input can also process `On Clicked`, and this works regardless of whether the input is `enterable` or `focusable` -- a non-enterable, non-focusable input still receives `On Clicked` when clicked, which is one of the mechanisms that makes non-enterable inputs useful for click-driven, display-only UI (see Enterable, above).
+
+### Mouse Coordinates: `MOUSEX`/`MOUSEY`
+
+Reference: https://developer.4d.com/docs/Concepts/variables#system-variables
+
+During `On Clicked` on an input, the system variables `MOUSEX` and `MOUSEY` are **automatically assigned the local (object-relative) mouse coordinates only when the data source is a picture**. If the data source is not a picture, `MOUSEX`/`MOUSEY` are not updated by the click, and the current mouse position must instead be obtained with `MOUSE POSITION` (https://developer.4d.com/docs/commands/mouse-position).
+
+To convert the object-relative coordinates to screen-relative coordinates, use `CONVERT COORDINATES` (https://developer.4d.com/docs/commands/convert-coordinates).
+
+`MOUSEX`/`MOUSEY` are also automatically updated during the mouse-tracking events regardless of data source type: `On Mouse Enter`, `On Mouse Leave`, `On Mouse Move` (https://developer.4d.com/docs/Events/onMouseEnter, onMouseLeave, onMouseMove) -- the picture-only restriction is specific to `On Clicked`.
+
+### SVG Hit-Testing
+
+If the picture data source is an SVG document, `MOUSEX`/`MOUSEY` from `On Clicked` are ready to pass directly into the SVG hit-testing commands:
+
+- `SVG Find element ID by coordinates` -- https://developer.4d.com/docs/commands/svg-find-element-id-by-coordinates
+- `SVG Find element IDs by rect` -- https://developer.4d.com/docs/commands/svg-find-element-ids-by-rect
+
+This is the standard pattern for making an SVG picture input clickable/interactive by element (e.g. a clickable map or diagram).
+
+## On Mouse Up: Picture-Only
+
+Reference: https://developer.4d.com/docs/Events/onMouseUp
+
+`On Mouse Up` fires for an input **only when the data source is a picture**. It never fires for a non-picture input, regardless of `enterable`/`focusable` settings. Combined with `On Mouse Move`/`On Mouse Enter`/`On Mouse Leave`, this makes a picture-type input the natural object for building custom mouse-tracked interactions (e.g. drag-to-select on an image, or completing an SVG click-and-release gesture).
+
+## Context Menu Behavior
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesEntry#context-menu, https://developer.4d.com/docs/commands/object-set-context-menu, https://developer.4d.com/docs/commands/object-get-context-menu
+
+The contextual menu (`contextMenu: "automatic"`, the default) only appears on Control+click or right-click when **both** conditions hold: the `contextMenu` property is not set to `"none"`, and the input is `enterable`. A non-enterable input does not show the contextual menu even if `contextMenu` is `"automatic"`.
+
+The exact contents of the menu are not fixed -- they depend on the data source's expression type (plain text vs. picture vs. multi-style/styled text) and on the current Clipboard/pasteboard content (e.g. whether Paste is enabled depends on what is currently on the Clipboard). A picture-type input's menu adds **Import...** and **Save as...** commands (plus temporary picture-format overrides); a multi-style text input's menu adds font/size/style/color commands, generating `On After Edit` when a style attribute is changed through the menu.
+
 ## Input Alternatives
 
 The overview page notes several cases where a different object type is a better fit than a plain input:
