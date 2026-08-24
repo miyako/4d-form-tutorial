@@ -1,5 +1,5 @@
 //%attributes = {"invisible":true}
-var $event : cs.EventObject
+var $event : Object
 $event:=FORM Event
 
 Case of 
@@ -24,12 +24,12 @@ Case of
 		
 		// Test 3: Red text color on "Warning"
 		$st:="This is a Warning message"
-		ST SET ATTRIBUTES($st; 11; 18; Attribute text color; "#FF0000")
+		ST SET ATTRIBUTES($st; 11; 18; Attribute text color; 0x00FF0000)
 		Form.st_color:=$st
 		
 		// Test 4: Yellow background on "highlighted"
 		$st:="This is highlighted text"
-		ST SET ATTRIBUTES($st; 9; 20; Attribute background color; "#FFFF00")
+		ST SET ATTRIBUTES($st; 9; 20; Attribute background color; 0x00FFFF00)
 		Form.st_bgcolor:=$st
 		
 		// Test 5: Large font size on "BIG"
@@ -55,12 +55,12 @@ Case of
 		// Test 9: Combined - bold+red on same range (two calls)
 		$st:="Status: ERROR - please fix"
 		ST SET ATTRIBUTES($st; 9; 14; Attribute bold style; 1)
-		ST SET ATTRIBUTES($st; 9; 14; Attribute text color; "#CC0000")
+		ST SET ATTRIBUTES($st; 9; 14; Attribute text color; 0x00CC0000)
 		Form.st_multi:=$st
 		
 		// Test 10: Multiple attributes in a single call
 		$st:="Important notice for all users"
-		ST SET ATTRIBUTES($st; 1; 10; Attribute bold style; 1; Attribute text color; "#0000FF"; Attribute underline style; 1)
+		ST SET ATTRIBUTES($st; 1; 10; Attribute bold style; 1; Attribute text color; 0x000000FF; Attribute underline style; 1)
 		Form.st_multiattr:=$st
 		
 		// === PAGE 2: ST SET TEXT / ST SET PLAIN TEXT / ST GET PLAIN TEXT ===
@@ -77,7 +77,7 @@ Case of
 		
 		// Test 13: ST GET PLAIN TEXT strips markup
 		$st:="Hello World"
-		ST SET ATTRIBUTES($st; 1; 6; Attribute bold style; 1; Attribute text color; "#FF0000")
+		ST SET ATTRIBUTES($st; 1; 6; Attribute bold style; 1; Attribute text color; 0x00FF0000)
 		Form.st_getplain_result:="raw="+$st+"\nplain="+ST Get plain text($st)
 		
 		// Test 14: Insert at position (no replacement — startSel=endSel)
@@ -94,14 +94,14 @@ Case of
 		
 		// Test 16: ST GET ATTRIBUTES — read back what was set
 		$st:="Hello World"
-		ST SET ATTRIBUTES($st; 1; 6; Attribute bold style; 1; Attribute text color; "#FF0000")
+		ST SET ATTRIBUTES($st; 1; 6; Attribute bold style; 1; Attribute text color; 0x00FF0000)
 		Form.st_getattr_src:=$st
 		
 		var $bold : Integer
 		var $color : Integer
 		var $fontSize : Integer
 		ST GET ATTRIBUTES($st; 1; 6; Attribute bold style; $bold; Attribute text color; $color; Attribute text size; $fontSize)
-		Form.st_getattr_report:="bold="+String($bold)+" color=0x"+String($color; "&x")+" size="+String($fontSize)
+		Form.st_getattr_report:="bold="+String($bold)+" color="+String($color; "&x")+" size="+String($fontSize)
 		
 		// Test 17: HIGHLIGHT TEXT — programmatic selection (handled by object method on focus)
 		Form.st_highlight:="Hello World, select me!"

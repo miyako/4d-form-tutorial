@@ -47,5 +47,6 @@ $file.setText(JSON Stringify:C1217($form; *))
 
 If (Application info:C1599.headless)
 	LOG EVENT:C667(Into system standard outputs:K38:9; $file.path; Information message:K38:1)
-	QUIT 4D:C291
 End if 
+
+QUIT 4D:C291
