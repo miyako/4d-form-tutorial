@@ -307,6 +307,38 @@ End case
 
 **FEP caveat**: keystroke events (`On Before Keystroke`, `On After Keystroke`) are **not posted** during a Front-End Processor edit session (e.g. Japanese Input Method Editor, Chinese Pinyin). The FEP composes characters internally from multiple physical keystrokes before committing the final character — individual keystrokes are consumed by the FEP and never reach the 4D event system. Use `On After Edit` instead to process text changes from FEP input. For this reason, assigning a `keyboardDialect` to the input (which disables FEP — see above) is a natural companion to keystroke-level processing.
 
+### Capturing Key Combinations with Invisible Buttons
+
+An alternative to processing keystrokes inside an input's own method is to place a **button with a shortcut** on the form. The button intercepts the key combination globally on the form, regardless of which object has focus — the input never sees the keystroke.
+
+To avoid disrupting the user's typing flow, the button must be:
+
+1. **Not rendered** (`display: false`) — the button is invisible but still active
+2. **Not focusable** (`focusable: false`) — pressing the shortcut fires the button's method without stealing focus from the text input
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesDisplay#not-rendered, https://developer.4d.com/docs/FormObjects/propertiesEntry#shortcut, https://developer.4d.com/docs/FormObjects/propertiesEntry#focusable
+
+```json
+{
+  "HiddenShortcut": {
+    "type": "button",
+    "style": "custom",
+    "display": false,
+    "focusable": false,
+    "top": 0,
+    "left": 0,
+    "width": 0,
+    "height": 0,
+    "shortcutKey": "K",
+    "shortcutAccel": true,
+    "method": "ObjectMethods/HiddenShortcut.4dm",
+    "events": ["onClick"]
+  }
+}
+```
+
+This pattern is useful for implementing global form hotkeys (e.g. Cmd+K to open a search, Ctrl+S to save) that must work while the user is typing in an input, without interrupting the current edit session or moving focus away.
+
 ## On Selection Change
 
 Reference: https://developer.4d.com/docs/Events/onSelectionChange
