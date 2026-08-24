@@ -1,8 +1,8 @@
 ---
 object: "tab"
 json_type: "tab"
-keywords: ["tab control", "labels", "dataSourceTypeHint", "hierarchical list", "gotoPage", "labelsPlacement", "compiler"]
-summary: "Tab control object: object/array/hierarchical/static-labels data-source kinds, gotoPage, labelsPlacement, compiler typing note."
+keywords: ["tab control", "labels", "dataSourceTypeHint", "hierarchical list", "gotoPage", "labelsPlacement", "compiler", "popup collapse", "page 0 navigation"]
+summary: "Tab control object: object/array/hierarchical/static-labels data-source kinds, gotoPage, labelsPlacement, compiler typing note, width-driven popup collapse, page-0 always-visible navigation tab pattern."
 ---
 
 # 4D Tab Control Object
@@ -199,6 +199,14 @@ Notably absent compared to drop-down list: no `focusable`, no `saveAs`/reference
 - **Object-based, array-based, and hierarchical-list-by-code** tabs (all of which have a `dataSource`) render a **single tab** showing the **literal `dataSource` expression text** (e.g. `Form.tabObj`, `arrPages`, `Form.tabHierarchical`) -- consistent with the same rule already established for drop-down list and combo box (see `16-dropdown.md`, `17-combo.md`).
 - The **static `labels`** list, which has **no `dataSource` at all**, is the first case among these pop-up/tab-style objects where the static template renders the object's **actual configured content**: the real tab strip, with every label from the `labels` array shown as its own tab, exactly as it will appear at runtime. This is possible because the labels are fully known at form-design time, embedded directly in the JSON, with nothing left to resolve from a runtime expression.
 - `labelsPlacement: "bottom"` is correctly honored in the static template render: with a tall test object, the tab strip visibly renders at the bottom edge of the object's frame, with the enclosed content area rendered above it as a plain rectangle. On a tab-strip-height-only object there is no visible difference between `"top"` and `"bottom"` since there is no space for the strip to move.
+
+## Static Labels: Automatic Popup Collapse When Too Narrow
+
+A static `labels` tab is rendered as a native macOS `NSTabView`, which means it inherits that control's own **auto-collapse** behavior: if the object's `width` is not large enough to lay out every label as a full-size tab, 4D silently substitutes a single **pop-up button** control instead (showing only the currently selected label, with a small up/down disclosure indicator) -- confirmed empirically with a 14-label static list at `width: 590` and again at `width: 1400` (collapsed) versus `width: 1300` (rendered as a full horizontal strip of all 14 tabs). This is a **width-only** trigger, unrelated to `height` -- a tall object at an insufficient width still collapses to a popup. There is no documented property to force one presentation or the other; the only lever is giving the object enough `width` for the label count and font. Practical sizing rule: leave generous headroom over a naive `label_count * average_label_width` estimate, then verify by rendering, since the collapse threshold is not published and depends on label text length. Both the tab-strip and popup-collapsed presentations remain fully functional -- clicking either still fires `On Clicked` and drives `gotoPage`/`FORM GOTO PAGE` identically; the collapse is a purely visual space-saving fallback, not a functional regression.
+
+## Always-Visible Navigation Tab (Page 0 Pattern)
+
+Placing a `gotoPage` static-`labels` tab on **page 0** (index 0 in the `pages` array) turns it into a persistent navigation bar: objects on page 0 are always visible regardless of which page is currently displayed (see `01-form-concepts.md`), so the tab strip stays on screen and keeps highlighting the current page's tab while the rest of the form's content switches underneath it. Because `gotoPage` swaps the *entire* form page rather than nesting per-page content inside the tab's own bounding box, the object's `width`/`height` do not need to match the tab's true "content frame" for the mechanism to work -- but sizing the tab's rectangle to enclose the widest/tallest extent of every other page's objects (i.e., `width`/`height` at least as large as the maximum `left + width` / `top + height` found across all pages) gives the visual impression of a single framed container whose interior content changes per tab, which is the conventional tabbed-dialog look. With `N` pages of real content plus a dedicated page 0 for the tab itself, the tab's `labels` array should have exactly `N` entries (one per content page, page 1 through page N) since `gotoPage` maps the *K*-th tab to page *K*.
 
 ## Comparison with Drop-down List
 
