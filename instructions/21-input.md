@@ -84,7 +84,14 @@ https://developer.4d.com/docs/API/FileClass#open
 { "entryFilter": "&9" }
 ```
 
-Restricts what characters can be typed, evaluated one character at a time as the user types (invalid keystrokes are simply rejected, not corrected after the fact). Built-in filter codes include `~A` (letters, forced uppercase), `&9` (digits only), `&A` (capital letters only), `&a` (any letters), `&@` (alphanumeric only), plus a number of pre-built date/phone/SSN patterns (see the property reference for the full table). A custom filter created in the Filters editor is referenced by name, prefixed with a vertical bar (e.g. `"|myFilter"`). An entry filter only constrains data entry -- it has no effect on how the value is displayed after the user leaves the object; combine it with a matching display format (`textFormat`, `dateFormat`, etc.) for both.
+Restricts what characters can be typed, evaluated one character at a time as the user types (invalid keystrokes are simply rejected, not corrected after the fact). A filter is defined one of two ways:
+
+- **Inline, using 4D's proprietary filter meta-language**: a short code string such as `~A` (letters, forced uppercase), `&9` (digits only), `&A` (capital letters only), `&a` (any letters), `&@` (alphanumeric only), plus a number of pre-built date/phone/SSN patterns (see the property reference for the full table).
+- **By name, defined in `filters.json`**: a project-level filter defined once in the project's `filters.json` (see Project Architecture) and referenced from any object by name, prefixed with a vertical bar, e.g. `"|myFilter"`. This is the reusable/shareable equivalent of writing the meta-language code inline on every object.
+
+https://developer.4d.com/docs/Project/architecture
+
+An entry filter only constrains data entry -- it has no effect on how the value is displayed after the user leaves the object; combine it with a matching display format (`textFormat`, `dateFormat`, etc.) for both.
 
 Defining an entry filter also **disables Front-End Processors (FEP)** for the object -- see Keyboard Layout, below, for why.
 
