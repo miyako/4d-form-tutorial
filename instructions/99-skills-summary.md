@@ -162,6 +162,7 @@ note: "Do NOT load this file for routine object/task work — it duplicates cont
 - `On Mouse Up` fires for an input **only when the data source is a picture** -- never for any other expression type
 - The contextual menu only appears when the input is both `enterable` and `contextMenu` is not `"none"`; its exact contents (Import/Save as for pictures, font/style/color commands for multi-style text) depend on the data source's expression type and current Clipboard content
 - `keyboardDialect` forces a specific installed keyboard layout on focus; Front-End Processors (FEP, for Chinese/Japanese/Korean and similar composed-character languages) are disabled whenever `keyboardDialect` is set **or** whenever an `entryFilter` is defined -- both are incompatible with FEP's need to defer/compose multiple keystrokes before committing a character
+- For a **non-picture** data source, `enterable: false` + `focusable: true` gives a copy-only reading mode: the object can be focused and the user can place a caret/make a selection to copy, but cannot edit. `showSelection` (Selection Always Visible) keeps that selection highlighted even while the window is inactive (normally selection highlighting disappears when the window loses frontmost status)
 - `On Before Keystroke`/`On After Keystroke` are legacy raw-keystroke events; `On After Edit` is the modern replacement, firing after every edit action regardless of mechanism (keystroke, paste, cut, FEP commit, Undo)
 
 ### Event Cycle Architecture

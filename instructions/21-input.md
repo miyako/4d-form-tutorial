@@ -40,6 +40,18 @@ An input is the general-purpose object for displaying and entering a field or ex
 
 Objects are enterable by default. A non-enterable input only displays its value -- the user cannot edit it directly, but `On Clicked`, `On Double Clicked`, `On Drag Over`, `On Drop`, `On Getting Focus`, and `On Losing Focus` still fire, which supports custom context menus, drag-and-drop, or click-to-select-only interfaces. An input is always focusable when it is enterable (per the generic Focusable property page); disabling Enterable does not disable focus by itself.
 
+For a **non-picture** data source, `enterable: false` can be combined with `focusable: true`: the object can receive focus, and the user can place a caret or make a text selection within it (e.g. to copy the value), while still being prohibited from editing the content. This is a copy-only reading mode, distinct from a fully inert non-enterable, non-focusable display.
+
+### Selection Always Visible
+
+```json
+{ "showSelection": true }
+```
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesEntry#selection-always-visible
+
+By default, a text selection made inside an object is cleared from view once the window becomes inactive (loses frontmost status to another window or application) -- even though the object itself may still conceptually hold the selection. `showSelection` (Selection Always Visible) keeps the selection highlighted on screen even while the window is inactive, which is particularly useful for a non-enterable-but-focusable copy-only input, or for building interfaces where a style-editing toolbar must keep showing which text is selected while the user interacts with a floating palette window.
+
 ## Assignable vs. Non-Assignable Expressions
 
 An input's `dataSource` can be any valid 4D expression (field, variable, object property, formula, or method name), not only a plain variable. Only an **assignable** expression (a simple variable, field, or object/collection property) can be written back into by user data entry; a **non-assignable** expression (e.g. a formula or a method call) can still be displayed and re-evaluated on every form event, but user keystrokes have nothing to write back to and the object behaves as effectively read-only regardless of the `enterable` setting.
@@ -123,7 +135,7 @@ A picture-type input (`dataSourceTypeHint: "picture"`) is the only input variant
 | Auto Spellcheck | `spellcheck` | Text type only |
 | Writing Tools | `writingTools` | macOS + Apple Intelligence only; multiline text |
 | Keyboard Layout | `keyboardDialect` | e.g. `"ar-ma"`, `"cs"` -- disables FEP, see above |
-| Selection always visible | `showSelection` | Keeps selection highlighted after losing focus |
+| Selection always visible | `showSelection` | Keeps selection highlighted when the window is inactive, see above |
 | Choice List | `choiceList` | Same mechanism as drop-down/combo |
 | Default value | `defaultValue` (see `properties_RangeOfValues.md`) | |
 | Excluded List / Required List | `excludedList` / `requiredList` | Same convention as combo box (see `17-combo.md`) |
