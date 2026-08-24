@@ -42,6 +42,19 @@ Objects are enterable by default. A non-enterable input only displays its value 
 
 For a **non-picture** data source, `enterable: false` can be combined with `focusable: true`: the object can receive focus, and the user can place a caret or make a text selection within it (e.g. to copy the value), while still being prohibited from editing the content. This is a copy-only reading mode, distinct from a fully inert non-enterable, non-focusable display.
 
+### Hide Focus Rectangle
+
+```json
+{ "enterable": false, "focusable": true, "hideFocusRing": true }
+```
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesAppearance#hide-focus-rectangle
+Also: https://developer.4d.com/docs/commands/object-set-focus-rectangle-invisible, https://developer.4d.com/docs/commands/object-get-focus-rectangle-invisible
+
+When a focusable input receives focus, the OS draws a focus rectangle around it. On a non-enterable-but-focusable (copy-only) input this can give the wrong impression that the input is editable. **Best practice**: set `hideFocusRing: true` on non-enterable, focusable inputs so the focus state is communicated only by the caret/selection, not by a misleading focus rectangle.
+
+See the "Inputs" form for examples: both `Input` and `Input1` use `enterable: false` + `hideFocusRing: true` + `borderStyle: "none"` for clean, read-only date displays that still allow text selection and copying.
+
 ### Selection Always Visible
 
 ```json
@@ -206,6 +219,7 @@ A picture-type input (`dataSourceTypeHint: "picture"`) is the only input variant
 | Background/Fill Color | `fill` | |
 | Border Line Style | `borderStyle` | |
 | Corner radius | `borderRadius` | Added 19 R7; **not** `cornerRadius` -- that key is silently ignored (not a recognized property), see CLI Verification Notes below |
+| Hide Focus Rectangle | `hideFocusRing` | Hides the OS focus rectangle; best practice for non-enterable, focusable inputs -- see above |
 | Horizontal/Vertical Scroll Bar | `horizontalScrollBar` / `verticalScrollBar` | |
 | Multi-style | `multistyle` | Rich per-character styling |
 | Store with default style tags | -- | Persists style tags with the value |
