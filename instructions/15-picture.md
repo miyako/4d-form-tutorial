@@ -1,7 +1,7 @@
 ---
 object: "picture"
 json_type: "picture"
-requires: ["01-form-concepts.md", "98-tool4d-cli.md"]
+requires: ["01-form-concepts.md", "98-tool4d-cli.md", "22-property-reference.md"]
 keywords: ["static picture", "pictureFormat", "scaled", "tiled", "truncatedCenter", "dark mode", "@nx", "_dark", "SVG", "WEBP"]
 summary: "Static picture object: pictureFormat modes, resource paths, high-res/dark-mode naming conventions, SVG/WEBP support."
 ---

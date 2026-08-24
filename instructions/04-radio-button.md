@@ -1,7 +1,7 @@
 ---
 object: "radio"
 json_type: "radio"
-requires: ["01-form-concepts.md"]
+requires: ["01-form-concepts.md", "22-property-reference.md"]
 keywords: ["radio button", "radioGroup", "mutual exclusion", "Form.property"]
 summary: "Radio button object: 12 styles, radioGroup semantics vs Form Editor groups, default selection behavior."
 ---

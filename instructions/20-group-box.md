@@ -1,7 +1,7 @@
 ---
 object: "groupBox"
 json_type: "groupBox"
-requires: ["01-form-concepts.md", "98-tool4d-cli.md"]
+requires: ["01-form-concepts.md", "98-tool4d-cli.md", "22-property-reference.md"]
 keywords: ["group box", "text", "title", "stroke", "textAlign", "static container"]
 summary: "Group box object: static non-interactive framed container, correct JSON title key, no events/data source."
 ---

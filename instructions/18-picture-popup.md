@@ -1,7 +1,7 @@
 ---
 object: "picturePopup"
 json_type: "picturePopup"
-requires: ["01-form-concepts.md", "98-tool4d-cli.md"]
+requires: ["01-form-concepts.md", "98-tool4d-cli.md", "22-property-reference.md"]
 keywords: ["picture popup", "picture pop-up menu", "rowCount", "columnCount", "gotoPage", "1-based position"]
 summary: "Picture pop-up menu object: button-grid-style frame grid rendered as a native pop-up menu, 1-based position data source."
 ---

@@ -1,7 +1,7 @@
 ---
 object: "stepper"
 json_type: "stepper"
-requires: ["01-form-concepts.md"]
+requires: ["01-form-concepts.md", "22-property-reference.md"]
 keywords: ["stepper", "min", "max", "step", "vertical", "arrow keys", "dataSourceTypeHint"]
 summary: "Stepper object: vertical-only control, min/max/step, keyboard interaction, date/time support."
 ---
