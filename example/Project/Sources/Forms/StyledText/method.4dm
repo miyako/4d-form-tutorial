@@ -98,10 +98,10 @@ Case of
 		Form.st_getattr_src:=$st
 		
 		var $bold : Integer
-		var $color : Text
+		var $color : Integer
 		var $fontSize : Integer
 		ST GET ATTRIBUTES($st; 1; 6; Attribute bold style; $bold; Attribute text color; $color; Attribute text size; $fontSize)
-		Form.st_getattr_report:="bold="+String($bold)+" color="+$color+" size="+String($fontSize)
+		Form.st_getattr_report:="bold="+String($bold)+" color=0x"+String($color; "&x")+" size="+String($fontSize)
 		
 		// Test 17: HIGHLIGHT TEXT — programmatic selection (handled by object method on focus)
 		Form.st_highlight:="Hello World, select me!"
