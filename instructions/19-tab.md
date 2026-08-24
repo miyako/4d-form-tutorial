@@ -143,6 +143,14 @@ Case of
 End case
 ```
 
+This only works if the tab object itself declares interest in the event:
+
+```json
+{ "events": ["onClicked"] }
+```
+
+Form-level lifecycle events (`On Load`, `On Unload`) are declared once in the *form's* top-level `events` array and apply regardless of which object last had focus. Per-object events such as `On Clicked` are different: the shared form method only receives `On Clicked` for a *specific* object if that object's own JSON declares `"events": ["onClicked"]`. Omitting it on the tab control means the `On Clicked` branch of the method above is simply never reached for that object -- no error, the click is just silently not reported to the method. This is unrelated to the `gotoPage` standard action, which is handled internally by 4D without any method code or `events` declaration at all.
+
 Manual navigation is the natural choice when the tab control does something other than plain page navigation -- e.g. driving a subform's displayed data (the official example: an alphabet-letter Rolodex tab control that reloads a subform's data set instead of switching form pages).
 
 Reference: https://developer.4d.com/docs/commands/form-goto-page, https://developer.4d.com/docs/Desktop/standard-actions
