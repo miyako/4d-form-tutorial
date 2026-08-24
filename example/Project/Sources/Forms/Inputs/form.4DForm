@@ -1,288 +1,281 @@
 {
-	"$4d": {
-		"version": "1",
-		"kind": "form"
-	},
-	"windowSizingX": "variable",
-	"windowSizingY": "variable",
-	"windowMinWidth": 0,
-	"windowMinHeight": 0,
-	"windowMaxWidth": 32767,
-	"windowMaxHeight": 32767,
-	"rightMargin": 20,
-	"bottomMargin": 20,
-	"events": [
-		"onLoad",
-		"onUnload"
-	],
-	"windowTitle": "Inputs",
-	"destination": "detailScreen",
-	"pages": [
-		{
-			"objects": {}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Basic input: dataSource=\"Form.txt1\", placeholder=\"Type here\"",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"txt1": {
-					"type": "input",
-					"dataSource": "Form.txt1",
-					"dataSourceTypeHint": "text",
-					"placeholder": "Type here",
-					"top": 30,
-					"left": 10,
-					"width": 220,
-					"height": 20,
-					"events": [
-						"onClick"
-					],
-					"method": "ObjectMethods/txt1.4dm",
-					"enterable": true,
-					"focusable": false,
-					"contextMenu": "automatic"
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Non-enterable input: enterable=false",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"txt2": {
-					"type": "input",
-					"dataSource": "Form.txt2",
-					"dataSourceTypeHint": "text",
-					"enterable": false,
-					"top": 30,
-					"left": 10,
-					"width": 220,
-					"height": 20
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Multiline input: multiline=\"yes\", wordwrap=\"normal\"",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"txt3": {
-					"type": "input",
-					"dataSource": "Form.txt3",
-					"dataSourceTypeHint": "text",
-					"multiline": "yes",
-					"wordwrap": "normal",
-					"top": 30,
-					"left": 10,
-					"width": 220,
-					"height": 80
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Entry filter: entryFilter=\"&9\" (numbers only)",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"txt4": {
-					"type": "input",
-					"dataSource": "Form.txt4",
-					"dataSourceTypeHint": "text",
-					"entryFilter": "&9",
-					"top": 30,
-					"left": 10,
-					"width": 220,
-					"height": 20
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Picture input: dataSourceTypeHint=\"picture\", pictureFormat=\"scaled\"",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"pic1": {
-					"type": "input",
-					"dataSource": "Form.pic1",
-					"dataSourceTypeHint": "picture",
-					"pictureFormat": "scaled",
-					"top": 30,
-					"left": 10,
-					"width": 150,
-					"height": 100
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Boolean input as text: booleanFormat=\"Assigned;Unassigned\"",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"bool1": {
-					"type": "input",
-					"dataSource": "Form.bool1",
-					"dataSourceTypeHint": "boolean",
-					"booleanFormat": "Assigned;Unassigned",
-					"top": 30,
-					"left": 10,
-					"width": 150,
-					"height": 20
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Date input: dateFormat=\"systemLong\"",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"date1": {
-					"type": "input",
-					"dataSource": "Form.date1",
-					"dataSourceTypeHint": "date",
-					"dateFormat": "systemLong",
-					"top": 30,
-					"left": 10,
-					"width": 220,
-					"height": 20
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Number input: numberFormat custom pattern",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"num1": {
-					"type": "input",
-					"dataSource": "Form.num1",
-					"dataSourceTypeHint": "number",
-					"numberFormat": "###,##0.00",
-					"top": 30,
-					"left": 10,
-					"width": 220,
-					"height": 20
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Input with choiceList: [\"Red\",\"Green\",\"Blue\"]",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"choice1": {
-					"type": "input",
-					"dataSource": "Form.choice1",
-					"dataSourceTypeHint": "text",
-					"choiceList": [
-						"Red",
-						"Green",
-						"Blue"
-					],
-					"top": 30,
-					"left": 10,
-					"width": 220,
-					"height": 20
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Alpha format on input (docs say NOT supported for Input): textFormat=\"(###) ### ####\"",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"alpha1": {
-					"type": "input",
-					"dataSource": "Form.alpha1",
-					"dataSourceTypeHint": "text",
-					"textFormat": "(###) ### ####",
-					"top": 30,
-					"left": 10,
-					"width": 220,
-					"height": 20
-				}
-			}
-		},
-		{
-			"objects": {
-				"lblTitle": {
-					"type": "text",
-					"text": "Styling: cornerRadius=10, borderStyle=\"solid\", fill=\"#EEF6FF\"",
-					"top": 5,
-					"left": 10,
-					"width": 500,
-					"height": 16
-				},
-				"styled1": {
-					"type": "input",
-					"dataSource": "Form.styled1",
-					"dataSourceTypeHint": "text",
-					"cornerRadius": 10,
-					"borderStyle": "solid",
-					"fill": "#EEF6FF",
-					"top": 30,
-					"left": 10,
-					"width": 220,
-					"height": 30
-				}
-			}
-		}
-	],
-	"editor": {
-		"activeView": "View 1",
-		"defaultView": "View 1",
-		"views": {
-			"View 1": {}
-		}
-	}
+    "$4d": {
+        "version": "1",
+        "kind": "form"
+    },
+    "windowSizingX": "variable",
+    "windowSizingY": "variable",
+    "windowMinWidth": 0,
+    "windowMinHeight": 0,
+    "windowMaxWidth": 32767,
+    "windowMaxHeight": 32767,
+    "rightMargin": 20,
+    "bottomMargin": 20,
+    "events": [
+        "onLoad",
+        "onUnload"
+    ],
+    "windowTitle": "Inputs",
+    "destination": "detailScreen",
+    "pages": [
+        {
+            "objects": {}
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Basic input: dataSource=\"Form.txt1\", placeholder=\"Type here\"",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "txt1": {
+                    "type": "input",
+                    "dataSource": "Form.txt1",
+                    "dataSourceTypeHint": "text",
+                    "placeholder": "Type here",
+                    "top": 30,
+                    "left": 10,
+                    "width": 220,
+                    "height": 20
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Non-enterable input: enterable=false",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "txt2": {
+                    "type": "input",
+                    "dataSource": "Form.txt2",
+                    "dataSourceTypeHint": "text",
+                    "enterable": false,
+                    "top": 30,
+                    "left": 10,
+                    "width": 220,
+                    "height": 20
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Multiline input: multiline=\"yes\", wordwrap=\"normal\"",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "txt3": {
+                    "type": "input",
+                    "dataSource": "Form.txt3",
+                    "dataSourceTypeHint": "text",
+                    "multiline": "yes",
+                    "wordwrap": "normal",
+                    "top": 30,
+                    "left": 10,
+                    "width": 220,
+                    "height": 80
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Entry filter: entryFilter=\"&9\" (numbers only)",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "txt4": {
+                    "type": "input",
+                    "dataSource": "Form.txt4",
+                    "dataSourceTypeHint": "text",
+                    "entryFilter": "&9",
+                    "top": 30,
+                    "left": 10,
+                    "width": 220,
+                    "height": 20
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Picture input: dataSourceTypeHint=\"picture\", pictureFormat=\"scaled\"",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "pic1": {
+                    "type": "input",
+                    "dataSource": "Form.pic1",
+                    "dataSourceTypeHint": "picture",
+                    "pictureFormat": "scaled",
+                    "top": 30,
+                    "left": 10,
+                    "width": 150,
+                    "height": 100
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Boolean input as text: booleanFormat=\"Assigned;Unassigned\"",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "bool1": {
+                    "type": "input",
+                    "dataSource": "Form.bool1",
+                    "dataSourceTypeHint": "boolean",
+                    "booleanFormat": "Assigned;Unassigned",
+                    "top": 30,
+                    "left": 10,
+                    "width": 150,
+                    "height": 20
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Date input: dateFormat=\"systemLong\"",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "date1": {
+                    "type": "input",
+                    "dataSource": "Form.date1",
+                    "dataSourceTypeHint": "date",
+                    "dateFormat": "systemLong",
+                    "top": 30,
+                    "left": 10,
+                    "width": 220,
+                    "height": 20
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Number input: numberFormat custom pattern",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "num1": {
+                    "type": "input",
+                    "dataSource": "Form.num1",
+                    "dataSourceTypeHint": "number",
+                    "numberFormat": "###,##0.00",
+                    "top": 30,
+                    "left": 10,
+                    "width": 220,
+                    "height": 20
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Input with choiceList: [\"Red\",\"Green\",\"Blue\"]",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "choice1": {
+                    "type": "input",
+                    "dataSource": "Form.choice1",
+                    "dataSourceTypeHint": "text",
+                    "choiceList": [
+                        "Red",
+                        "Green",
+                        "Blue"
+                    ],
+                    "top": 30,
+                    "left": 10,
+                    "width": 220,
+                    "height": 20
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Alpha format on input (docs say NOT supported for Input): textFormat=\"(###) ### ####\"",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "alpha1": {
+                    "type": "input",
+                    "dataSource": "Form.alpha1",
+                    "dataSourceTypeHint": "text",
+                    "textFormat": "(###) ### ####",
+                    "top": 30,
+                    "left": 10,
+                    "width": 220,
+                    "height": 20
+                }
+            }
+        },
+        {
+            "objects": {
+                "lblTitle": {
+                    "type": "text",
+                    "text": "Styling: cornerRadius=10, borderStyle=\"solid\", fill=\"#EEF6FF\"",
+                    "top": 5,
+                    "left": 10,
+                    "width": 500,
+                    "height": 16
+                },
+                "styled1": {
+                    "type": "input",
+                    "dataSource": "Form.styled1",
+                    "dataSourceTypeHint": "text",
+                    "cornerRadius": 10,
+                    "borderStyle": "solid",
+                    "fill": "#EEF6FF",
+                    "top": 30,
+                    "left": 10,
+                    "width": 220,
+                    "height": 30
+                }
+            }
+        }
+    ],
+    "editor": {
+        "activeView": "View 1",
+        "defaultView": "View 1",
+        "views": {
+            "View 1": {}
+        }
+    }
 }
