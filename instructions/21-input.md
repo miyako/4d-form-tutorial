@@ -560,31 +560,97 @@ The "Inputs" form demonstrates both approaches side by side:
 
 Reference: https://developer.4d.com/docs/Desktop/drag-and-drop
 
-An input supports **automatic drag and drop** with no extra configuration: dragging selected text out of the object, or dropping text/a picture into it, works as a mouse-driven substitute for the Copy/Cut/Paste edit actions -- the data source is read/written the same way it would be via the keyboard/menu equivalents.
+See form "Inputs" for a working example of custom picture drag and drop.
 
-Automatic drag and drop between two text inputs is a **move (cut), not a copy**: dragging a selection out of the source object removes it from the source, and dropping it on the destination object inserts it at the caret position created where the mouse pointer is released -- the same end result as a Cut on the source followed by a Paste at that caret position on the destination, done in a single mouse gesture.
+### Automatic vs. Custom
 
-To **copy** instead of move, hold down **Ctrl** (Windows) or **Option** (macOS) *after the drag has already started* (i.e. after picking up the selection) -- the source keeps its original text and the destination receives a duplicate.
+An input supports **automatic drag and drop** with no extra configuration: dragging selected text out of the object, or dropping text/a picture into it, works as a mouse-driven substitute for the Copy/Cut/Paste edit actions.
 
-Holding the modifier key from the **very start** of the gesture -- pressed *before or as* the drag begins, not after -- has a completely different effect: it switches the whole operation from automatic to **custom** drag and drop. In this mode 4D no longer performs the built-in text transfer at all; instead it dispatches `On Drag Over`/`On Drop` to the destination object's method, and it is entirely up to that method's code to retrieve the pasteboard data and insert it wherever appropriate. If the object method does not do this (e.g. it only reads `$event.description` for display/logging, as in the `Inputb` example below), no text is cut, copied, or inserted anywhere -- the source keeps its text, the destination stays empty, and only whatever side effect the custom code performs (such as assigning `Form.info`) actually happens.
+Automatic drag and drop between two text inputs is a **move (cut), not a copy**. To **copy** instead, hold **Ctrl** (Windows) or **Option** (macOS) *after the drag has already started*.
 
-https://developer.4d.com/docs/Desktop/drag-and-drop
+Holding the modifier key from the **very start** switches the operation from automatic to **custom** drag and drop. In custom mode, 4D no longer performs the built-in text transfer; instead it dispatches `On Drag Over`/`On Drop` to the destination's method.
 
-Automatic drag and drop is handled **entirely internally by 4D** and does not dispatch `On Drag Over`/`On Drop` to the object method, even if the object declares `"events": ["onDrop"]` and has its own object method file -- those events, and the ability to inspect/accept/reject the pasteboard data (e.g. via `$event.description`), are only fired for **custom** drag and drop, not for the automatic built-in text/picture transfer. An input with both automatic dragging/dropping left enabled and an `onDrop` object method wired will still complete the automatic move silently *unless* the modifier key was held from the start of the drag, in which case custom mode takes over and the object method's `On Drag Over`/`On Drop` code runs instead of the automatic transfer.
+For full programmatic control, set `"dragging": "custom"` and/or `"dropping": "custom"` explicitly on the objects.
 
-Beyond this automatic behavior, the developer can implement **custom drag and drop** to transfer arbitrary pasteboard data (any type except file promises) between the object and other areas of the application, or other applications entirely. Custom drag and drop is covered separately in more detail later.
+### Source (`On Begin Drag Over`)
+
+Reference: https://developer.4d.com/docs/commands/set-drag-icon, https://developer.4d.com/docs/commands/append-data-to-pasteboard, https://developer.4d.com/docs/commands/set-text-to-pasteboard, https://developer.4d.com/docs/commands/set-picture-to-pasteboard, https://developer.4d.com/docs/commands/set-file-to-pasteboard
+
+**Prerequisite**: if the input's data source is undefined or null, `On Begin Drag Over` will **not fire** — the drag gesture is silently ignored. The data source must have a value.
+
+In the `On Begin Drag Over` handler, transfer data via the pasteboard:
+
+- **`SET TEXT TO PASTEBOARD`** / **`SET PICTURE TO PASTEBOARD`** / **`SET FILE TO PASTEBOARD`** — for text, picture, or file/folder path
+- **`APPEND DATA TO PASTEBOARD`** — for custom/composite data types (identified by a UTI string, e.g. `"private.myapp.data"`)
+
+By default, a ghost image of the data source is used as the drag icon. Customise with **`SET DRAG ICON`**:
+
+```4d
+// Source: custom drag with thumbnail icon and custom pasteboard data
+Case of
+  : ($event.code=On Begin Drag Over)
+    SET PICTURE TO PASTEBOARD(Form.src)
+
+    var $data : Blob
+    $info:={foo: "bar"}
+    VARIABLE TO BLOB($info; $data)
+    APPEND DATA TO PASTEBOARD("private.myapp.data"; $data)
+
+    var $icon : Picture
+    CREATE THUMBNAIL(Form.src; $icon; 32; 32)
+    SET DRAG ICON($icon)
+End case
+```
+
+### Destination (`On Drag Over` / `On Drop`)
+
+Reference: https://developer.4d.com/docs/commands/pasteboard-data-size, https://developer.4d.com/docs/commands/get-picture-from-pasteboard, https://developer.4d.com/docs/commands/get-text-from-pasteboard
+
+**`On Drag Over`** fires continuously while the drag hovers over the destination. The method must return a value to accept or reject:
+
+- **Return `0`** — accept the drop (cursor shows accept indicator)
+- **Return `-1`** — reject the drop (cursor shows reject indicator)
+
+Use `Pasteboard data size` to test for expected data types before accepting.
+
+**Important**: do not use `TRACE` or any blocking call during `On Drag Over` — it fires continuously and a breakpoint will freeze the drag interaction. Use non-blocking measures (write to file, update a UI label) to debug.
+
+**Note on `return` vs `$0`**: `return 0` exits the method immediately; `$0:=0` sets the return value but continues execution. If the handler is a subroutine, the return value must be propagated back to the object method itself.
+
+Reference: https://developer.4d.com/docs/Concepts/control-flow#return-expression, https://developer.4d.com/docs/Concepts/parameters#return-expression
+
+The mouse pointer automatically changes to accept/reject. **`SET CURSOR` is ignored** during both `On Drag Over` and `On Drop` — the system controls the cursor throughout the drag session.
+
+**`On Drop`** fires only if `On Drag Over` previously accepted. Retrieve data from the pasteboard and process it:
+
+```4d
+// Destination: accept only custom data, retrieve picture on drop
+Case of
+  : ($event.code=On Drag Over)
+    If (Pasteboard data size("private.myapp.data")>0)
+      return 0  // accept
+    Else
+      return -1  // reject
+    End if
+
+  : ($event.code=On Drop)
+    var $image : Picture
+    GET PICTURE FROM PASTEBOARD($image)
+    Form.dst:=$image
+End case
+```
 
 ### Entry Filter Applies to Automatically Dropped Text
 
-An automatic drop into a destination input with an `entryFilter` (see above) is filtered exactly like keyboard entry: only the characters that pass the filter make it into the destination, and any non-conforming characters are silently dropped from the inserted text -- confirmed with a source input containing `"abc123"` dropped onto a destination with `entryFilter: "&9"` (digits only), where only `"123"` actually lands, the letters are discarded, and no error/alert is raised. This means the entry filter is applied to the drop's inserted text at the same point it would apply to typed keystrokes, not bypassed as a bulk/non-interactive insertion the way some other validation mechanisms are.
+An automatic drop into a destination input with an `entryFilter` is filtered exactly like keyboard entry: only the characters that pass the filter make it into the destination, and any non-conforming characters are silently dropped. Confirmed with a source containing `"abc123"` dropped onto a destination with `entryFilter: "&9"` (digits only) — only `"123"` lands.
 
 ### `enterable: false` Alone Blocks Automatic Dropping
 
-Setting `enterable: false` on a destination input is sufficient by itself to make a drop onto it impossible -- confirmed with a destination left at the default `dragging`/`dropping` values (neither explicitly set to `"none"`): dropping a dragged selection onto a non-enterable input has no effect at all, nothing is inserted, and the destination's own `dropping` property does not need to be explicitly set to `"none"` for this to hold. This follows the general rule that a non-enterable object cannot receive any user-driven data entry, keyboard or drag-and-drop alike -- `enterable: false` is a strictly broader restriction that `dropping: "none"` is unnecessary to add on top of.
+Setting `enterable: false` on a destination input is sufficient to block drops — `dropping: "none"` is unnecessary on top of it. A non-enterable object cannot receive any user-driven data entry, keyboard or drag-and-drop alike.
 
 ### Picture Drag Is a Copy, Not a Move
 
-Dragging a picture out of a picture-type input and dropping it on another picture-type input **copies** the picture rather than moving it -- confirmed with a source input preloaded with an image, dragged onto an empty destination input: the destination receives the picture, but the source **keeps its own copy** rather than being cleared. This is the opposite of automatic drag and drop between two text inputs (a move/cut, see above) -- text and picture data sources are handled by different default transfer semantics for the same automatic drag-and-drop gesture.
+Dragging a picture between two picture-type inputs **copies** the picture rather than moving it — the source keeps its copy. This is the opposite of text drag (a move/cut).
 
 ## Input Alternatives
 

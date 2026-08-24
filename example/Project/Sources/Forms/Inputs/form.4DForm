@@ -25,41 +25,57 @@
 		},
 		{
 			"objects": {
-				"Input": {
+				"src": {
 					"type": "input",
 					"left": 20,
-					"top": 20,
-					"width": 157,
-					"height": 17,
-					"enterable": false,
-					"dataSourceTypeHint": "date",
-					"dataSource": "Current date:C33",
-					"borderStyle": "none",
-					"hideFocusRing": true,
-					"method": "ObjectMethods/Input.4dm",
+					"top": 43,
+					"width": 150,
+					"height": 150,
+					"dataSourceTypeHint": "picture",
+					"dragging": "custom",
+					"dropping": "none",
 					"events": [
-						"onClick"
+						"onLoad",
+						"onBeginDragOver"
 					],
+					"method": "ObjectMethods/src.4dm",
+					"enterable": true,
 					"contextMenu": "none",
-					"fontFamily": "%password",
-					"fontSize": 13
+					"dataSource": "Form:C1466.src"
 				},
-				"Input1": {
+				"dst": {
 					"type": "input",
-					"left": 20,
-					"top": 60,
-					"width": 157,
-					"height": 17,
-					"enterable": false,
-					"dataSourceTypeHint": "date",
-					"dataSource": "Form:C1466.today",
-					"borderStyle": "none",
-					"hideFocusRing": true,
+					"left": 200,
+					"top": 43,
+					"width": 150,
+					"height": 150,
+					"dataSourceTypeHint": "picture",
+					"dragging": "none",
+					"dropping": "custom",
 					"events": [
-						"onClick"
+						"onDrop",
+						"onDragOver"
 					],
-					"fontFamily": "%password",
-					"fontSize": 13
+					"method": "ObjectMethods/dst.4dm",
+					"dataSource": "Form:C1466.dst"
+				},
+				"title.src": {
+					"type": "text",
+					"text": "src",
+					"top": 14,
+					"left": 20,
+					"width": 150,
+					"height": 16,
+					"textAlign": "center"
+				},
+				"title.dst": {
+					"type": "text",
+					"text": "dst",
+					"top": 14,
+					"left": 200,
+					"width": 150,
+					"height": 16,
+					"textAlign": "center"
 				}
 			}
 		}
@@ -71,6 +87,6 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 60,
+	"geometryStamp": 104,
 	"formClass": "MyInputsFormController"
 }
