@@ -219,6 +219,14 @@ Reference: https://developer.4d.com/docs/Events/onAfterKeystroke, https://develo
 
 A modern application should use `On After Edit` instead: it fires after **every** transitional edit action, whether that action was a single keystroke, a paste, a cut, an automatic drop, an FEP-composed edit, or an Undo -- one consistent event regardless of the mechanism that produced the change, rather than needing to separately special-case pastes/cuts/drops/FEP/Undo alongside keystroke handling. This is the event that fires for an automatically dropped text or picture -- `On Data Change` does not fire until the object is subsequently validated (tab/Return/click-out).
 
+## On Selection Change
+
+Reference: https://developer.4d.com/docs/Events/onSelectionChange
+
+For an input, the text caret is treated as a **zero-width selection**: every movement of the selection or caret fires `On Selection Change`. Per the reference, for Input (and 4D Write Pro) this event fires specifically "following a click or a keystroke" -- it is a direct response to the user actively moving the caret or selection with the mouse or arrow keys once the object has focus.
+
+An automatic drop does **not** fire `On Selection Change`: at the moment a drop lands, the input has no active selection to move (there is no click or keystroke involved in the drop itself), so there is nothing for the event to report. Only a subsequent click or arrow-key press inside the now-focused input triggers `On Selection Change`.
+
 ## On Clicked on Input
 
 An input can also process `On Clicked`, and this works regardless of whether the input is `enterable` or `focusable` -- a non-enterable, non-focusable input still receives `On Clicked` when clicked, which is one of the mechanisms that makes non-enterable inputs useful for click-driven, display-only UI (see Enterable, above).
