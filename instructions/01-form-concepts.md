@@ -456,6 +456,38 @@ button {
 }
 ```
 
+## Filesystem Paths: POSIX vs. Platform
+
+Reference: https://developer.4d.com/docs/Concepts/paths#filesystem-pathnames, https://developer.4d.com/docs/commands/file, https://developer.4d.com/docs/API/FileClass
+
+4D internally uses **POSIX paths** (forward slashes, filesystem-relative like `/RESOURCES/...`) for JSON properties, `File()`, and `Folder()`. However, many legacy commands (`READ PICTURE FILE`, `WRITE PICTURE FILE`, `DOCUMENT TO BLOB`, etc.) expect a **platform path** (macOS: `/Users/.../`, Windows: `C:\...`).
+
+The `File` object bridges the two:
+
+```4d
+var $file : 4D.File
+$file:=File("/RESOURCES/Images/grid2x2.png")  // POSIX filesystem path
+READ PICTURE FILE($file.platformPath; $image) // .platformPath for legacy commands
+```
+
+This is cleaner than manually building platform paths with `Get 4D folder` + `Folder separator`:
+
+```4d
+// Verbose legacy approach — avoid
+READ PICTURE FILE(Get 4D folder(Current resources folder)+"Images"+Folder separator+"grid2x2.png"; $image)
+```
+
+**Key properties of `4D.File`:**
+
+| Property | Returns | Use for |
+|----------|---------|---------|
+| `.path` | POSIX filesystem path (`/RESOURCES/...`) | 4D API calls that accept filesystem paths |
+| `.platformPath` | Native OS path | Legacy commands expecting platform paths |
+| `.name` | Filename with extension | Display, logging |
+| `.exists` | Boolean | Guard before reading |
+
+The same pattern applies to `Folder()` for directory references.
+
 ## Data Sources
 
 Interactive form objects can have an associated data source.
