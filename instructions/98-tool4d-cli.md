@@ -153,3 +153,101 @@ Some behaviors cannot be observed via `FORM SCREENSHOT` at all and require runni
 - Combo box `automaticInsertion`, `excludedList` alerts
 - Animated GIF playback in static picture objects
 - Any behavior driven by `On Load` / user interaction
+
+## CLI Testing Methodology
+
+Beyond static screenshots, you can test runtime behavior by writing **startup methods** that exercise 4D commands and output results.
+
+### Choosing the Right Engine
+
+| Engine | Mode | Use for |
+|--------|------|---------|
+| `tool4d` | Always headless | Commands that don't need UI: string manipulation, file I/O, calculations, `FORM LOAD`-based screenshots |
+| `4D` (no flags) | GUI mode | Commands that need windows: `Open form window`, `DIALOG`, `FORM SCREENSHOT` after runtime code |
+| `4D --headless` | Headless with license | Same as tool4d but with full 4D capabilities (requires license) |
+
+**Key limitation**: In headless mode (tool4d or `4D --headless`), `Open form window` and `DIALOG` are **silently ignored** — they do not raise an error, but the form never opens and the form method never fires.
+
+### Pattern 1: Direct Test (No UI Needed)
+
+For testing commands that operate on variables (not form objects), write a startup method that runs the commands and writes results to a file:
+
+```4d
+//%attributes = {"invisible":true}
+var $st : Text
+$st:="Hello World"
+ST SET ATTRIBUTES($st; 1; 6; Attribute bold style; 1)
+
+var $result : Object
+$result:={}
+$result.styled:=$st
+$result.plain:=ST Get plain text($st)
+$result.length:=Length($st)
+
+var $file : 4D.File
+$file:=File("/RESOURCES/tests/result.json")
+$file.parent.create()
+$file.setText(JSON Stringify($result; *))
+
+QUIT 4D
+```
+
+Invoke with tool4d:
+```bash
+tool4d --project path/to/project.4DProject --startup-method test_method --dataless
+```
+
+### Pattern 2: Form + DIALOG (UI Needed)
+
+For testing form-level behavior (On Load, object methods, Form object population), use `Open form window` + `DIALOG` with a method that serializes the Form object:
+
+```4d
+//%attributes = {"invisible":true}
+var $formName : Text
+$formName:="MyForm"
+
+var $form : Object
+$form:={}
+
+var $window : Integer
+$window:=Open form window($formName)
+DIALOG($formName; $form; *)
+CALL FORM($window; Formula(ACCEPT))
+
+// $form now contains all Form.xxx values set during On Load
+var $file : 4D.File
+$file:=File("/RESOURCES/tests/form_result.json")
+$file.parent.create()
+$file.setText(JSON Stringify($form; *))
+
+QUIT 4D
+```
+
+This pattern **requires 4D** (not tool4d) because it uses `DIALOG`. Invoke with:
+```bash
+/Applications/4D\ 21\ R3/4D.app/Contents/MacOS/4D --project path/to/project.4DProject --startup-method run_project_form --user-param "FormName:1:/RESOURCES/tests/output.json" --dataless
+```
+
+The `--dataless` flag avoids data file locking when the project is also open in the IDE.
+
+### Pattern 3: Parameterized with `--user-param`
+
+Use `Get database parameter(User param value)` to pass arguments:
+
+```4d
+var $userParamValue : Text
+Get database parameter(User param value; $userParamValue)
+var $params : Collection
+$params:=Split string($userParamValue; ":")
+// $params[0] = form name, $params[1] = page, $params[2] = output path
+```
+
+This allows a single generic method (like `run_project_form`) to test any form/page combination.
+
+### Tips
+
+- **`--dataless`**: Always pass when the project may be open elsewhere (avoids lock conflicts)
+- **`QUIT 4D`**: Always include at the end — without it, 4D stays open indefinitely in GUI mode
+- **`Application info.headless`**: Use to branch behavior (e.g. log to stdout in headless, display UI otherwise)
+- **Output format**: JSON is easiest to parse and verify; use `JSON Stringify($obj; *)` for pretty-printing
+- **Styled text in JSON**: The HTML markup is preserved in JSON output, letting you verify that ST commands produced the expected `<span style="...">` tags
