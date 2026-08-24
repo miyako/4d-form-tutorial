@@ -430,6 +430,26 @@ Key differences from the naive approach (using `OBJECT Get pointer` + `String`):
 - **Only shows the menu when text is selected** (`$selectedValue#""`) — no misleading empty-copy option
 - **Works despite `%password`** because it bypasses the standard action system entirely
 
+### Styled Text Caveat
+
+Reference: https://developer.4d.com/docs/commands/object-is-styled-text, https://developer.4d.com/docs/commands/st-get-plain-text
+
+In 4D, styled text values are stored as a light version of HTML — the data source contains markup. `GET HIGHLIGHT` returns **character positions in the plain text**, not byte offsets in the HTML source. Therefore, calling `Substring` directly on the data source (which is HTML) returns wrong values when the input contains styled text.
+
+Before extracting the selection, check `OBJECT Is styled text` and, if true, use `ST Get plain text` to obtain the plain text for substring:
+
+```4d
+var $text : Text
+If (OBJECT Is styled text(*; $focusObjectName))
+  $text:=ST Get plain text(*; $focusObjectName)
+Else 
+  $text:=Get edited text
+End If 
+$selectedValue:=Substring($text; $start; $end-$start)
+```
+
+`ST Get plain text` strips all HTML/style markup and returns the character stream that matches `GET HIGHLIGHT`'s character-position indices.
+
 ### Comparison: Built-in vs. Custom
 
 The "Inputs" form demonstrates both approaches side by side:

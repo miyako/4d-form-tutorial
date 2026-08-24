@@ -11,6 +11,8 @@ Case of
 		var $selectedValue : Text
 		$selectedValue:=Substring:C12(Get edited text:C655; $start; $end-$start)
 		
+		
+		
 		If ($selectedValue#"")
 			
 			var $menu : Text
