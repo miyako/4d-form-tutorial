@@ -19,7 +19,32 @@
 	"destination": "detailScreen",
 	"pages": [
 		{
-			"objects": {}
+			"objects": {
+				"navTab": {
+					"type": "tab",
+					"labels": [
+						"Page 1",
+						"Page 2",
+						"Page 3",
+						"Page 4",
+						"Page 5",
+						"Page 6",
+						"Page 7",
+						"Page 8",
+						"Page 9",
+						"Page 10",
+						"Page 11",
+						"Page 12",
+						"Page 13",
+						"Page 14"
+					],
+					"action": "gotoPage",
+					"top": 0,
+					"left": 0,
+					"width": 1300,
+					"height": 210
+				}
+			}
 		},
 		{
 			"objects": {
