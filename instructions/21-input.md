@@ -391,7 +391,8 @@ Reference: https://developer.4d.com/docs/commands/get-highlight, https://develop
 When the `%password` font blocks the Copy standard action, implement copy manually using:
 
 - **`Get edited text`** — returns the text currently being edited (pre-validation), not the committed/stored data source value. This is important because during an edit session the displayed content may differ from the stored value.
-- **`GET HIGHLIGHT`** — returns the selection start and end positions in the focused object
+- **`GET HIGHLIGHT`** — returns the selection start and end character positions in the focused object
+- **`HIGHLIGHT TEXT`** — sets the selection range programmatically (same coordinate system as `GET HIGHLIGHT`)
 - **`Substring`** — extracts only the selected portion
 
 ```4d
@@ -463,6 +464,35 @@ $selectedValue:=Substring($text; $start; $end-$start)
 ```
 
 `ST Get plain text` strips all HTML/style markup and returns the character stream that matches `GET HIGHLIGHT`'s character-position indices.
+
+### Character Position Model
+
+Reference: https://developer.4d.com/docs/commands/get-highlight, https://developer.4d.com/docs/commands/highlight-text
+
+`GET HIGHLIGHT` and `HIGHLIGHT TEXT` use the same position model. Positions represent the **spaces between characters** (like cursor positions), not character indices:
+
+```
+|A|B|C|
+1 2 3 4
+```
+
+- Character "A" occupies range 1–2
+- Character "B" occupies range 2–3
+- Selecting "ABC" is range 1–4
+- An empty selection (cursor between B and C) is start=3, end=3
+
+`HIGHLIGHT TEXT` sets the selection programmatically using the same coordinate system:
+
+```4d
+HIGHLIGHT TEXT(*; "myInput"; 1; 4)  // selects "ABC"
+HIGHLIGHT TEXT(*; "myInput"; 3; 3)  // places cursor between B and C
+```
+
+#### UTF-16 and Surrogate Pairs
+
+4D text is stored internally as **UTF-16 little-endian**. Characters outside the Basic Multilingual Plane (emoji, some CJK characters) are represented as **surrogate pairs** — two UTF-16 code units for a single visible character. `GET HIGHLIGHT` and `HIGHLIGHT TEXT` measure positions in **code units**, not grapheme clusters, so a single emoji consumes 2 positions in the range (e.g. range 1–3 for one emoji at position 1). `Substring` uses the same code-unit indexing, so the values from `GET HIGHLIGHT` can be passed directly to `Substring` without conversion — they are consistent with each other.
+
+This also means that `Length` returns code units, not visible characters. A string containing one emoji has `Length` = 2.
 
 ### Comparison: Built-in vs. Custom
 
