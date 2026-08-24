@@ -424,11 +424,25 @@ Case of
 End case 
 ```
 
-Key differences from the naive approach (using `OBJECT Get pointer` + `String`):
+Key differences from the naive approach (using `OBJECT Get pointer` / `OBJECT Get value`):
 - **Only copies the selected text**, not the entire value — respects user intent
 - **Uses `Get edited text`**, not the stored data source — captures the current edit state
 - **Only shows the menu when text is selected** (`$selectedValue#""`) — no misleading empty-copy option
 - **Works despite `%password`** because it bypasses the standard action system entirely
+
+### Retrieving an Object's Value: `OBJECT Get pointer` vs `OBJECT Get value` vs `Get edited text`
+
+Reference: https://developer.4d.com/docs/commands/object-get-pointer, https://developer.4d.com/docs/commands/object-get-value, https://developer.4d.com/docs/commands/get-edited-text
+
+Three ways to access an input's value, each with different semantics:
+
+| Command | Returns | Works with expressions (`Form.xxx`)? | Notes |
+|---------|---------|--------------------------------------|-------|
+| `OBJECT Get pointer` | Pointer to the data source variable | **No** — only works if the data source is a variable or field. Returns `Nil` for object property expressions like `Form.text` | Legacy approach (pre-v12, when data sources were always variables/fields) |
+| `OBJECT Get value` | The validated/stored value as a variant | **Yes** — works regardless of whether the data source is a variable, field, or expression | Preferred for reading the committed value of any object |
+| `Get edited text` | The text currently being edited (pre-validation) | N/A (reads the edit buffer, not the data source) | Only valid during an edit session; returns the in-progress content that may differ from the stored value |
+
+**Rule of thumb**: use `Get edited text` when you need the current content as the user sees it mid-edit; use `OBJECT Get value` when you need the committed/stored value regardless of data source type; avoid `OBJECT Get pointer` for modern code where expressions are common.
 
 ### Styled Text Caveat
 
