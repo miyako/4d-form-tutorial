@@ -121,6 +121,8 @@ The button grid supports the `gotoPage` standard action. When assigned, clicking
 
 This is useful for tab-like navigation where a background graphic shows labeled sections.
 
+Like drop-down list and picture pop-up menu, a `gotoPage` button grid becomes a persistent navigation control when placed on **page 0** (always visible regardless of the current page -- see `19-tab.md`'s page-0 navigation pattern, which applies identically here). A companion plain button with `"action": "gotoPage?value=N"` (see `02-button.md`) can add fixed one-off page jumps (e.g. "Home") that don't warrant their own grid cell.
+
 ## Events
 
 Supported events:
