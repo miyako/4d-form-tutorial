@@ -63,7 +63,17 @@
 					"height": 20,
 					"dataSource": "Form:C1466.comboFruit",
 					"dataSourceTypeHint": "object",
-					"textFormat": "@"
+					"textFormat": "@",
+					"events": [
+						"onClick",
+						"onDataChange"
+					],
+					"method": "ObjectMethods/comboFruit.4dm",
+					"choiceList": [
+						"a",
+						"b",
+						"c"
+					]
 				}
 			}
 		},
