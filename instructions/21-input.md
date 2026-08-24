@@ -180,7 +180,7 @@ A picture-type input (`dataSourceTypeHint: "picture"`) is the only input variant
 | Horizontal Alignment | `textAlign` | |
 | Background/Fill Color | `fill` | |
 | Border Line Style | `borderStyle` | |
-| Corner radius | `cornerRadius` | Added 19 R7 |
+| Corner radius | `borderRadius` | Added 19 R7; **not** `cornerRadius` -- that key is silently ignored (not a recognized property), see CLI Verification Notes below |
 | Horizontal/Vertical Scroll Bar | `horizontalScrollBar` / `verticalScrollBar` | |
 | Multi-style | `multistyle` | Rich per-character styling |
 | Store with default style tags | -- | Persists style tags with the value |
@@ -306,7 +306,7 @@ The overview page notes several cases where a different object type is a better 
 
 `FORM SCREENSHOT` renders the Form Editor's static template. For an input with a `dataSource`, the template renders the **literal `dataSource` expression text** as a placeholder label -- the same rule already established for drop-down list, combo box, and tab control. This holds for **every** expression type tested, including `picture` and `boolean`: a picture-type input with `dataSourceTypeHint: "picture"` shows the literal text `Form.pic1`, not the actual image content and not a blank frame -- a contrast with the static Picture object and Picture Pop-up Menu, both of which render real image content (frame 0) in their static templates regardless of data source. This is because those two object types own their appearance directly from a `picture` source property, whereas an input's appearance is always driven through its `dataSource` expression, textual placeholder included.
 
-`enterable: false` and a `choiceList` array produce **no visible difference** from a plain enterable text input in the static template -- both the disabled-entry affordance and the pop-up-list affordance are runtime-only behaviors not reflected in the design-time render. `fill` is honored visually (background tint) in the static template, but `cornerRadius` is **not** -- a box with `cornerRadius: 10` still renders with perfectly square corners in `FORM SCREENSHOT`. So not every purely visual/static property renders in the design-time template; `fill` does, `cornerRadius` does not (confirmed by zoomed pixel inspection of the rendered PNG).
+`enterable: false` and a `choiceList` array produce **no visible difference** from a plain enterable text input in the static template -- both the disabled-entry affordance and the pop-up-list affordance are runtime-only behaviors not reflected in the design-time render. `fill` is honored visually (background tint) in the static template. The property named "Corner radius" in the property list is **`borderRadius`** in JSON, not `cornerRadius` -- setting `cornerRadius: 10` has **no effect at all** (unrecognized key, silently ignored, corners stay square), while `borderRadius: 10` renders correctly rounded. Confirmed by zoomed pixel inspection of the rendered PNG: square corners with `cornerRadius`, rounded corners with `borderRadius`.
 
 ## Comparison with Drop-down List / Combo Box
 

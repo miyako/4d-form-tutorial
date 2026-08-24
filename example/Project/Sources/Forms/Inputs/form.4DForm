@@ -308,7 +308,7 @@
 			"objects": {
 				"lblTitle": {
 					"type": "text",
-					"text": "Styling: cornerRadius=10, borderStyle=\"solid\", fill=\"#EEF6FF\"",
+					"text": "Styling: borderRadius=10, borderStyle=\"solid\", fill=\"#EEF6FF\"",
 					"top": 35,
 					"left": 10,
 					"width": 500,
@@ -318,13 +318,13 @@
 					"type": "input",
 					"dataSource": "Form.styled1",
 					"dataSourceTypeHint": "text",
-					"cornerRadius": 10,
 					"borderStyle": "solid",
 					"fill": "#EEF6FF",
 					"top": 60,
 					"left": 10,
 					"width": 220,
-					"height": 30
+					"height": 30,
+					"borderRadius": 10
 				}
 			}
 		},
