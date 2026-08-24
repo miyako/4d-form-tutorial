@@ -192,51 +192,81 @@ Typing `1999.1.1` into a `dateFormat: "systemLong"` input and validating it prod
 
 A picture-type input (`dataSourceTypeHint: "picture"`) is the only input variant that displays and accepts image data (pasted from the Clipboard or dragged in) rather than character data. Its context menu (unless disabled) adds **Import...** and **Save as...** commands, plus temporary, non-persistent overrides of the display format (Truncated non-centered / Scaled to fit / Scaled to fit centered proportional). Per `properties_Object.md#expression-type`, a picture variable used as a process variable has a stricter typing requirement than other expression types: it must already be declared (`var varName : Picture`) and initialized *before* the form loads (in the method that calls `DIALOG`, not the form's own `On Load`) for correct display in interpreted mode -- otherwise the picture variable will not render correctly.
 
-## Supported Properties
+## Supported Properties (per JSON Schema)
 
-| Property | JSON Name | Notes |
-|----------|-----------|-------|
-| Variable or Expression | `dataSource` | Field, variable, or any expression; empty string leaves it to a dynamic variable |
-| Expression Type | `dataSourceTypeHint` | `"text"`, `"date"`, `"time"`, `"number"`, `"boolean"`, `"picture"`, `"integer"`, `"object"`, array variants, `"collection"`, `"undefined"` |
-| Enterable | `enterable` | Default `true` |
-| Multiline | `multiline` | `"yes"` / `"no"` / `"automatic"` (default) -- Text type only |
-| Wordwrap | `wordwrap` | `"normal"` / `"none"` -- only active when `multiline: "yes"` |
-| Placeholder | `placeholder` | String type, or date/time with Blank if null |
-| Entry Filter | `entryFilter` | Built-in code, custom string, or `\|namedFilter` |
-| Context Menu | `contextMenu` | `"automatic"` (default) / `"none"` |
-| Auto Spellcheck | `spellcheck` | Text type only; Hunspell on Windows, system spell-check on macOS -- see above |
-| Writing Tools | `writingTools` | Added 21 R4; macOS + Apple Intelligence only; multiline text -- inert elsewhere, see above |
-| Keyboard Layout | `keyboardDialect` | e.g. `"ar-ma"`, `"cs"` -- disables FEP, see above |
-| Selection always visible | `showSelection` | Keeps selection highlighted when the window is inactive, see above |
-| Choice List | `choiceList` | Same mechanism as drop-down/combo |
-| Default value | `defaultValue` (see `properties_RangeOfValues.md`) | |
-| Excluded List / Required List | `excludedList` / `requiredList` | Same convention as combo box (see `17-combo.md`) |
-| Alpha Format | `textFormat` | See caveat above (Objects Supported omission) |
-| Date/Time/Number/Boolean/Picture Format | `dateFormat` / `timeFormat` / `numberFormat` / `booleanFormat` / `pictureFormat` | One active per expression type |
-| Font / Font Size / Bold / Italic / Underline | `font` / `fontSize` / `bold` / `italic` / `underline` | |
-| Font Color | `stroke` | Same generic Text property key as other objects |
-| Horizontal Alignment | `textAlign` | |
-| Background/Fill Color | `fill` | |
-| Border Line Style | `borderStyle` | |
-| Corner radius | `borderRadius` | Added 19 R7; **not** `cornerRadius` -- that key is silently ignored (not a recognized property), see CLI Verification Notes below |
-| Hide Focus Rectangle | `hideFocusRing` | Hides the OS focus rectangle; best practice for non-enterable, focusable inputs -- see above |
-| Horizontal/Vertical Scroll Bar | `horizontalScrollBar` / `verticalScrollBar` | |
-| Multi-style | `multistyle` | Rich per-character styling |
-| Store with default style tags | -- | Persists style tags with the value |
-| Orientation | `orientation` | |
-| Allow font/color picker | -- | Multi-style context menu extension |
-| Print Frame | `printFrame` | |
-| Draggable / Droppable | `draggable` / `droppable` | |
-| Visibility | `visibility` | `"visible"` / `"hidden"` |
-| Horizontal/Vertical Sizing | `horizontalSizing` / `verticalSizing` | |
-| CSS Class | `class` | |
-| Top/Left/Right/Bottom/Width/Height | `top`, `left`, `right`, `bottom`, `width`, `height` | |
-| Object Name | (JSON key) | |
-| Type | `"type": "input"` | Fixed |
+All properties from the schema's `input` definition, with exact JSON keys and valid enum values:
 
-## Supported Events
+| JSON Key | Type / Enum Values | Notes |
+|----------|-------------------|-------|
+| `type` | `"input"` (fixed) | |
+| `dataSource` | string | Field, variable, or any expression |
+| `dataSourceTypeHint` | `"text"`, `"object"`, `"number"`, `"integer"`, `"boolean"`, `"picture"`, `"date"`, `"time"` | Expression type hint |
+| `method` | string | **Required to bind an object method** — e.g. `"ObjectMethods/Input.4dm"`. Without this, the `.4dm` file is orphaned and never invoked (same rule as the form-level `"method"` property) |
+| `enterable` | boolean | Default `true` |
+| `focusable` | boolean | When focusable, always tabbable |
+| `hideFocusRing` | boolean | Hides the OS focus rectangle; best practice for non-enterable, focusable inputs |
+| `showSelection` | boolean | Keeps selection highlighted when the window is inactive |
+| `multiline` | `"automatic"`, `"yes"`, `"no"` | Text type only |
+| `wordwrap` | `"automatic"`, `"normal"`, `"none"` | Only active when `multiline` is enabled |
+| `placeholder` | string | Watermark text when empty |
+| `entryFilter` | string | Built-in code, custom string, or `\|namedFilter` |
+| `contextMenu` | `"automatic"`, `"none"` | Only works when `enterable: true` — see Context Menu section |
+| `spellcheck` | boolean | Text type only; platform-dependent engine |
+| `keyboardDialect` | string | e.g. `"ar-ma"`, `"cs"` — disables FEP |
+| `memorizeValue` | boolean | Saves data source value when `memorizeGeometry` is active |
+| `choiceList` | string or array | Same mechanism as drop-down/combo |
+| `requiredList` | string or array | |
+| `excludedList` | string or array | |
+| `defaultValue` | string | |
+| `min` / `max` | string or number | For number, date, time |
+| `textFormat` | string | Alpha format — see caveat (does not apply to Input at runtime) |
+| `numberFormat` | string | Only applies while unfocused |
+| `dateFormat` | `"systemShort"`, `"systemMedium"`, `"systemLong"`, `"iso8601"`, `"rfc822"`, `"short"`, `"shortCentury"`, `"abbreviated"`, `"long"` (optionally + `" blankIfNull"`) | |
+| `timeFormat` | `"hh_mm_ss"`, `"hh_mm"`, `"hh_mm_am"`, `"mm_ss"`, `"HH_MM_SS"`, `"HH_MM"`, `"MM_SS"`, `"systemShort"`, `"systemMedium"`, `"systemLong"`, `"iso8601"` (optionally + `" blankIfNull"`) | |
+| `booleanFormat` | string | `"textWhenTrue;textWhenFalse"` |
+| `pictureFormat` | `"scaled"`, `"truncatedTopLeft"`, `"truncatedCenter"`, `"tiled"`, `"proportionalTopLeft"`, `"proportionalCenter"` | |
+| `textAlign` | `"automatic"`, `"right"`, `"center"`, `"justify"`, `"left"` | |
+| `textAngle` | `0`, `90`, `180`, `270` | |
+| `fontTheme` | `"normal"`, `"main"`, `"additional"` | |
+| `styledText` | boolean | Rich per-character styling (multi-style) |
+| `storeDefaultStyle` | boolean | Persists style tags with the value |
+| `allowFontColorPicker` | boolean | Multi-style context menu extension |
+| `printFrame` | `"fixed"`, `"variable"` | |
+| `scrollbarHorizontal` | `"visible"`, `"hidden"`, `"automatic"` | |
+| `scrollbarVertical` | `"visible"`, `"hidden"`, `"automatic"` | |
+| `dragging` | `"none"`, `"automatic"`, `"custom"` | |
+| `dropping` | `"none"`, `"automatic"`, `"custom"` | |
+| `borderRadius` | integer (≥ 0) | Added 19 R7; **not** `cornerRadius` — that key is silently ignored |
+| `tooltip` | string | |
 
-`onAfterEdit`, `onAfterKeystroke`, `onBeforeKeystroke`, `onBeginDragOver`, `onClicked`, `onDataChange`, `onDoubleClicked`, `onDragOver`, `onDrop`, `onGettingFocus`, `onHeader`, `onLoad`, `onLosingFocus`, `onMouseEnter`, `onMouseLeave`, `onMouseMove`, `onMouseUp` (Picture type only), `onPrintingBreak`, `onPrintingDetail`, `onPrintingFooter`, `onScroll` (Picture type only), `onSelectionChange`, `onUnload`, `onValidate`.
+Plus inherited from `objectCommon`: `top` (required), `left` (required), `width`, `height`, `bottom`, `right`, `sizingX` (`"move"`, `"grow"`, `"fixed"`), `sizingY` (`"move"`, `"grow"`, `"fixed"`), `class`, `visibility` (`"visible"`, `"hidden"`, `"selectedRows"`, `"unselectedRows"`).
+
+Plus inherited from `borderStyle`: `borderStyle` (`"system"`, `"none"`, `"solid"`, `"dotted"`, `"raised"`, `"sunken"`, `"double"`).
+
+Plus inherited from `drawingSpec`: `stroke` (color), `fill` (color).
+
+Plus inherited from `fontSpec`: font properties (`fontFamily`, `fontSize`, `fontWeight`, `fontStyle`, `textDecoration`).
+
+## Supported Events (JSON Schema Names)
+
+The `events` array uses these exact JSON enum values (not the runtime `FORM Event.description` strings):
+
+`onClick`, `onDoubleClick`, `onAfterEdit`, `onAfterKeystroke`, `onBeforeKeystroke`, `onDataChange`, `onGettingFocus`, `onLosingFocus`, `onSelectionChange`, `onBeginDragOver`, `onDragOver`, `onDrop`, `onMouseEnter`, `onMouseMove`, `onMouseLeave`, `onMouseUp` (picture type only), `onScroll` (picture type only), `onLoad`, `onUnload`, `onValidate`, `onHeader`, `onPrintingDetail`, `onPrintingBreak`, `onPrintingFooter`.
+
+**Important**: JSON event names differ from runtime descriptions. Key mappings:
+
+| JSON Schema (`events` array) | Runtime (`FORM Event.description`) |
+|------------------------------|-------------------------------------|
+| `onClick` | `On Clicked` |
+| `onDoubleClick` | `On Double Clicked` |
+| `onAlternateClick` | `On Alternative Click` |
+| `onLongClick` | `On Long Click` |
+| `onDataChange` | `On Data Change` |
+| `onAfterEdit` | `On After Edit` |
+| `onGettingFocus` | `On Getting Focus` |
+| `onLosingFocus` | `On Losing Focus` |
+
+In 4D code, compare against the runtime constant (e.g. `$event.code=On Clicked`), not the JSON key.
 
 ## On Data Change: The General-Purpose Event
 
