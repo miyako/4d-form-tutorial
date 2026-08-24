@@ -13,7 +13,8 @@
 	"bottomMargin": 20,
 	"events": [
 		"onLoad",
-		"onUnload"
+		"onUnload",
+		"onPageChange"
 	],
 	"method": "method.4dm",
 	"windowTitle": "Inputs",
@@ -158,7 +159,7 @@
 				},
 				"txt4": {
 					"type": "input",
-					"dataSource": "Form.txt4",
+					"dataSource": "Form:C1466.txt4",
 					"dataSourceTypeHint": "text",
 					"entryFilter": "&9",
 					"top": 60,
@@ -180,7 +181,7 @@
 				},
 				"pic1": {
 					"type": "input",
-					"dataSource": "Form.pic1",
+					"dataSource": "Form:C1466.pic1",
 					"dataSourceTypeHint": "picture",
 					"pictureFormat": "scaled",
 					"top": 60,
@@ -202,7 +203,7 @@
 				},
 				"bool1": {
 					"type": "input",
-					"dataSource": "Form.bool1",
+					"dataSource": "Form:C1466.bool1",
 					"dataSourceTypeHint": "boolean",
 					"booleanFormat": "Assigned;Unassigned",
 					"top": 60,
@@ -224,7 +225,7 @@
 				},
 				"date1": {
 					"type": "input",
-					"dataSource": "Form.date1",
+					"dataSource": "Form:C1466.date1",
 					"dataSourceTypeHint": "date",
 					"dateFormat": "systemLong",
 					"top": 60,
@@ -252,7 +253,8 @@
 					"top": 60,
 					"left": 10,
 					"width": 220,
-					"height": 20
+					"height": 20,
+					"enterable": true
 				}
 			}
 		},
@@ -428,6 +430,6 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 33,
+	"geometryStamp": 37,
 	"formClass": "MyInputsFormController"
 }

@@ -66,6 +66,8 @@ An input's `dataSource` can be any valid 4D expression (field, variable, object 
 
 With `multiline: "no"`, the object continues on a single visual line and breaks only on explicit carriage returns already present in the value (any further line breaks the user types are stripped). With `multiline: "yes"`/`"automatic"` and `wordwrap: "normal"`, the object also wraps automatically at the object's width, in addition to breaking on explicit carriage returns.
 
+**Confirmed at runtime**: with `wordwrap: "normal"`, a long line wraps automatically at word boundaries -- consistent with ICU-style word-break rules for space-delimited languages (English, etc.), never mid-word. **Not yet tested**: how wrapping behaves for languages without space delimiters (e.g. Japanese), where a naive space-based line breaker would fail to find any break point at all -- ICU's dictionary-based segmentation handles this for space-delimited scripts, but whether 4D applies the same dictionary-based approach for CJK text specifically (as opposed to falling back to arbitrary/character-boundary wrapping) has not been verified here.
+
 ### Line Break Encoding: CR, Not CRLF or LF
 
 A 4D text value uses a single **carriage return (CR)** character as its line delimiter, on both macOS and Windows -- never CRLF (Windows) or LF-only (Unix/macOS native). This is a deliberate cross-platform normalization internal to 4D, independent of the host OS's native text-file convention. When the user presses Return/Enter while editing a multiline input, 4D inserts a CR.
@@ -149,6 +151,29 @@ An input can carry the same `choiceList` property used by drop-down list/combo b
 | `number` | `numberFormat` | Built-in or custom numeric pattern |
 | `boolean` | `booleanFormat` | `"<textWhenTrue>;<textWhenFalse>"`, e.g. `"Assigned;Unassigned"` -- displays a boolean expression as text instead of a check box |
 | `picture` | `pictureFormat` | `"scaled"`, `"truncatedCenter"`, `"truncatedTopLeft"`, `"proportionalTopLeft"`, `"proportionalCenter"`, `"tiled"` -- identical vocabulary to List Box Column/Footer picture display |
+
+### Runtime-Confirmed: Alpha Format Never Applies, Number Format Only Applies While Unfocused
+
+Manually testing each format at runtime (not just the static `FORM SCREENSHOT` template) on single-object pages confirmed:
+
+- **`textFormat` (Alpha Format) never applies to an Input at all**, at runtime or design time -- a `textFormat: "(###) ### ####"` input holding `"5551234567"` displays the literal, unformatted `"5551234567"`. This matches the official Alpha Format page's "Objects Supported" list, which really does omit Input despite Input's own overview page claiming support.
+- **`booleanFormat` and `dateFormat` apply correctly and unconditionally** -- a `booleanFormat: "Assigned;Unassigned"` input holding `True` displays `"Assigned"`; a `dateFormat: "systemLong"` input holding `!2024-03-25!` displays `"Monday, March 25, 2024"`, both regardless of whether the object currently has keyboard focus.
+- **`numberFormat` only applies while the object does *not* have keyboard focus.** A `numberFormat: "###,##0.00"` input holding `1234.5` displayed the raw, unformatted `"1234.5"` -- not because the format doesn't work, but because the object had **automatically received keyboard focus** (it was the only/first enterable object on its page, and 4D auto-focuses the first object in entry order whenever a page loads or becomes active). While focused, a number-type input shows its raw editable value; the formatted display only appears once it loses focus. This is unlike Date, which displays formatted even while focused.
+
+**Practical fix for pages that must display already-formatted values without user interaction**: handle `On Page Change` in the form method and call `GOTO OBJECT(*; "")` (empty object name) to clear the current focus/selection immediately after a page switch:
+
+```4d
+Case of
+	: ($event.code=On Page Change)
+		GOTO OBJECT(*; "")
+End case
+```
+
+This defocuses whatever object auto-received focus from the page change, so number-type inputs (and similar focus-sensitive displays) immediately show their formatted value instead of the raw editable one. See https://developer.4d.com/docs/commands/goto-object.
+
+### Date Entry Parsing Is Lenient, But Re-Entering the Formatted Display Can Produce a Null Date
+
+Typing `1999.1.1` into a `dateFormat: "systemLong"` input and validating it produces `Friday, January 1, 1999` -- 4D's date parser accepts alternate separators (`.` here) and is not strictly limited to the documented `MM/DD/YYYY` entry format. However, typing the object's *own currently-displayed formatted text* back in as new input -- e.g. typing the literal string `Friday, January 1, 1999` into the same field -- does **not** round-trip; it fails to parse and the value resets to a null date (`00/00/00`). This is a real trap: a formatted date display is not necessarily valid as re-entered input, and the object does not switch to a raw/editable representation while being retyped, unlike some other apps' date fields. Treat this as effectively a display-only round-trip hazard -- possibly a bug -- rather than relying on users being able to re-type what they see.
 
 ## Picture-Type Input
 

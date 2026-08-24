@@ -30,4 +30,8 @@ Case of
 		
 	: ($event.code=On Unload:K2:2)
 		
+	: ($event.code=On Page Change:K2:54)
+		
+		GOTO OBJECT:C206(*; "")
+		
 End case 

@@ -218,6 +218,21 @@ The fix is a **layout convention, not a property**: reserve a top margin on ever
 
 A **button** is not a multi-value object (it has no "selected item" concept), so it cannot auto-populate a page list -- but it can still drive navigation to one specific, fixed page via the parameterized standard-action syntax `"action": "gotoPage?value=N"` (see `02-button.md` and https://developer.4d.com/docs/commands/invoke-action). Placed on page 0 alongside (or instead of) a multi-value nav object, a `gotoPage?value=N` button is a natural companion for one-off jumps that don't warrant their own tab/menu entry -- e.g. a persistent "Home" button that always returns to page 1 regardless of the tab's current selection.
 
+### Defocusing After a Page Change
+
+Whenever a page becomes active (via a nav tab, `FORM GOTO PAGE`, or `INVOKE ACTION("gotoPage...")`), 4D **automatically gives keyboard focus to the first object in entry order on that page** if it's enterable, even without any user click. This has a display-correctness side effect: some format properties render differently while an object has focus versus while it doesn't (see `21-input.md`'s Number Format finding -- a `numberFormat`-formatted input shows its **raw, unformatted** value while focused, and only shows the formatted value once focus leaves). A page landing on such an object right after a tab switch will therefore momentarily look wrong/unformatted, purely because of the auto-focus, not because the format itself is broken.
+
+The fix is to handle `On Page Change` in the form method and clear the focus immediately with `GOTO OBJECT(*; "")` (empty object name):
+
+```4d
+Case of
+	: ($event.code=On Page Change)
+		GOTO OBJECT(*; "")
+End case
+```
+
+This requires `"onPageChange"` to be declared in the form's own top-level `events` array (see `01-form-concepts.md`'s per-object/per-form event-wiring rule) as well as the `"method"` property pointing at the file that handles it. See https://developer.4d.com/docs/commands/goto-object.
+
 ## Comparison with Drop-down List
 
 | Feature | Drop-down List | Tab Control |
