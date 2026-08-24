@@ -36,7 +36,10 @@
 					"dataSource": "Current date:C33",
 					"borderStyle": "none",
 					"hideFocusRing": true,
-					"events": ["onClicked"]
+					"method": "ObjectMethods/Input.4dm",
+					"events": [
+						"onClick"
+					]
 				},
 				"Input1": {
 					"type": "input",
@@ -49,7 +52,10 @@
 					"dataSource": "Form:C1466.today",
 					"borderStyle": "none",
 					"hideFocusRing": true,
-					"events": ["onClicked"]
+					"method": "ObjectMethods/Input1.4dm",
+					"events": [
+						"onClick"
+					]
 				}
 			}
 		}

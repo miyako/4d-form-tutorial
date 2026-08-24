@@ -305,7 +305,7 @@ The contextual menu (`contextMenu: "automatic"`, the default) only appears on Co
 
 ### Custom Context Menu for Non-Enterable Inputs
 
-To provide a "Copy" popup menu on a non-enterable, focusable (copy-only) input, implement the context menu by code in the object method. The object must subscribe to `onClicked`, then detect a contextual click (right-click / Ctrl+click) using the `Contextual click` command:
+To provide a "Copy" popup menu on a non-enterable, focusable (copy-only) input, implement the context menu by code in the object method. The object must have a `method` property pointing to its `.4dm` file and subscribe to `onClick` in its `events` array, then detect a contextual click (right-click / Ctrl+click) using the `Contextual click` command:
 
 ```4d
 var $event : Object
