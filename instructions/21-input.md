@@ -89,7 +89,20 @@ Front-End Processors (FEP) -- the input method system used by Chinese, Japanese,
 - A specific `keyboardDialect` is assigned to the object (FEP composition is incompatible with forcing a fixed non-FEP layout on focus)
 - The object has an `entryFilter` defined (see above) -- an entry filter operates on raw, individual keystrokes as they are typed, which is fundamentally incompatible with FEP composition, where multiple keystrokes must be deferred and combined before a character is actually committed
 
+## Spell Check and Writing Tools
+
+```json
+{ "spellcheck": true, "writingTools": true }
+```
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesEntry#auto-spellcheck, https://developer.4d.com/docs/FormObjects/propertiesEntry#writing-tools, https://developer.4d.com/docs/commands/spell-set-current-dictionary, https://blog.4d.com/apple-writing-tools-now-available-in-4d-write-pro-and-text-input/
+
+`spellcheck` (Auto Spellcheck, Text type only) performs a spell-check automatically during data entry, using a **platform-dependent spelling engine**: Hunspell on Windows, the system spell-checking service on macOS (also invocable per-object via the `SPELL CHECKING` language command, and configured via `SPELL SET CURRENT DICTIONARY` for the active dictionary/language).
+
+`writingTools` is a separate, newer property (added **21 R4**) that exposes Apple Intelligence Writing Tools (proofread, rewrite, summarize, change tone) inside a multiline input's context menu, and through the `writingTools` standard action assignable to a button/menu item. It is **macOS-only** and additionally requires Apple Intelligence & Siri to be enabled in System Settings on a compatible Mac; on Windows, or on a Mac without Apple Intelligence enabled, the property remains visible/settable in the Property List but the feature and its standard action are both inert at runtime (invoking the action does nothing). Where Auto Spellcheck is a basic, cross-platform, always-available dictionary check, Writing Tools is an AI-assisted, system-dependent, opt-in enhancement layered on top for macOS users specifically.
+
 ## Placeholder
+
 
 ```json
 { "placeholder": "Enter your name" }
@@ -132,8 +145,8 @@ A picture-type input (`dataSourceTypeHint: "picture"`) is the only input variant
 | Placeholder | `placeholder` | String type, or date/time with Blank if null |
 | Entry Filter | `entryFilter` | Built-in code, custom string, or `\|namedFilter` |
 | Context Menu | `contextMenu` | `"automatic"` (default) / `"none"` |
-| Auto Spellcheck | `spellcheck` | Text type only |
-| Writing Tools | `writingTools` | macOS + Apple Intelligence only; multiline text |
+| Auto Spellcheck | `spellcheck` | Text type only; Hunspell on Windows, system spell-check on macOS -- see above |
+| Writing Tools | `writingTools` | Added 21 R4; macOS + Apple Intelligence only; multiline text -- inert elsewhere, see above |
 | Keyboard Layout | `keyboardDialect` | e.g. `"ar-ma"`, `"cs"` -- disables FEP, see above |
 | Selection always visible | `showSelection` | Keeps selection highlighted when the window is inactive, see above |
 | Choice List | `choiceList` | Same mechanism as drop-down/combo |
