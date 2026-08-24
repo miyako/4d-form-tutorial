@@ -60,6 +60,23 @@ An input's `dataSource` can be any valid 4D expression (field, variable, object 
 
 Restricts what characters can be typed, evaluated one character at a time as the user types (invalid keystrokes are simply rejected, not corrected after the fact). Built-in filter codes include `~A` (letters, forced uppercase), `&9` (digits only), `&A` (capital letters only), `&a` (any letters), `&@` (alphanumeric only), plus a number of pre-built date/phone/SSN patterns (see the property reference for the full table). A custom filter created in the Filters editor is referenced by name, prefixed with a vertical bar (e.g. `"|myFilter"`). An entry filter only constrains data entry -- it has no effect on how the value is displayed after the user leaves the object; combine it with a matching display format (`textFormat`, `dateFormat`, etc.) for both.
 
+Defining an entry filter also **disables Front-End Processors (FEP)** for the object -- see Keyboard Layout, below, for why.
+
+## Keyboard Layout and Front-End Processors (FEP)
+
+```json
+{ "keyboardDialect": "ar-ma" }
+```
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesEntry#keyboard-layout, https://developer.4d.com/docs/commands/object-get-keyboard-layout, https://developer.4d.com/docs/commands/object-set-keyboard-layout
+
+`keyboardDialect` forces a specific installed keyboard layout (e.g. `"ar-ma"`, `"cs"`) to become active automatically whenever the object gets focus -- useful when a particular field must always be typed in a given language/layout regardless of the user's current system layout.
+
+Front-End Processors (FEP) -- the input method system used by Chinese, Japanese, Korean, and other languages that require composing a character from multiple keystrokes before committing it -- are **disabled** on an object in two cases:
+
+- A specific `keyboardDialect` is assigned to the object (FEP composition is incompatible with forcing a fixed non-FEP layout on focus)
+- The object has an `entryFilter` defined (see above) -- an entry filter operates on raw, individual keystrokes as they are typed, which is fundamentally incompatible with FEP composition, where multiple keystrokes must be deferred and combined before a character is actually committed
+
 ## Placeholder
 
 ```json
@@ -105,7 +122,7 @@ A picture-type input (`dataSourceTypeHint: "picture"`) is the only input variant
 | Context Menu | `contextMenu` | `"automatic"` (default) / `"none"` |
 | Auto Spellcheck | `spellcheck` | Text type only |
 | Writing Tools | `writingTools` | macOS + Apple Intelligence only; multiline text |
-| Keyboard Layout | `keyboardDialect` | e.g. `"ar-ma"`, `"cs"` |
+| Keyboard Layout | `keyboardDialect` | e.g. `"ar-ma"`, `"cs"` -- disables FEP, see above |
 | Selection always visible | `showSelection` | Keeps selection highlighted after losing focus |
 | Choice List | `choiceList` | Same mechanism as drop-down/combo |
 | Default value | `defaultValue` (see `properties_RangeOfValues.md`) | |
@@ -144,6 +161,14 @@ Reference: https://developer.4d.com/docs/Events/onDataChange
 
 - It fires only when the data source is touched **through the user interface** (typing, pasting, dragging in a value). A code-driven assignment to the same variable/field/object property (e.g. `Form.myText:="new value"` in a method) does **not** trigger `On Data Change`.
 - It fires even when the newly entered value is **identical** to the previous value -- unlike a typical "changed" semantics, `On Data Change` really means "the user interface touched this data source," not "the value is different from before."
+
+## Keystroke Events vs. `On After Edit`
+
+Reference: https://developer.4d.com/docs/Events/onAfterKeystroke, https://developer.4d.com/docs/Events/onBeforeKeystroke, https://developer.4d.com/docs/Events/onAfterEdit
+
+`On Before Keystroke` and `On After Keystroke` were designed for an era of applications/languages that work primarily with raw, individual keystrokes -- they fire once per physical key. This model does not map cleanly onto every way an input's content can change: a paste, a cut, an FEP (Front-End Processor) composition commit, or an Undo all modify the content without corresponding to a single discrete keystroke.
+
+A modern application should use `On After Edit` instead: it fires after **every** edit action, whether that action was a single keystroke, a paste, a cut, an FEP-composed edit, or an Undo -- one consistent event regardless of the mechanism that produced the change, rather than needing to separately special-case pastes/cuts/FEP/Undo alongside keystroke handling.
 
 ## On Clicked on Input
 
