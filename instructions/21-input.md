@@ -203,18 +203,21 @@ A picture-type input (`dataSourceTypeHint: "picture"`) is the only input variant
 
 Reference: https://developer.4d.com/docs/Events/onDataChange
 
-`On Data Change` is the general-purpose event for reacting to a value change on an input. Two rules govern when it fires:
+`On Data Change` is the general-purpose event for reacting to a **validated** value change on an input. Two rules govern when it fires:
 
-- It fires only when the data source is touched **through the user interface** (typing, pasting, dragging in a value). A code-driven assignment to the same variable/field/object property (e.g. `Form.myText:="new value"` in a method) does **not** trigger `On Data Change`.
-- It fires even when the newly entered value is **identical** to the previous value -- unlike a typical "changed" semantics, `On Data Change` really means "the user interface touched this data source," not "the value is different from before."
+- It fires when the edit is **validated** -- the user tabs out, presses Return, or clicks outside the object -- ending the edit session for that object. It is not a per-keystroke or per-edit-action event; it fires once the object's content is committed, not while it is still being actively edited.
+- It only fires for changes made **through the user interface**. A code-driven assignment to the same variable/field/object property (e.g. `Form.myText:="new value"` in a method) does **not** trigger `On Data Change`.
+- It fires even when the newly entered value is **identical** to the previous value -- unlike a typical "changed" semantics, `On Data Change` really means "the user interface validated this data source," not "the value is different from before."
+
+An individual edit action within that session -- a keystroke, a paste, a cut, an automatic drop, an FEP composition commit, or an Undo -- is a **transitional** edit, not a validation, and is reported by `On After Edit` instead (see below), not `On Data Change`.
 
 ## Keystroke Events vs. `On After Edit`
 
 Reference: https://developer.4d.com/docs/Events/onAfterKeystroke, https://developer.4d.com/docs/Events/onBeforeKeystroke, https://developer.4d.com/docs/Events/onAfterEdit
 
-`On Before Keystroke` and `On After Keystroke` were designed for an era of applications/languages that work primarily with raw, individual keystrokes -- they fire once per physical key. This model does not map cleanly onto every way an input's content can change: a paste, a cut, an FEP (Front-End Processor) composition commit, or an Undo all modify the content without corresponding to a single discrete keystroke.
+`On Before Keystroke` and `On After Keystroke` were designed for an era of applications/languages that work primarily with raw, individual keystrokes -- they fire once per physical key. This model does not map cleanly onto every way an input's content can change: a paste, a cut, an automatic drop, an FEP (Front-End Processor) composition commit, or an Undo all modify the content without corresponding to a single discrete keystroke.
 
-A modern application should use `On After Edit` instead: it fires after **every** edit action, whether that action was a single keystroke, a paste, a cut, an FEP-composed edit, or an Undo -- one consistent event regardless of the mechanism that produced the change, rather than needing to separately special-case pastes/cuts/FEP/Undo alongside keystroke handling.
+A modern application should use `On After Edit` instead: it fires after **every** transitional edit action, whether that action was a single keystroke, a paste, a cut, an automatic drop, an FEP-composed edit, or an Undo -- one consistent event regardless of the mechanism that produced the change, rather than needing to separately special-case pastes/cuts/drops/FEP/Undo alongside keystroke handling. This is the event that fires for an automatically dropped text or picture -- `On Data Change` does not fire until the object is subsequently validated (tab/Return/click-out).
 
 ## On Clicked on Input
 
