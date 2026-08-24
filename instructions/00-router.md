@@ -11,6 +11,24 @@ file(s) from the table below, then proceed. Each target file has front matter
 (`object`, `json_type`, `keywords`, `summary`) — skim that first if you need to
 confirm relevance before reading the full body.
 
+## Prerequisite Loading (`requires` front matter)
+
+Some instruction files declare a `requires` list in their front matter:
+
+```yaml
+---
+requires: ["01-form-concepts.md", "98-tool4d-cli.md"]
+---
+```
+
+**Rule**: when you load a file that has `requires`, also load each listed
+prerequisite — but **only once per session**. If you have already read a
+prerequisite (for a previous task, or because another file also required it),
+do not re-read it. This is analogous to C/C++ `#pragma once`.
+
+Track which files you have loaded in this session. Before reading any
+prerequisite, check whether you have already loaded it. Skip if yes.
+
 ## Route Table
 
 | Task involves...                                              | Open |

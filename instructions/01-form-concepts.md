@@ -1,6 +1,7 @@
 ---
 object: "form"
 json_type: null
+requires: ["98-tool4d-cli.md"]
 keywords: ["form", "project form", "table form", "subform", "page", "windowTitle", "windowSizingX", "windowSizingY", "margins", "onLoad", "onUnload", "formClass", "file structure", "4DForm"]
 summary: "Form-level concepts: project/table/subform types, file/directory structure, window & page properties, form-level events, form classes."
 ---

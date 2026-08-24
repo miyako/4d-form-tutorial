@@ -1,6 +1,7 @@
 ---
 object: "input"
 json_type: "input"
+requires: ["01-form-concepts.md", "98-tool4d-cli.md"]
 keywords: ["input", "field", "text", "multiline", "wordwrap", "entry filter", "placeholder", "picture format", "boolean format", "date format", "number format", "choice list", "enterable"]
 summary: "Input object: general-purpose field/expression display and entry, all expression types (text/date/time/number/boolean/picture/object), format-per-type properties, entry filter, multiline/wordwrap, static template always shows literal dataSource text regardless of expression type."
 ---
