@@ -1,14 +1,22 @@
 ---
 object: "tool4d"
 json_type: null
-keywords: ["tool4d", "CLI", "headless", "FORM SCREENSHOT", "print form", "4D CLI", "version", "LTS", "feature release", "21 R3"]
-summary: "Centralized reference for tool4d / 4D CLI usage: version requirements, FORM SCREENSHOT behavior, static template rendering rules, and CLI commands for testing forms."
+keywords: ["tool4d", "CLI", "headless", "FORM SCREENSHOT", "print form", "4D CLI", "version", "LTS", "feature release", "21 R3", "CI/CD", "automated testing", "ASSERT", "download"]
+summary: "Centralized reference for tool4d / 4D CLI usage: what tool4d is, version requirements, automated testing, download URLs, FORM SCREENSHOT behavior, static template rendering rules, and CLI commands."
 ---
 
 # tool4d and 4D CLI
 
 Reference: https://developer.4d.com/docs/Admin/cli
 Reference: https://blog.4d.com/4d-versioning-feature-releases-lts-releases-explained/
+
+## What is tool4d?
+
+`tool4d` is a CLI version of 4D designed for CI/CD and automated testing:
+
+- **No license activation required** — free to download and use
+- Must match the `compatibilityVersion` of the test project
+- Runs 4D methods headlessly without a GUI
 
 ## 4D Versioning: Feature Releases vs. LTS
 
@@ -70,6 +78,40 @@ This is a workaround only — prefer upgrading to 21 R3+ where `tool4d` works co
 Note: `FORM SCREENSHOT` does **not** apply CSS stylesheets. Use print form output to verify CSS styling.
 
 The helper methods used in this project (`project_form_to_image`, `print_form_to_file`) are project-specific, not built-in 4D commands.
+
+## Automated Testing
+
+### Running Tests
+
+```bash
+/path/to/tool4d --dataless --startup-method=test_all --project=/path/to/{name}.4DProject
+```
+
+| Flag | Description |
+|---|---|
+| `--dataless` | No data file (empty data path). Suitable for tests that don't need records. |
+| `--startup-method` | 4D method to execute at startup |
+| `--project` | Path to the `.4DProject` file |
+
+### Exit Behavior
+
+- **PASS**: stdout contains "PASS", exit code 0
+- **FAIL**: `ASSERT` triggers a dialog → headless auto-abort → non-zero exit code, no "PASS" output
+
+## Downloading tool4d
+
+```
+https://resources-download.4d.com/release/{branch}/{version}/latest/{platform}/tool4d_{suffix}.tar.xz
+```
+
+| Parameter | Examples |
+|---|---|
+| branch | `21.x`, `20.x` |
+| version | `21.1`, `21 R2` |
+| platform | `win`, `mac` |
+| suffix | `win`, `x86_64`, `arm64` |
+
+No authentication required for download.
 
 ## `FORM SCREENSHOT` Static Template Behavior
 
