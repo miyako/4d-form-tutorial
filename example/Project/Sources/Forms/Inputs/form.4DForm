@@ -35,7 +35,8 @@
 					"dataSourceTypeHint": "date",
 					"dataSource": "Current date:C33",
 					"borderStyle": "none",
-					"hideFocusRing": true
+					"hideFocusRing": true,
+					"events": ["onClicked"]
 				},
 				"Input1": {
 					"type": "input",
@@ -47,7 +48,8 @@
 					"dataSourceTypeHint": "date",
 					"dataSource": "Form:C1466.today",
 					"borderStyle": "none",
-					"hideFocusRing": true
+					"hideFocusRing": true,
+					"events": ["onClicked"]
 				}
 			}
 		}

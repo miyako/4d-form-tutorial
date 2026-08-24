@@ -301,7 +301,38 @@ Reference: https://developer.4d.com/docs/Events/onMouseUp
 
 Reference: https://developer.4d.com/docs/FormObjects/propertiesEntry#context-menu, https://developer.4d.com/docs/commands/object-set-context-menu, https://developer.4d.com/docs/commands/object-get-context-menu
 
-The contextual menu (`contextMenu: "automatic"`, the default) only appears on Control+click or right-click when **both** conditions hold: the `contextMenu` property is not set to `"none"`, and the input is `enterable`. A non-enterable input does not show the contextual menu even if `contextMenu` is `"automatic"`.
+The contextual menu (`contextMenu: "automatic"`, the default) only appears on Control+click or right-click when **both** conditions hold: the `contextMenu` property is not set to `"none"`, and the input is `enterable`. A non-enterable input does not show the contextual menu even if `contextMenu` is `"automatic"` — the built-in context menu is part of the entry system and is ignored for non-enterable objects.
+
+### Custom Context Menu for Non-Enterable Inputs
+
+To provide a "Copy" popup menu on a non-enterable, focusable (copy-only) input, implement the context menu by code in the object method. The object must subscribe to `onClicked`, then detect a contextual click (right-click / Ctrl+click) using the `Contextual click` command:
+
+```4d
+var $event : Object
+$event:=FORM Event
+
+Case of 
+  : (($event.code=On Clicked) && (Contextual click))
+    var $menu : Text
+    $menu:=Create menu
+    APPEND MENU ITEM($menu; "Copy")
+    SET MENU ITEM PARAMETER($menu; -1; "copy")
+    var $parameter : Text
+    $parameter:=Dynamic pop up menu($menu)
+    RELEASE MENU($menu)
+
+    If ($parameter="copy")
+      var $ptr : Pointer
+      $ptr:=OBJECT Get pointer(Object named; $event.objectName)
+      SET TEXT TO PASTEBOARD(String($ptr->))
+    End If 
+
+End case 
+```
+
+Reference: https://developer.4d.com/docs/commands/set-text-to-pasteboard, https://developer.4d.com/docs/commands/object-get-pointer, https://developer.4d.com/docs/commands/dynamic-pop-up-menu
+
+The pattern uses `OBJECT Get pointer(Object named; $event.objectName)` to dereference the data source generically (works regardless of expression type), then `String()` to convert to text for the pasteboard. See the "Inputs" form's `Input` and `Input1` object methods for a working example.
 
 The exact contents of the menu are not fixed -- they depend on the data source's expression type (plain text vs. picture vs. multi-style/styled text) and on the current Clipboard/pasteboard content (e.g. whether Paste is enabled depends on what is currently on the Clipboard). A picture-type input's menu adds **Import...** and **Save as...** commands (plus temporary picture-format overrides); a multi-style text input's menu adds font/size/style/color commands, generating `On After Edit` when a style attribute is changed through the menu.
 
