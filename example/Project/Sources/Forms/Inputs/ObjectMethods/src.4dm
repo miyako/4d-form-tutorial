@@ -14,12 +14,16 @@ Case of
 		
 		OBJECT SET TITLE:C194(*; "title.src"; $event.description)
 		
-		var $data : Blob
-		$info:={foo: "bar"}
-		VARIABLE TO BLOB:C532($info; $data)
+		//var $data : Blob
+		//var $info : Object
+		//$info:={foo: "bar"}
+		//VARIABLE TO BLOB($info; $data)
 		
-		SET PICTURE TO PASTEBOARD:C521(Form:C1466.src)
-		APPEND DATA TO PASTEBOARD:C403("private.myapp.data"; $data)
+		//SET PICTURE TO PASTEBOARD(Form.src)
+		//APPEND DATA TO PASTEBOARD("private.myapp.data"; $data)
+		
+		$file:=File:C1566("/RESOURCES/images/grid2x2.png")
+		SET FILE TO PASTEBOARD:C975($file.platformPath)
 		
 		var $icon : Picture
 		CREATE THUMBNAIL:C679(Form:C1466.src; $icon; 32; 32)

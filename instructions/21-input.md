@@ -580,21 +580,19 @@ Reference: https://developer.4d.com/docs/commands/set-drag-icon, https://develop
 
 In the `On Begin Drag Over` handler, transfer data via the pasteboard:
 
-- **`SET TEXT TO PASTEBOARD`** / **`SET PICTURE TO PASTEBOARD`** / **`SET FILE TO PASTEBOARD`** — for text, picture, or file/folder path
+- **`SET FILE TO PASTEBOARD`** — transfers a file/folder path (platform path). The preferred approach when the data originates from a file on disk
+- **`SET TEXT TO PASTEBOARD`** / **`SET PICTURE TO PASTEBOARD`** — for text or picture data directly
 - **`APPEND DATA TO PASTEBOARD`** — for custom/composite data types (identified by a UTI string, e.g. `"private.myapp.data"`)
 
 By default, a ghost image of the data source is used as the drag icon. Customise with **`SET DRAG ICON`**:
 
 ```4d
-// Source: custom drag with thumbnail icon and custom pasteboard data
+// Source: drag a file reference with a thumbnail icon
 Case of
   : ($event.code=On Begin Drag Over)
-    SET PICTURE TO PASTEBOARD(Form.src)
-
-    var $data : Blob
-    $info:={foo: "bar"}
-    VARIABLE TO BLOB($info; $data)
-    APPEND DATA TO PASTEBOARD("private.myapp.data"; $data)
+    var $file : 4D.File
+    $file:=File("/RESOURCES/images/grid2x2.png")
+    SET FILE TO PASTEBOARD($file.platformPath)
 
     var $icon : Picture
     CREATE THUMBNAIL(Form.src; $icon; 32; 32)
@@ -602,16 +600,18 @@ Case of
 End case
 ```
 
+Note: `SET FILE TO PASTEBOARD` takes a **platform path** (hence `.platformPath`), not a 4D filesystem pathname.
+
 ### Destination (`On Drag Over` / `On Drop`)
 
-Reference: https://developer.4d.com/docs/commands/pasteboard-data-size, https://developer.4d.com/docs/commands/get-picture-from-pasteboard, https://developer.4d.com/docs/commands/get-text-from-pasteboard
+Reference: https://developer.4d.com/docs/commands/get-file-from-pasteboard, https://developer.4d.com/docs/commands/is-picture-file, https://developer.4d.com/docs/commands/pasteboard-data-size, https://developer.4d.com/docs/commands/get-picture-from-pasteboard, https://developer.4d.com/docs/commands/get-text-from-pasteboard
 
 **`On Drag Over`** fires continuously while the drag hovers over the destination. The method must return a value to accept or reject:
 
 - **Return `0`** — accept the drop (cursor shows accept indicator)
 - **Return `-1`** — reject the drop (cursor shows reject indicator)
 
-Use `Pasteboard data size` to test for expected data types before accepting.
+When the pasteboard contains files, use **`Get file from pasteboard($i)`** to iterate (1-based index, returns `""` when no more files). Validate each file before accepting — e.g. with **`Is picture file`** to check if the file is a supported image format. For non-file data, use `Pasteboard data size` to test for expected data types.
 
 **Important**: do not use `TRACE` or any blocking call during `On Drag Over` — it fires continuously and a breakpoint will freeze the drag interaction. Use non-blocking measures (write to file, update a UI label) to debug.
 
@@ -624,21 +624,39 @@ The mouse pointer automatically changes to accept/reject. **`SET CURSOR` is igno
 **`On Drop`** fires only if `On Drag Over` previously accepted. Retrieve data from the pasteboard and process it:
 
 ```4d
-// Destination: accept only custom data, retrieve picture on drop
+// Destination: accept only picture files, load on drop
 Case of
   : ($event.code=On Drag Over)
-    If (Pasteboard data size("private.myapp.data")>0)
-      return 0  // accept
-    Else
-      return -1  // reject
-    End if
+    var $i : Integer
+    var $path : Text
+    $i:=0
+    Repeat
+      $i+=1
+      $path:=Get file from pasteboard($i)
+      If (Is picture file($path))
+        return 0  // accept — at least one picture file found
+      End if
+    Until ($path="")
+    return -1  // reject — no picture files
 
   : ($event.code=On Drop)
-    var $image : Picture
-    GET PICTURE FROM PASTEBOARD($image)
-    Form.dst:=$image
+    var $i : Integer
+    var $path : Text
+    $i:=0
+    Repeat
+      $i+=1
+      $path:=Get file from pasteboard($i)
+      If (Is picture file($path))
+        var $image : Picture
+        READ PICTURE FILE($path; $image)
+        Form.dst:=$image
+        return  // done — loaded first picture file
+      End if
+    Until ($path="")
 End case
 ```
+
+`Get file from pasteboard` returns **platform paths** — they can be passed directly to `READ PICTURE FILE` and other legacy file commands without conversion.
 
 ### Entry Filter Applies to Automatically Dropped Text
 
