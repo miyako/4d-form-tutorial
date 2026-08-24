@@ -440,7 +440,7 @@ Three ways to access an input's value, each with different semantics:
 |---------|---------|--------------------------------------|-------|
 | `OBJECT Get pointer` | Pointer to the data source variable | **No** — only works if the data source is a variable or field. Returns `Nil` for object property expressions like `Form.text` | Legacy approach (pre-v12, when data sources were always variables/fields) |
 | `OBJECT Get value` | The validated/stored value as a variant | **Yes** — works regardless of whether the data source is a variable, field, or expression | Preferred for reading the committed value of any object |
-| `Get edited text` | The text currently being edited (pre-validation) | N/A (reads the edit buffer, not the data source) | Only valid during an edit session; returns the in-progress content that may differ from the stored value |
+| `Get edited text` | The text currently being edited (pre-validation) | **Yes** — works regardless of data source type | Only valid during an edit session; returns the in-progress content that may differ from the stored value |
 
 **Rule of thumb**: use `Get edited text` when you need the current content as the user sees it mid-edit; use `OBJECT Get value` when you need the committed/stored value regardless of data source type; avoid `OBJECT Get pointer` for modern code where expressions are common.
 
