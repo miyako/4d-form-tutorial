@@ -40,7 +40,9 @@
 					"events": [
 						"onClick"
 					],
-					"contextMenu": "none"
+					"contextMenu": "none",
+					"fontFamily": "%password",
+					"fontSize": 13
 				},
 				"Input1": {
 					"type": "input",
@@ -55,7 +57,9 @@
 					"hideFocusRing": true,
 					"events": [
 						"onClick"
-					]
+					],
+					"fontFamily": "%password",
+					"fontSize": 13
 				}
 			}
 		}

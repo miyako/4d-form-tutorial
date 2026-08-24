@@ -332,9 +332,27 @@ Reference: https://developer.4d.com/docs/Events/onMouseUp
 
 Reference: https://developer.4d.com/docs/FormObjects/propertiesEntry#context-menu, https://developer.4d.com/docs/commands/object-set-context-menu, https://developer.4d.com/docs/commands/object-get-context-menu
 
-The built-in contextual menu (`contextMenu: "automatic"`, the default) appears on Control+click or right-click. **Correction**: it works on both enterable and non-enterable inputs — earlier documentation incorrectly stated it required `enterable: true`. A non-enterable, focusable input with `contextMenu: "automatic"` will show the standard context menu including Copy, which is sufficient for a copy-only read-only input.
+The built-in contextual menu (`contextMenu: "automatic"`, the default) appears on Control+click or right-click. It works on both enterable and non-enterable inputs. However, the **`%password` pseudo-font suppresses the Copy standard action** — when `fontFamily: "%password"` is applied, the Copy menu item is not permitted (neither in the built-in context menu nor as a standard action bound to a custom popup menu), which prevents the user from copying the masked value.
+
+This is why a non-enterable password-masked input may appear to have no context menu at all — the menu itself still exists, but its primary useful action (Copy) is disabled by the password font's security restriction.
 
 The exact contents of the menu depend on the data source's expression type (plain text vs. picture vs. multi-style/styled text) and on the current Clipboard/pasteboard content. A picture-type input's menu adds **Import...** and **Save as...** commands (plus temporary picture-format overrides); a multi-style text input's menu adds font/size/style/color commands, generating `On After Edit` when a style attribute is changed through the menu.
+
+## Password Pseudo-Font
+
+```json
+{ "fontFamily": "%password", "fontSize": 13 }
+```
+
+Reference: https://developer.4d.com/docs/commands/object-set-font, https://developer.4d.com/docs/commands/object-get-font
+
+`%password` is a pseudo-font in 4D (not a real typeface) that replaces every character with `*` in inputs and combo boxes. It is set via the `fontFamily` JSON property (or `OBJECT SET FONT` / `OBJECT GET FONT` at runtime).
+
+Key behaviors:
+- Applies to inputs and combo boxes
+- The Copy standard action is **suppressed** while `%password` is active — the value cannot be copied to the pasteboard through any standard mechanism (built-in context menu or custom menu with `ak copy`)
+- The underlying data source value is **not** masked — it holds the real text; only the display is obfuscated
+- `fontSize` should be set explicitly (the `*` character renders differently from normal text at the default font size)
 
 ### Custom Context Menu with Standard Actions
 
