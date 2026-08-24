@@ -25,6 +25,22 @@
 		},
 		{
 			"objects": {
+				"Input": {
+					"type": "input",
+					"left": 51,
+					"top": 43,
+					"width": 172,
+					"height": 17,
+					"events": [
+						"onLosingFocus",
+						"onDataChange"
+					],
+					"method": "ObjectMethods/Input.4dm"
+				}
+			}
+		},
+		{
+			"objects": {
 				"src": {
 					"type": "input",
 					"left": 20,
@@ -87,6 +103,6 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 104,
+	"geometryStamp": 110,
 	"formClass": "MyInputsFormController"
 }

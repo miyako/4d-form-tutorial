@@ -166,6 +166,18 @@ An input can carry the same `choiceList` property used by drop-down list/combo b
 | `boolean` | `booleanFormat` | `"<textWhenTrue>;<textWhenFalse>"`, e.g. `"Assigned;Unassigned"` -- displays a boolean expression as text instead of a check box |
 | `picture` | `pictureFormat` | `"scaled"`, `"truncatedCenter"`, `"truncatedTopLeft"`, `"proportionalTopLeft"`, `"proportionalCenter"`, `"tiled"` -- identical vocabulary to List Box Column/Footer picture display |
 
+### Runtime Format and Filter Commands
+
+Reference: https://developer.4d.com/docs/commands/object-set-format, https://developer.4d.com/docs/commands/object-set-filter
+
+Display formats and entry filters can be changed at runtime with `OBJECT SET FORMAT` and `OBJECT SET FILTER`. This allows dynamic switching (e.g. toggling between currency and percentage format on the same number input based on user selection).
+
+### Runtime Scrollbar and Multiline Commands
+
+Reference: https://developer.4d.com/docs/commands/object-set-scrollbar, https://developer.4d.com/docs/commands/object-set-multiline
+
+Scrollbar visibility and multiline mode can also be changed at runtime with `OBJECT SET SCROLLBAR` and `OBJECT SET MULTILINE`.
+
 ### Runtime-Confirmed: Alpha Format Never Applies, Number Format Only Applies While Unfocused
 
 Manually testing each format at runtime (not just the static `FORM SCREENSHOT` template) on single-object pages confirmed:
@@ -276,10 +288,23 @@ Reference: https://developer.4d.com/docs/Events/onDataChange
 `On Data Change` is the general-purpose event for reacting to a **validated** value change on an input. Two rules govern when it fires:
 
 - It fires when the edit is **validated** -- the user tabs out, presses Return, or clicks outside the object -- ending the edit session for that object. It is not a per-keystroke or per-edit-action event; it fires once the object's content is committed, not while it is still being actively edited.
+- **Important**: clicking outside the object only validates if there is somewhere for focus to go. If the current input is the **only focusable object** on the form, `On Data Change` will never fire via click-out — the input remains perpetually in edit mode. This is a form design issue (ensure at least two focusable objects, or rely on Return/Enter for validation).
 - It only fires for changes made **through the user interface**. A code-driven assignment to the same variable/field/object property (e.g. `Form.myText:="new value"` in a method) does **not** trigger `On Data Change`.
 - It fires even when the newly entered value is **identical** to the previous value -- unlike a typical "changed" semantics, `On Data Change` really means "the user interface validated this data source," not "the value is different from before."
 
 An individual edit action within that session -- a keystroke, a paste, a cut, an automatic drop, an FEP composition commit, or an Undo -- is a **transitional** edit, not a validation, and is reported by `On After Edit` instead (see below), not `On Data Change`.
+
+### `On Losing Focus` — Fires After `On Data Change`
+
+Reference: https://developer.4d.com/docs/Events/onLosingFocus
+
+`On Losing Focus` fires after `On Data Change` when the user moves away from the input. It is another possible hook for validation logic, but suffers from the same limitation: if the input is the **only focusable object**, focus never leaves, and `On Losing Focus` never fires.
+
+### `REJECT` — Legacy Record-Level Command
+
+Reference: https://developer.4d.com/docs/commands/reject
+
+`REJECT` is a legacy command from the era when all forms were record input forms and all data sources were fields. It rejects the **entire record entry** at the form level, not an individual input's edit. It is not the right tool for field-level input validation in modern code — use `On Data Change` or `On After Edit` with explicit logic instead.
 
 ## Keystroke Events vs. `On After Edit`
 
@@ -513,6 +538,12 @@ End If
 $selectedValue:=Substring($text; $start; $end-$start)
 ```
 
+### Styled Text Commands
+
+Reference: https://developer.4d.com/docs/commands/theme/Styled-Text
+
+When `styledText: true`, the full **Styled Text** command theme is available for programmatic rich text editing at runtime. These commands can set or get bold, italic, color, font, size, and other attributes on a specific character range — enabling rich text editor functionality. Key commands include `ST SET ATTRIBUTES`, `ST GET ATTRIBUTES`, `ST SET TEXT`, `ST INSERT EXPRESSION`.
+
 `ST Get plain text` strips all HTML/style markup and returns the character stream that matches `GET HIGHLIGHT`'s character-position indices.
 
 ### Character Position Model
@@ -565,6 +596,14 @@ See form "Inputs" for a working example of custom picture drag and drop.
 ### Automatic vs. Custom
 
 An input supports **automatic drag and drop** with no extra configuration: dragging selected text out of the object, or dropping text/a picture into it, works as a mouse-driven substitute for the Copy/Cut/Paste edit actions.
+
+Automatic drag and drop works in three scenarios:
+
+1. **Between two 4D objects** on the same form or different forms — text or picture is automatically transferred via the pasteboard on both sides.
+2. **From an external application (including the desktop shell — Finder/Explorer) into 4D** — files, folders, text, or pictures are automatically retrieved on the destination side.
+3. **From 4D to an external application** — text or picture is automatically set on the pasteboard.
+
+**Limitation**: the source application may use **file promises** (to avoid blocking on large files) or **metadata-triggered scripts** (to generate data on demand). These lazy-evaluation mechanisms are **not handled** by 4D on the destination side — only concrete pasteboard data is retrieved.
 
 Automatic drag and drop between two text inputs is a **move (cut), not a copy**. To **copy** instead, hold **Ctrl** (Windows) or **Option** (macOS) *after the drag has already started*.
 
