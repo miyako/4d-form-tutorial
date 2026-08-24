@@ -256,6 +256,8 @@ An automatic drop does **not** fire `On Selection Change`: at the moment a drop 
 
 An input can also process `On Clicked`, and this works regardless of whether the input is `enterable` or `focusable` -- a non-enterable, non-focusable input still receives `On Clicked` when clicked, which is one of the mechanisms that makes non-enterable inputs useful for click-driven, display-only UI (see Enterable, above).
 
+**Contrast with a combo box's text-entry area** (`17-combo.md`): much of an input's text-entry behavior (typing, `entryFilter`, `On Data Change`/`On After Edit` on validation/edit, caret/selection mechanics) applies identically to the enterable text part of a combo box (conceptually its "element 0"), since a combo box is fundamentally an enterable text field with an attached pop-up. However, `On Clicked` does **not** fire for a click into that text-entry part -- a combo box's `On Clicked` fires only for a **popup-driven selection** (click the chevron, then choose an item from the list), the same click-is-a-data-change semantics as a drop-down list. Clicking the chevron and then dismissing the popup without choosing anything does not fire `On Clicked` at all.
+
 ### Mouse Coordinates: `MOUSEX`/`MOUSEY`
 
 Reference: https://developer.4d.com/docs/Concepts/variables#system-variables
