@@ -652,6 +652,12 @@ Setting `enterable: false` on a destination input is sufficient to block drops â
 
 Dragging a picture between two picture-type inputs **copies** the picture rather than moving it â€” the source keeps its copy. This is the opposite of text drag (a move/cut).
 
+### Drop Position
+
+Reference: https://developer.4d.com/docs/commands/drop-position
+
+If the exact position of the drop matters (e.g. inserting text at the cursor position in an input, or determining which row in a list box), use `Drop position` during `On Drop`. For a text-type input, it returns the character position (using the same inter-character position model as `GET HIGHLIGHT`) where the drop landed.
+
 ## Input Alternatives
 
 The overview page notes several cases where a different object type is a better fit than a plain input:
