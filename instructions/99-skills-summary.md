@@ -223,8 +223,7 @@ note: "Do NOT load this file for routine object/task work — it duplicates cont
 - I can only create and edit the JSON directly. I have no experience with the visual form editor or its features.
 
 ### CLI Testing
-- **`FORM SCREENSHOT` works in both `tool4d` and the full 4D application, but requires 21 R3 (build 100186) or later.** Earlier builds of `tool4d` had a bug that caused segfaults or silently produced blank/wrong output for certain picture formats (SVG, WEBP) and missed conditional form behavior (dark-mode substitution). As a workaround for older builds, use `4D.app/Contents/MacOS/4D --headless --user-param ... --startup-method ...`.
-- The helper methods used in this project (`project_form_to_image`, `print_form_to_file`) are project-specific, not built-in
+- See `98-tool4d-cli.md` for version requirements, CLI commands, and `FORM SCREENSHOT` static template rendering rules. Key point: requires `tool4d` **21 R3 (build 100186) or later**.
 - Reference: https://developer.4d.com/docs/Admin/cli
 
 ## Showcase Forms Created

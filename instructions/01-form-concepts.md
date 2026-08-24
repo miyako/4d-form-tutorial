@@ -554,12 +554,14 @@ The `.4DProject` file's `compatibilityVersion` encodes the 4D version:
 
 ## CLI Commands for Testing
 
+See `98-tool4d-cli.md` for centralized CLI reference (version requirements, binary paths, `FORM SCREENSHOT` behavior).
+
 ### Screenshot (no CSS applied)
 
 ```bash
-/Applications/4D\ 21.1/4D.app/Contents/MacOS/4D \
+/Applications/4D\ 21\ R3/tool4d.app/Contents/MacOS/tool4d \
   --startup-method=project_form_to_image \
-  --dataless --headless \
+  --dataless \
   --project=<path>/example.4DProject \
   --user-param=<FormName>:<PageNumber>:<OutputPath.png>
 ```
@@ -567,9 +569,9 @@ The `.4DProject` file's `compatibilityVersion` encodes the 4D version:
 ### Print to PDF (CSS applied)
 
 ```bash
-/Applications/4D\ 21\ R3/4D.app/Contents/MacOS/4D \
+/Applications/4D\ 21\ R3/tool4d.app/Contents/MacOS/tool4d \
   --startup-method=print_form_to_file \
-  --dataless --headless \
+  --dataless \
   --project=<path>/example.4DProject \
   --user-param=<FormName>:<PageNumber>:<OutputPath.pdf>
 ```

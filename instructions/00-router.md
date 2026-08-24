@@ -36,6 +36,7 @@ confirm relevance before reading the full body.
 | Tab control | `19-tab.md` |
 | Group box | `20-group-box.md` |
 | Input / field / text entry | `21-input.md` |
+| tool4d, CLI, headless, `FORM SCREENSHOT`, version requirements, LTS vs feature release | `98-tool4d-cli.md` |
 | Meta questions: "what have you built", capability/status summary, showcase form catalog | `99-skills-summary.md` (on-demand only, see its own front matter — do not load by default) |
 
 If a task spans multiple objects, open only the files for those objects — do not
@@ -46,11 +47,9 @@ open unrelated ones "just in case."
 - **Never invent 4D command names or guess syntax.** Refer to documentation or
   existing project code. IDE-added token suffixes (`:CNNN`, `:KNN:NN`) must
   never be written by hand.
-- **CLI rendering/testing**: `FORM SCREENSHOT` works in both `tool4d` and the
-  full 4D application, but requires **21 R3 (build 100186) or later** — earlier
-  builds of `tool4d` had a bug that caused crashes or silent mis-rendering.
-  As a workaround for older builds, use `4D.app/Contents/MacOS/4D --headless ...`.
-  Reference: https://developer.4d.com/docs/Admin/cli
+- **CLI rendering/testing**: see `98-tool4d-cli.md` for version requirements,
+  `FORM SCREENSHOT` behavior, and CLI commands. Key point: requires tool4d
+  **21 R3 (build 100186) or later**.
 - **Form Editor**: only the JSON is edited directly here; there is no visual
   form editor experience/behavior to draw on.
 - 4D language knowledge is **not systematic** — code patterns are inferred from
