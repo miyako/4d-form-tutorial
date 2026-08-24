@@ -253,6 +253,14 @@ The contextual menu (`contextMenu: "automatic"`, the default) only appears on Co
 
 The exact contents of the menu are not fixed -- they depend on the data source's expression type (plain text vs. picture vs. multi-style/styled text) and on the current Clipboard/pasteboard content (e.g. whether Paste is enabled depends on what is currently on the Clipboard). A picture-type input's menu adds **Import...** and **Save as...** commands (plus temporary picture-format overrides); a multi-style text input's menu adds font/size/style/color commands, generating `On After Edit` when a style attribute is changed through the menu.
 
+## Drag and Drop
+
+Reference: https://developer.4d.com/docs/Desktop/drag-and-drop
+
+An input supports **automatic drag and drop** with no extra configuration: dragging selected text out of the object, or dropping text/a picture into it, works as a mouse-driven substitute for the Copy/Cut/Paste edit actions -- the data source is read/written the same way it would be via the keyboard/menu equivalents.
+
+Beyond this automatic behavior, the developer can implement **custom drag and drop** to transfer arbitrary pasteboard data (any type except file promises) between the object and other areas of the application, or other applications entirely. Custom drag and drop is covered separately in more detail later.
+
 ## Input Alternatives
 
 The overview page notes several cases where a different object type is a better fit than a plain input:
