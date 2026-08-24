@@ -16,6 +16,14 @@ Case of
 		Form.alpha1:="5551234567"
 		Form.styled1:="Styled input"
 		
+		Form.srcFilter:="abc123"
+		Form.dstFilter:=""
+		
+		Form.srcEnterable:="Drop me"
+		Form.dstEnterable:=""
+		
+		Form.srcPic:=Read picture file(Get 4D folder(Current resources folder)+"Images"+Folder separator+"grid2x2.png")
+		
 	: ($event.code=On Unload)
 		
 End case
