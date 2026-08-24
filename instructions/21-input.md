@@ -261,6 +261,10 @@ An input supports **automatic drag and drop** with no extra configuration: dragg
 
 Automatic drag and drop between two text inputs is a **move (cut), not a copy**: dragging a selection out of the source object removes it from the source, and dropping it on the destination object inserts it at the caret position created where the mouse pointer is released -- the same end result as a Cut on the source followed by a Paste at that caret position on the destination, done in a single mouse gesture.
 
+To **copy** instead of move, hold down **Ctrl** (Windows) or **Option** (macOS) during the drag -- the source keeps its original text and the destination receives a duplicate. On macOS, the modifier must be pressed *after* the drag has already started (pressing it before picking up the item has no effect).
+
+https://developer.4d.com/docs/Desktop/drag-and-drop
+
 Automatic drag and drop is handled **entirely internally by 4D** and does not dispatch `On Drag Over`/`On Drop` to the object method, even if the object declares `"events": ["onDrop"]` and has its own object method file -- those events, and the ability to inspect/accept/reject the pasteboard data (e.g. via `$event.description`), are only fired for **custom** drag and drop, not for the automatic built-in text/picture transfer. An input with both automatic dragging/dropping left enabled and an `onDrop` object method wired will still complete the automatic move silently; the object method's `On Drag Over`/`On Drop` code simply never runs for that transfer.
 
 Beyond this automatic behavior, the developer can implement **custom drag and drop** to transfer arbitrary pasteboard data (any type except file promises) between the object and other areas of the application, or other applications entirely. Custom drag and drop is covered separately in more detail later.
