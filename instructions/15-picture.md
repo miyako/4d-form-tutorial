@@ -129,4 +129,4 @@ Static pictures have **no data source** and no configurable event set of their o
 
 ## CLI Verification Note
 
-`FORM SCREENSHOT` must be run through the real 4D application binary (`4D.app/Contents/MacOS/4D --headless --user-param ... --startup-method ...`), never through `tool4d`. `tool4d` is unreliable for this object type: depending on build, it can segfault outright, or silently produce blank output for certain picture formats (SVG, WEBP) and fail to apply conditional form behavior such as dark-mode picture substitution.
+`FORM SCREENSHOT` works in both `tool4d` and the full 4D application, but requires **21 R3 (build 100186) or later**. Earlier builds of `tool4d` had a bug that caused segfaults or silently produced blank output for certain picture formats (SVG, WEBP) and failed to apply conditional form behavior such as dark-mode picture substitution. As a workaround for older builds, use `4D.app/Contents/MacOS/4D --headless --user-param ... --startup-method ...`.

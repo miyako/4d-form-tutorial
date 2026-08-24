@@ -46,9 +46,10 @@ open unrelated ones "just in case."
 - **Never invent 4D command names or guess syntax.** Refer to documentation or
   existing project code. IDE-added token suffixes (`:CNNN`, `:KNN:NN`) must
   never be written by hand.
-- **CLI rendering/testing**: `FORM SCREENSHOT` must be driven via the real 4D
-  application binary (`4D.app/Contents/MacOS/4D --headless ...`), never via
-  `tool4d` — `tool4d` can crash or silently mis-render some formats/behaviors.
+- **CLI rendering/testing**: `FORM SCREENSHOT` works in both `tool4d` and the
+  full 4D application, but requires **21 R3 (build 100186) or later** — earlier
+  builds of `tool4d` had a bug that caused crashes or silent mis-rendering.
+  As a workaround for older builds, use `4D.app/Contents/MacOS/4D --headless ...`.
   Reference: https://developer.4d.com/docs/Admin/cli
 - **Form Editor**: only the JSON is edited directly here; there is no visual
   form editor experience/behavior to draw on.
