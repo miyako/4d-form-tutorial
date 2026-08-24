@@ -132,11 +132,18 @@ No authentication required for download.
 | **Group box** | True runtime appearance (static by nature) |
 | **Button / Checkbox / Radio** | True runtime appearance (label, style) |
 
+### Properties Fully Rendered in the Static Template
+
+- All **visual styling**: `borderStyle`, `borderRadius`, `fill`, `stroke`, `fontFamily`, `fontSize`, `fontWeight`, `fontStyle`, `textDecoration`, `textAlign`
+- Hex colors, named colors, and `"transparent"` all honored
+- `%password` font shows the literal dataSource text (not masked characters — masking is runtime-only)
+
 ### Properties Not Reflected in the Static Template
 
 - `enterable: false` — no visible difference from enterable
 - `choiceList` on an input — no pop-up affordance shown
 - Runtime values, array contents, `Form.xxx` bindings — always show the literal expression text
+- `%password` character masking — literal text shown instead
 
 ### Interactive-Only Behaviors
 

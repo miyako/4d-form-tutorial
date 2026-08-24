@@ -514,6 +514,81 @@ The overview page notes several cases where a different object type is a better 
 - Drop-down List or Combo Box, for representing a list field/variable with a closed or semi-open set of choices
 - Check Box or Radio Button, for a boolean expression
 
+## Visual Display Properties
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesBackgroundAndBorder, https://developer.4d.com/docs/FormObjects/propertiesAppearance
+
+See form "InputStyles" for a comprehensive showcase.
+
+### Border Style (`borderStyle`)
+
+All seven values render correctly in both the Form Editor and `FORM SCREENSHOT`:
+
+| Value | Visual effect |
+|-------|--------------|
+| `"none"` | No visible border — blends into the form background |
+| `"system"` | Platform-native field border (macOS: light inset bezel) |
+| `"solid"` | Thin single-line black border |
+| `"dotted"` | Thin dotted border |
+| `"raised"` | 3D raised/embossed effect (lighter top-left, darker bottom-right) |
+| `"sunken"` | 3D sunken/inset effect (opposite of raised) |
+| `"double"` | Double-line border |
+
+### Corner Radius (`borderRadius`)
+
+Rounds the corners of the input's border **and** background fill. Only meaningful when `borderStyle` is `"solid"` (other styles ignore or clip oddly). Setting the radius to half the object height creates a "pill" shape — e.g. `height: 22` + `borderRadius: 11`.
+
+**Important:** The JSON key is `borderRadius`, not `cornerRadius`. Using `cornerRadius` is silently ignored (unrecognized key).
+
+### Background Color (`fill`) and Text Color (`stroke`)
+
+Both accept any CSS color value: named colors (`"red"`), hex (`"#2980B9"`), or `"transparent"`.
+
+- `fill` — the object's background color (CSS equivalent: `background-color`)
+- `stroke` — the text/foreground color (CSS equivalent: `color`)
+
+Both are honored in the `FORM SCREENSHOT` static template. Combined with `borderRadius`, they allow creating "tag" or "badge" style inputs:
+
+```json
+{
+  "type": "input",
+  "borderStyle": "solid",
+  "borderRadius": 12,
+  "stroke": "#27AE60",
+  "fill": "#EAFAF1",
+  "fontWeight": "bold",
+  "textAlign": "center"
+}
+```
+
+### Font Properties
+
+| JSON Key | Effect | Static template |
+|----------|--------|-----------------|
+| `fontFamily` | Font face — system fonts or `"%password"` pseudo-font | ✓ rendered |
+| `fontSize` | Point size | ✓ rendered |
+| `fontWeight` | `"bold"` or `"normal"` | ✓ rendered |
+| `fontStyle` | `"italic"` or `"normal"` | ✓ rendered |
+| `textDecoration` | `"underline"` or `"none"` | ✓ rendered |
+
+All font properties are correctly rendered by `FORM SCREENSHOT`. They can be combined freely (bold+italic, bold+underline, etc.).
+
+### Text Alignment (`textAlign`)
+
+`"left"`, `"center"`, `"right"`, `"justify"`, `"automatic"` — all render correctly in the static template.
+
+### Static Template Behavior for Display Properties
+
+`FORM SCREENSHOT` renders **all visual styling properties** (borders, colors, fonts, alignment, corner radius) accurately. What it does NOT render is **runtime data** — the `dataSource` expression text is shown literally rather than evaluated. So a styled input with `"dataSource": "Current date:C33"` will display the text `Current date` in the specified font/color/border, not the actual date value.
+
+This means `FORM SCREENSHOT` is a reliable tool for verifying:
+- ✓ Layout and spacing
+- ✓ Border styles and radii
+- ✓ Color schemes (fill + stroke)
+- ✓ Font choices, sizes, and styles
+- ✓ Text alignment
+- ✗ Runtime values, format results, or conditional logic
+
 ## CLI Verification Notes
 
 `FORM SCREENSHOT` renders the Form Editor's static template. For an input with a `dataSource`, the template renders the **literal `dataSource` expression text** as a placeholder label -- the same rule already established for drop-down list, combo box, and tab control. This holds for **every** expression type tested, including `picture` and `boolean`: a picture-type input with `dataSourceTypeHint: "picture"` shows the literal text `Form.pic1`, not the actual image content and not a blank frame -- a contrast with the static Picture object and Picture Pop-up Menu, both of which render real image content (frame 0) in their static templates regardless of data source. This is because those two object types own their appearance directly from a `picture` source property, whereas an input's appearance is always driven through its `dataSource` expression, textual placeholder included.
