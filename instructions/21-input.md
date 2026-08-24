@@ -715,6 +715,40 @@ Reference: https://developer.4d.com/docs/commands/drop-position
 
 If the exact position of the drop matters (e.g. inserting text at the cursor position in an input, or determining which row in a list box), use `Drop position` during `On Drop`. For a text-type input, it returns the character position (using the same inter-character position model as `GET HIGHLIGHT`) where the drop landed.
 
+## Menu Bar Association
+
+Reference: https://developer.4d.com/docs/FormEditor/menu, https://developer.4d.com/docs/commands/set-menu-bar, https://developer.4d.com/docs/Menus/sdi, https://developer.4d.com/docs/commands/open-form-window
+
+A form can be associated with a **menu bar** through its properties. This association is critical for any form that contains input objects (or any active/editable objects), because the standard edit actions — **Copy, Paste, Cut, Undo, Redo** — are provided by the menu bar. If a form's window is frontmost but has no associated menu bar, or if the visible menu bar belongs to a *different* form, those edit actions silently do nothing. This is a common developer mistake.
+
+### Why It Matters
+
+When a form's window becomes frontmost, 4D activates the menu bar associated with **that form**. The menu bar's Edit menu provides the standard edit actions that text inputs depend on. Without an associated menu bar:
+
+- **Cmd+C / Ctrl+C** (Copy), **Cmd+V / Ctrl+V** (Paste), **Cmd+X / Ctrl+X** (Cut) will not work
+- **Cmd+Z / Ctrl+Z** (Undo), **Cmd+Shift+Z / Ctrl+Y** (Redo) will not work
+- The context menu's Copy/Paste/Cut items will also fail if they rely on standard actions routed through the menu bar
+
+**Rule**: if a form has input objects or any active objects, it **must** be associated with a menu bar that includes the Edit menu with standard actions.
+
+### `SET MENU BAR` — Process-Level Menu Bar
+
+Reference: https://developer.4d.com/docs/commands/set-menu-bar
+
+`SET MENU BAR` associates a menu bar with the current **process**, not a specific form. This is useful when you need a menu bar visible even when no form window is open (e.g. when all windows are closed but the process is still running). However, this does **not** replace the form-level association — each form should still declare its own associated menu bar so that bringing that form's window to the front activates the correct menu bar.
+
+### SDI Mode (Windows)
+
+Reference: https://developer.4d.com/docs/Menus/sdi
+
+On Windows, 4D can run in **SDI (Single Document Interface)** mode where each window is independent and has its own menu bar. In this mode, each form window carries its own menu bar rather than sharing a single application-level menu bar. The form-level menu bar association becomes even more important in SDI mode — each form must declare which menu bar it uses.
+
+### Hidden Menu Bar
+
+Reference: https://developer.4d.com/docs/commands/open-form-window
+
+It is possible to open a form window with the menu bar **hidden** (e.g. for a floating palette or utility window). The hidden menu bar still functions — keyboard shortcuts for Copy/Paste/Cut/Undo/Redo still work — but the form must still have an associated menu bar for those actions to be routed correctly. Hiding the menu bar is a display choice, not a functional disconnection.
+
 ## Input Alternatives
 
 The overview page notes several cases where a different object type is a better fit than a plain input:
