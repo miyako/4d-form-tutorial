@@ -1,6 +1,7 @@
 ---
 object: "rectangle"
 json_type: "rectangle"
+requires: ["01-form-concepts.md"]
 keywords: ["rectangle", "shape", "stroke"]
 summary: "Rectangle shape object: basic static rectangle definition."
 ---

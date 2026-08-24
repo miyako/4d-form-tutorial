@@ -1,6 +1,7 @@
 ---
 object: "progress"
 json_type: "progress"
+requires: ["01-form-concepts.md"]
 keywords: ["progress indicator", "thermometer", "barber shop mode", "scale", "enterable"]
 summary: "Progress indicator (thermometer) object: scale properties, barber-shop running/stopped mode, enterable ruler-like behavior."
 ---

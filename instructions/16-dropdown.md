@@ -1,6 +1,7 @@
 ---
 object: "dropdown"
 json_type: "dropdown"
+requires: ["01-form-concepts.md", "98-tool4d-cli.md"]
 keywords: ["dropdown", "dropdown list", "dataSourceTypeHint", "choiceList", "saveAs", "hierarchical list", "gotoPage", "standard action", "object-based", "array-based"]
 summary: "Dropdown list object: five data-source kinds (object/array/choice-list/hierarchical/standard-action), binding rules, screenshot rendering caveats."
 ---

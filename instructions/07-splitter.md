@@ -1,6 +1,7 @@
 ---
 object: "splitter"
 json_type: "splitter"
+requires: ["01-form-concepts.md"]
 keywords: ["splitter", "borderStyle", "orientation", "pusher", "splitterMode", "sizing", "grow", "move", "fixed"]
 summary: "Splitter object: orientation rules, pusher mode, coverage rule, sizing interactions, data source semantics."
 ---

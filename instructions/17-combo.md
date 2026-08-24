@@ -1,6 +1,7 @@
 ---
 object: "combo"
 json_type: "combo"
+requires: ["01-form-concepts.md", "98-tool4d-cli.md"]
 keywords: ["combo box", "enterable", "automaticInsertion", "excludedList", "requiredList", "choiceList"]
 summary: "Combo box object: enterable drop-down variant, object/array/choice-list data sources, automaticInsertion/excludedList."
 ---

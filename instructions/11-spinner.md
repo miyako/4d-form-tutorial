@@ -1,6 +1,7 @@
 ---
 object: "spinner"
 json_type: "spinner"
+requires: ["01-form-concepts.md"]
 keywords: ["spinner", "running", "stopped", "circular"]
 summary: "Spinner object: binary running/stopped state, circular shape, minimal configuration."
 ---

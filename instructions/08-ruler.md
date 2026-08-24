@@ -1,6 +1,7 @@
 ---
 object: "ruler"
 json_type: "ruler"
+requires: ["01-form-concepts.md"]
 keywords: ["ruler", "min", "max", "step", "showGraduations", "graduationStep", "labelsPlacement", "scale"]
 summary: "Ruler object: scale properties, orientation, integer-only values, event model (On Data Change vs On Clicked)."
 ---
