@@ -15,7 +15,7 @@ Reference: https://blog.4d.com/4d-versioning-feature-releases-lts-releases-expla
 `tool4d` is a CLI version of 4D designed for CI/CD and automated testing:
 
 - **No license activation required** — free to download and use
-- Must match the `compatibilityVersion` of the test project
+- Must be compatible with the project's `compatibilityVersion` (see `01-form-concepts.md`). A newer tool4d can safely run an older project; the reverse works too, but the project may use commands or features that do not yet exist in the older tool4d.
 - Runs 4D methods headlessly without a GUI
 
 ## 4D Versioning: Feature Releases vs. LTS
@@ -33,7 +33,7 @@ Bug fixes land in feature releases first and may be backported to LTS later.
 
 - **tool4d 21 R3 (build 100186) or later**
 
-Earlier builds of `tool4d` (including 21.1 LTS) had a bug that caused `FORM SCREENSHOT` to crash (segfault) or silently produce blank/incorrect output for certain picture formats (SVG, WEBP) and fail to apply conditional form behavior such as dark-mode picture substitution. This was a bug, not a design limitation of `tool4d`.
+Earlier builds of `tool4d` (including 21.1 LTS) had a bug that caused `FORM SCREENSHOT` to crash (segfault) or silently produce blank/incorrect output for certain picture formats (SVG, WEBP) and fail to apply conditional form behavior such as dark-mode picture substitution. This was a bug, not a design limitation of `tool4d`. Until there is confirmation that tool4d 21.1 LTS has received the fix, use tool4d **21 R3 or later**; alternatively, the full 4D desktop application works via CLI as a fallback (see below).
 
 ### Workaround for Older Builds
 

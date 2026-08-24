@@ -548,9 +548,12 @@ The `.4DProject` file's `compatibilityVersion` encodes the 4D version:
 | Value | Version |
 |-------|---------|
 | `2101` | 21.1 |
-| `2009` | 20.9 |
 | `2120` | 21 R2 |
+| `2130` | 21 R3 |
+| `2009` | 20.9 |
 | `20A0` | 20 R10 |
+
+A newer tool4d can safely run an older `compatibilityVersion` project (e.g. tool4d 21 R3 running a `2101` project). The reverse also works, but the project may use commands or features that do not yet exist in the older version.
 
 ## CLI Commands for Testing
 
