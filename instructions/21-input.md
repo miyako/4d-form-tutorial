@@ -64,6 +64,20 @@ An input's `dataSource` can be any valid 4D expression (field, variable, object 
 
 `multiline` (Text-type expressions only): `"yes"`, `"no"`, or `"automatic"` (default). `"automatic"` wraps text with automatic line returns only when the object is tall enough to be treated as a multiline area; `"no"` forces a single line and strips everything after the first carriage return as soon as the value is edited. `wordwrap` only takes effect once `multiline` is `"yes"`: `"normal"` wraps long lines to fit the object's width; `"none"` truncates instead.
 
+With `multiline: "no"`, the object continues on a single visual line and breaks only on explicit carriage returns already present in the value (any further line breaks the user types are stripped). With `multiline: "yes"`/`"automatic"` and `wordwrap: "normal"`, the object also wraps automatically at the object's width, in addition to breaking on explicit carriage returns.
+
+### Line Break Encoding: CR, Not CRLF or LF
+
+A 4D text value uses a single **carriage return (CR)** character as its line delimiter, on both macOS and Windows -- never CRLF (Windows) or LF-only (Unix/macOS native). This is a deliberate cross-platform normalization internal to 4D, independent of the host OS's native text-file convention. When the user presses Return/Enter while editing a multiline input, 4D inserts a CR.
+
+This CR rule is only enforced for line breaks entered **through the keyboard** while editing. The runtime does not prevent an LF (or other) character from being inserted into a text value programmatically, and it does not normalize text that is copied in from an external source (clipboard paste, imported document, or read from a file). A pasted or command-populated text value can therefore contain a mix of CR, LF, or CRLF, and 4D will not silently rewrite it.
+
+It is the developer's responsibility to normalize line breaks in imported text to CR before assigning it to a text/input data source, typically after reading with `Document to text`, `File.getText`, or `File.open`, replacing LF/CRLF sequences with CR (e.g. `Change string`/`Replace string` or a regex-based cleanup) as needed:
+
+https://developer.4d.com/docs/commands/document-to-text
+https://developer.4d.com/docs/API/FileClass#gettext
+https://developer.4d.com/docs/API/FileClass#open
+
 ## Entry Filter
 
 ```json
