@@ -625,6 +625,69 @@ The "Inputs" form demonstrates both approaches side by side:
 | How Copy works | Custom popup with standard action | OS-provided context menu |
 | When to use | Full control over menu items | Simplest approach for standard behavior |
 
+## System Pickers (Font and Color)
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesText (Allow Font/Color Picker)
+
+Input objects with `styledText: true` can enable the **system font picker** and
+**system color picker** — floating, non-modal panels (on macOS; modal on Windows)
+that update the selected text **live** as the user changes settings.
+
+### Enabling
+
+Set the **"Allow Font/Color Picker"** property on the input object (in the Form
+editor, or via the property list). This is a prerequisite — without it, the picker
+commands do nothing for that object.
+
+### Commands
+
+| Command | Ref | Behavior |
+|---------|-----|----------|
+| `OPEN FONT PICKER` | https://developer.4d.com/docs/commands/open-font-picker | Opens the system font dialog. No parameters. Changes are applied to the current text selection in the focused object. Generates `On After Edit`. **macOS**: floating/non-modal. **Windows**: modal. |
+| `OPEN COLOR PICKER` | https://developer.4d.com/docs/commands/open-color-picker | Opens the system color dialog. Optional parameter: `0` or omitted = text color, `1` = background color. Applied to selection in focused object. Generates `On After Edit`. **macOS**: floating/non-modal. **Windows**: modal. |
+
+### Typical Pattern
+
+A button (set to non-focusable) triggers the picker. The button must first give
+focus to the input, then open the picker:
+
+```4d
+// Button object method (button must have "Focusable" unchecked)
+Case of
+  :(FORM Event.code=On Clicked)
+    GOTO OBJECT(*; "myStyledInput")  // give focus to the input
+    OPEN FONT PICKER
+End case
+```
+
+For a color picker button:
+```4d
+Case of
+  :(FORM Event.code=On Clicked)
+    GOTO OBJECT(*; "myStyledInput")
+    OPEN COLOR PICKER(0)  // 0 = text color, 1 = background color
+End case
+```
+
+The picker modifies the selected text **in real time** — each change generates
+`On After Edit` on the input object.
+
+### Comparison with `Select RGB color`
+
+| | `OPEN COLOR PICKER` | `Select RGB color` |
+|---|---|---|
+| **Purpose** | Edit styled text color in-place | Pick a color value for any purpose |
+| **Requires** | Input with "Allow Font/Color Picker" | Nothing (standalone) |
+| **UI** | System floating panel (macOS) | Modal dialog |
+| **Updates** | Applies directly to selected text | Returns Integer (0x00RRGGBB) |
+| **Result** | No return value; changes input live | Returns selected color or -1 (cancel on Windows) |
+| **Ref** | https://developer.4d.com/docs/commands/open-color-picker | https://developer.4d.com/docs/commands/select-rgb-color |
+
+`Select RGB color` is a general-purpose modal color dialog (ref: above). It returns
+an RGB Integer value and sets `OK` to 1/0. It does **not** require any input object
+and can be used anywhere you need to let the user pick a color. On macOS, the dialog
+can only be closed via the close box or Esc — `OK` is always 1 regardless.
+
 ## Drag and Drop
 
 Reference: https://developer.4d.com/docs/Desktop/drag-and-drop
