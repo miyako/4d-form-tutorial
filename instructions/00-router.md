@@ -55,6 +55,7 @@ prerequisite, check whether you have already loaded it. Skip if yes.
 | Group box | `20-group-box.md` |
 | Input / field / text entry | `21-input.md` |
 | Static text / label / title / rotation / dynamic reference | `23-text.md` |
+| Hierarchical list / tree / ListRef / expand-collapse / choice list | `24-list.md` |
 | Property cross-reference: JSON keys, CSS names, getter/setter commands, applicable types | `22-property-reference.md` |
 | tool4d, CLI, headless, `FORM SCREENSHOT`, version requirements, LTS vs feature release | `98-tool4d-cli.md` |
 | Meta questions: "what have you built", capability/status summary, showcase form catalog | `99-skills-summary.md` (on-demand only, see its own front matter — do not load by default) |
