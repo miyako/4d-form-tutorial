@@ -11,7 +11,9 @@
 	"windowMaxHeight": 32767,
 	"rightMargin": 20,
 	"bottomMargin": 20,
-	"events": ["onLoad"],
+	"events": [
+		"onLoad"
+	],
 	"method": "method.4dm",
 	"destination": "detailScreen",
 	"windowTitle": "Styled Text Tests",
@@ -33,7 +35,6 @@
 					"fontWeight": "bold",
 					"stroke": "#2C3E50"
 				},
-
 				"Label_Bold": {
 					"type": "text",
 					"left": 20,
@@ -48,11 +49,10 @@
 					"top": 44,
 					"width": 400,
 					"height": 20,
-					"dataSource": "Form.st_bold",
+					"dataSource": "Form:C1466.st_bold",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_Italic": {
 					"type": "text",
 					"left": 20,
@@ -67,11 +67,10 @@
 					"top": 74,
 					"width": 400,
 					"height": 20,
-					"dataSource": "Form.st_italic",
+					"dataSource": "Form:C1466.st_italic",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_Color": {
 					"type": "text",
 					"left": 20,
@@ -86,11 +85,10 @@
 					"top": 104,
 					"width": 400,
 					"height": 20,
-					"dataSource": "Form.st_color",
+					"dataSource": "Form:C1466.st_color",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_BgColor": {
 					"type": "text",
 					"left": 20,
@@ -105,11 +103,10 @@
 					"top": 134,
 					"width": 400,
 					"height": 20,
-					"dataSource": "Form.st_bgcolor",
+					"dataSource": "Form:C1466.st_bgcolor",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_Size": {
 					"type": "text",
 					"left": 20,
@@ -124,11 +121,10 @@
 					"top": 164,
 					"width": 400,
 					"height": 28,
-					"dataSource": "Form.st_size",
+					"dataSource": "Form:C1466.st_size",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_Font": {
 					"type": "text",
 					"left": 20,
@@ -143,11 +139,10 @@
 					"top": 200,
 					"width": 400,
 					"height": 20,
-					"dataSource": "Form.st_font",
+					"dataSource": "Form:C1466.st_font",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_Underline": {
 					"type": "text",
 					"left": 20,
@@ -162,11 +157,10 @@
 					"top": 230,
 					"width": 400,
 					"height": 20,
-					"dataSource": "Form.st_underline",
+					"dataSource": "Form:C1466.st_underline",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_Strikethrough": {
 					"type": "text",
 					"left": 20,
@@ -181,11 +175,10 @@
 					"top": 260,
 					"width": 400,
 					"height": 20,
-					"dataSource": "Form.st_strikethrough",
+					"dataSource": "Form:C1466.st_strikethrough",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_Multi": {
 					"type": "text",
 					"left": 20,
@@ -200,11 +193,10 @@
 					"top": 290,
 					"width": 400,
 					"height": 20,
-					"dataSource": "Form.st_multi",
+					"dataSource": "Form:C1466.st_multi",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_MultiAttr": {
 					"type": "text",
 					"left": 20,
@@ -219,9 +211,21 @@
 					"top": 320,
 					"width": 400,
 					"height": 20,
-					"dataSource": "Form.st_multiattr",
+					"dataSource": "Form:C1466.st_multiattr",
 					"styledText": true,
 					"enterable": false
+				},
+				"Button": {
+					"type": "button",
+					"text": "Button",
+					"top": 9,
+					"left": 411,
+					"width": 65,
+					"height": 52,
+					"events": [
+						"onClick"
+					],
+					"action": "gotoPage?value=3"
 				}
 			}
 		},
@@ -239,7 +243,6 @@
 					"fontWeight": "bold",
 					"stroke": "#2C3E50"
 				},
-
 				"Label_SetText": {
 					"type": "text",
 					"left": 20,
@@ -254,11 +257,10 @@
 					"top": 44,
 					"width": 360,
 					"height": 20,
-					"dataSource": "Form.st_settext",
+					"dataSource": "Form:C1466.st_settext",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_SetPlain": {
 					"type": "text",
 					"left": 20,
@@ -273,11 +275,10 @@
 					"top": 74,
 					"width": 360,
 					"height": 20,
-					"dataSource": "Form.st_setplain",
+					"dataSource": "Form:C1466.st_setplain",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_GetPlain": {
 					"type": "text",
 					"left": 20,
@@ -292,10 +293,9 @@
 					"top": 104,
 					"width": 360,
 					"height": 20,
-					"dataSource": "Form.st_getplain_result",
+					"dataSource": "Form:C1466.st_getplain_result",
 					"enterable": false
 				},
-
 				"Label_InsertAt": {
 					"type": "text",
 					"left": 20,
@@ -310,11 +310,10 @@
 					"top": 144,
 					"width": 360,
 					"height": 20,
-					"dataSource": "Form.st_insertat",
+					"dataSource": "Form:C1466.st_insertat",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_Replace": {
 					"type": "text",
 					"left": 20,
@@ -329,7 +328,7 @@
 					"top": 174,
 					"width": 360,
 					"height": 20,
-					"dataSource": "Form.st_replace",
+					"dataSource": "Form:C1466.st_replace",
 					"styledText": true,
 					"enterable": false
 				}
@@ -349,7 +348,6 @@
 					"fontWeight": "bold",
 					"stroke": "#2C3E50"
 				},
-
 				"Label_GetAttr": {
 					"type": "text",
 					"left": 20,
@@ -364,11 +362,10 @@
 					"top": 44,
 					"width": 360,
 					"height": 20,
-					"dataSource": "Form.st_getattr_src",
+					"dataSource": "Form:C1466.st_getattr_src",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_AttrReport": {
 					"type": "text",
 					"left": 20,
@@ -383,12 +380,11 @@
 					"top": 74,
 					"width": 360,
 					"height": 40,
-					"dataSource": "Form.st_getattr_report",
+					"dataSource": "Form:C1466.st_getattr_report",
 					"enterable": false,
 					"wordwrap": "automatic",
 					"multiline": "yes"
 				},
-
 				"Label_Highlight": {
 					"type": "text",
 					"left": 20,
@@ -403,21 +399,22 @@
 					"top": 124,
 					"width": 360,
 					"height": 20,
-					"dataSource": "Form.st_highlight",
+					"dataSource": "Form:C1466.st_highlight",
 					"styledText": true,
 					"enterable": true,
 					"focusable": true,
-					"events": ["onGettingFocus"],
+					"events": [
+						"onGettingFocus"
+					],
 					"method": "ObjectMethods/st_highlight.4dm"
 				},
-
 				"Label_Emoji": {
 					"type": "text",
 					"left": 20,
 					"top": 160,
 					"width": 200,
 					"height": 24,
-					"text": "Emoji/surrogate (bold \ud83d\ude00):"
+					"text": "Emoji/surrogate (bold 😀):"
 				},
 				"st_emoji": {
 					"type": "input",
@@ -425,11 +422,10 @@
 					"top": 160,
 					"width": 360,
 					"height": 24,
-					"dataSource": "Form.st_emoji",
+					"dataSource": "Form:C1466.st_emoji",
 					"styledText": true,
 					"enterable": false
 				},
-
 				"Label_EmojiReport": {
 					"type": "text",
 					"left": 20,
@@ -444,10 +440,11 @@
 					"top": 194,
 					"width": 360,
 					"height": 20,
-					"dataSource": "Form.st_emoji_report",
+					"dataSource": "Form:C1466.st_emoji_report",
 					"enterable": false
 				}
 			}
 		}
-	]
+	],
+	"geometryStamp": 2
 }
