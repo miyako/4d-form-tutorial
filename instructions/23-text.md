@@ -1,8 +1,8 @@
 ---
 object: "text"
 json_type: "text"
-keywords: ["text", "static text", "label", "title", "fontTheme", "textAngle", "rotation", "dynamic reference"]
-summary: "Static text object for labels, titles, and instructions. Supports rotation, font themes, border styles, and dynamic references. No events, no method, no data source — purely a display element."
+keywords: ["text", "static text", "label", "title", "fontTheme", "textAngle", "rotation", "dynamic reference", "XLIFF", "SET TABLE TITLES", "OBJECT SET TITLE"]
+summary: "Static text — a read-only counterpart to input with plain-text data source. Supports rotation, font themes, border styles, XLIFF references, embedded field/variable values, and dynamic table/field name display aliases. No events, no method, no data source."
 requires: ["01-form-concepts.md", "98-tool4d-cli.md", "22-property-reference.md"]
 ---
 
@@ -12,9 +12,18 @@ Reference: https://developer.4d.com/docs/FormObjects/text
 
 ## Purpose
 
-A text object displays static written content — labels, titles, instructions, section headings. It is the simplest form object: no events, no method, no data source. It cannot receive focus, cannot be edited, and does not participate in the tab order.
+A text object is essentially a **read-only counterpart to the input object** with
+a plain-text data source. It is often referred to as "static text," but the content
+is not truly static — it supports XLIFF references, embedded field/variable values,
+dynamic table/field name aliases, and runtime title changes via `OBJECT SET TITLE`.
 
-Despite being "static," text objects can include **dynamic references** that resolve at runtime (see below).
+Text objects display labels, titles, instructions, and section headings. They have
+no events, no method, and no data source binding. They cannot receive focus, cannot
+be edited, and do not participate in the tab order.
+
+Like input (non-enterable), text objects support `textAngle` for orientation.
+Unlike input, text objects support a special syntax for embedding table and field
+names that respect display aliases (see Dynamic References below).
 
 ## Basic Definition
 
@@ -132,11 +141,75 @@ Rotation can also be set at runtime with `OBJECT SET TEXT ORIENTATION`.
 
 ## Dynamic References in Static Text
 
-Reference: https://doc.4d.com/4Dv20/4D/20.2/Using-references-in-static-text.300-6750154.en.html
+Reference (legacy URL, may be retired):
+https://doc.4d.com/4Dv20/4D/20.2/Using-references-in-static-text.300-6750154.en.html
 
-Although text objects have no data source, their `text` property can contain **dynamic references** that resolve at runtime. These are expressions enclosed in special delimiters that 4D evaluates when the form is displayed.
+The `text` property of a text object can contain **dynamic references** that 4D
+evaluates when the form is displayed or printed. Three kinds of embedding are
+supported: field/variable values, table/field display names, and XLIFF resources.
 
-This makes text objects useful for displaying computed values (dates, user names, record counts) in label-style layouts without needing an input object.
+In the Form editor, **Object > Show Name / Show Resource** toggles between
+displaying the raw reference syntax and the resolved values.
+
+### Embedded Field and Variable Values
+
+Enclose a field or variable name in `< >` delimiters:
+
+- **Field (current table)**: `<FieldName>`
+- **Field (other table)**: `<[TableName]FieldName>`
+- **Variable**: `<VariableName>`
+
+When displayed, 4D substitutes the current value. You can append a display format
+after a semicolon:
+
+```
+<vTotal;$###,##0.00>
+```
+
+This is useful for mail-merge documents and report headers/footers.
+
+### Embedded Table and Field Names (Display Aliases)
+
+This is unique to text objects — input objects do **not** support this syntax.
+
+Use `<?...>` to embed the **name** (not value) of a table or field. These names
+update automatically when you rename tables/fields in the Structure editor, or
+when `SET TABLE TITLES` / `SET FIELD TITLES` commands set display aliases:
+
+| Syntax | Meaning |
+|--------|---------|
+| `<?[TableName]>` | Table name by name |
+| `<?[2]>` | Table name by creation order (2nd table created) |
+| `<?[TableName]FieldName>` | Field name (qualified by table name) |
+| `<?[2]3>` | Field name by creation order (table 2, field 3) |
+| `<?3>` | Field name by creation order (current table, field 3) |
+
+Since the numbers correspond to creation order (not current position), you can
+safely add or rename tables and fields without breaking references.
+
+**Key commands for display aliases:**
+- `SET TABLE TITLES` — https://developer.4d.com/docs/commands/set-table-titles
+- `SET FIELD TITLES` — https://developer.4d.com/docs/commands/set-field-titles
+
+These are particularly useful for **translating** the structure names visible to
+users (e.g. showing "Clients" instead of "Customers" depending on locale).
+
+### XLIFF References
+
+XLIFF (XML-based) references can also appear in text objects, as well as in menu
+and button labels. These are part of 4D's built-in localization architecture.
+
+### When to Use Input Instead
+
+For **expression-based dynamic content** like:
+
+```
+Form.firstName+" "+Form.lastName
+```
+
+it is easier to use an **input** object (non-enterable) bound to that expression.
+Text objects cannot evaluate arbitrary 4D expressions — they only support the
+specific embedding syntaxes described above.
 
 ## Visual Display Properties
 
@@ -184,27 +257,37 @@ Although text objects have no events, several commands can modify them at runtim
 
 | Command | Purpose |
 |---------|---------|
-| `OBJECT SET VALUE` | Change the displayed text |
+| `OBJECT SET TITLE` | Change the displayed text (ref: https://developer.4d.com/docs/commands/object-set-title). Targets static text areas, buttons, checkboxes, radio buttons, list box headers, group boxes |
+| `OBJECT SET TEXT ORIENTATION` | Change rotation angle (ref: https://developer.4d.com/docs/commands/object-set-text-orientation) |
 | `OBJECT SET FONT` | Change font family |
 | `OBJECT SET FONT SIZE` | Change font size |
 | `OBJECT SET FONT STYLE` | Change bold/italic |
 | `OBJECT SET COLOR` | Change text color |
 | `OBJECT SET RGB COLORS` | Change text and/or background color |
-| `OBJECT SET TEXT ORIENTATION` | Change rotation angle |
 | `OBJECT SET VISIBLE` | Show/hide |
 | `OBJECT MOVE` | Reposition |
 
 These commands target text objects by name (using `*` and the object name string).
 
+**Multi-line titles**: use `\\` in the title string as a line separator
+(in code editor: `"Line 1\\\\Line 2"`).
+
+```4d
+// Change a label at runtime
+OBJECT SET TITLE(*; "myLabel"; "Updated: "+String(Current date))
+```
+
 ## Text vs. Input for Labels
 
 | Need | Use |
 |------|-----|
-| Static label with no interaction | **Text** object |
+| Simple label with no interaction | **Text** object |
+| Label showing embedded field/variable values | **Text** with `<FieldName>` or `<VariableName>` syntax |
+| Label showing structure names (with aliases) | **Text** with `<?[2]>` / `<?[2]3>` syntax |
+| Label with expression-based dynamic content (e.g. `Form.firstName+" "+Form.lastName`) | **Input** with `enterable: false` — easier than text for arbitrary expressions |
 | Label that updates from a data source | **Input** with `enterable: false` |
 | Label that responds to clicks | **Button** (flat style) or **Input** with method |
 | Label with styled text (bold/italic ranges) | **Input** with `styledText: true` |
-| Dynamic computed value in a label | **Text** with dynamic reference, or **Input** bound to expression |
 
 ## CLI Verification Notes
 
@@ -229,5 +312,5 @@ These commands target text objects by name (using `*` and the object name string
 always set `stroke` to a visible color (e.g. `"#000000"` for black).
 
 The `dialog_screenshot` pattern (Pattern 4 in `98-tool4d-cli.md`) works for text
-objects — if runtime code changes text via `OBJECT SET VALUE`, the screenshot captures
-the updated content (provided `stroke` is set).
+objects — if runtime code changes text via `OBJECT SET TITLE`, the screenshot
+captures the updated content (provided `stroke` is set).
