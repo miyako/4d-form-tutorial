@@ -244,6 +244,41 @@ $params:=Split string($userParamValue; ":")
 
 This allows a single generic method (like `run_project_form`) to test any form/page combination.
 
+### Pattern 4: Runtime Screenshot with `dialog_screenshot`
+
+Combines DIALOG (runs On Load code) + FORM SCREENSHOT (captures rendered state) in one CLI call:
+
+```bash
+/path/to/4D --project path/to/project.4DProject \
+  --startup-method dialog_screenshot \
+  --user-param "FormName:Page:/RESOURCES/output.png" \
+  --dataless
+```
+
+**Architecture**: `dialog_screenshot` → opens DIALOG with `*` (non-blocking) → `CALL FORM(goto_page_then_screenshot)` → `CALL FORM(screenshot_and_accept)`.
+
+#### Form Rendering Cycle
+
+4D defers form rendering until the end of each execution cycle (form event or `CALL FORM` execution). This means `FORM GOTO PAGE` and `FORM SCREENSHOT` in the **same** execution cycle captures the **old** page state.
+
+**Solution**: chain `CALL FORM` calls. Each `CALL FORM` is a separate execution cycle:
+
+1. **Cycle 1** (`goto_page_then_screenshot`): calls `FORM GOTO PAGE($page)`, then issues `CALL FORM(screenshot_and_accept)`. Page rendering happens at the end of this cycle.
+2. **Cycle 2** (`screenshot_and_accept`): calls `FORM SCREENSHOT` — now captures the correctly rendered page. Then `ACCEPT` + `QUIT 4D`.
+
+```4d
+// goto_page_then_screenshot — called via CALL FORM
+FORM GOTO PAGE(Form.__page)
+// Chain: screenshot runs in the NEXT cycle, after this cycle renders
+CALL FORM(Current form window; Formula(screenshot_and_accept))
+```
+
+This pattern also applies to any scenario where you need to change form state and then capture it — the change and the observation must be in **separate execution cycles**.
+
+#### Where to Place `QUIT 4D`
+
+With `DIALOG($form; *)` (non-blocking), the process stays alive because the dialog is open. Place `QUIT 4D` inside the **last chained method** (after `ACCEPT`), not in the startup method — otherwise the process may exit before the chained `CALL FORM` executes.
+
 ### Tips
 
 - **`--dataless`**: Always pass when the project may be open elsewhere (avoids lock conflicts)
