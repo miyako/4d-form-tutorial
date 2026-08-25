@@ -164,7 +164,7 @@ Form.listRef:=$list
 
 ```4d
 // In On Unload
-If (Form.listRef#0)
+If (Is a list(Form.listRef))
   CLEAR LIST(Form.listRef; *)  // * clears sublists too
   Form.listRef:=0
 End if
@@ -226,6 +226,7 @@ Reference: https://developer.4d.com/docs/commands/theme/Hierarchical-Lists
 | `Copy list` | Duplicate a list |
 | `Load list` | Load a design-time choice list |
 | `CLEAR LIST` | Free memory. Pass `*` to also clear sublists |
+| `Is a list` | Returns `True` if the value is a valid `ListRef`. Use before `CLEAR LIST` (ref: https://developer.4d.com/docs/commands/is-a-list) |
 | `SAVE LIST` | Save list back to List editor |
 | `BLOB to list` / `LIST TO BLOB` | Serialize/deserialize to BLOB |
 
