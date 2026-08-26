@@ -25,13 +25,41 @@
 		},
 		{
 			"objects": {
+				"toolSelect": {
+					"type": "checkbox",
+					"text": "Select",
+					"style": "toolbar",
+					"top": 20,
+					"left": 20,
+					"width": 80,
+					"height": 24,
+					"dataSource": "Form.toolSelect",
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/toolSelect.4dm"
+				},
+				"toolLine": {
+					"type": "checkbox",
+					"text": "Line",
+					"style": "toolbar",
+					"top": 20,
+					"left": 104,
+					"width": 80,
+					"height": 24,
+					"dataSource": "Form.toolLine",
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/toolLine.4dm"
+				},
 				"canvas": {
 					"type": "input",
 					"left": 20,
-					"top": 20,
+					"top": 52,
 					"width": 500,
 					"height": 400,
-					"dataSource": "Form:C1466.SVG",
+					"dataSource": "Form.SVG",
 					"dataSourceTypeHint": "picture",
 					"enterable": false,
 					"focusable": true,
