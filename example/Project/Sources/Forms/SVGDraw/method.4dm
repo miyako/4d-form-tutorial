@@ -21,6 +21,15 @@ Case of
 		Form.lineCount:=0
 		Form.polyPoints:=Null
 		
+		// Detect stroke color from CSS (adapts to dark/light mode)
+		var $fg; $bg : Integer
+		OBJECT GET RGB COLORS(*; "refStroke"; $fg; $bg)
+		var $r; $g; $b : Integer
+		$r:=($bg >> 16) & 0x0000FF
+		$g:=($bg >> 8) & 0x0000FF
+		$b:=$bg & 0x0000FF
+		Form.strokeColor:="rgb("+String($r)+","+String($g)+","+String($b)+")"
+		
 		// Default tool: select
 		Form.toolSelect:=1
 		Form.toolLine:=0
@@ -78,7 +87,7 @@ Case of
 						"y1"; Form.startY; \
 						"x2"; $x2Str; \
 						"y2"; $y2Str; \
-						"stroke"; "black"; \
+						"stroke"; Form.strokeColor; \
 						"stroke-width"; "2")
 					
 					SVG EXPORT TO PICTURE(Form.dom; $pic)
@@ -131,7 +140,7 @@ Case of
 						"width"; String($rw); \
 						"height"; String($rh); \
 						"fill"; "none"; \
-						"stroke"; "black"; \
+						"stroke"; Form.strokeColor; \
 						"stroke-width"; "2")
 					
 					SVG EXPORT TO PICTURE(Form.dom; $pic)
@@ -187,7 +196,7 @@ Case of
 						"rx"; String($erx); \
 						"ry"; String($ery); \
 						"fill"; "none"; \
-						"stroke"; "black"; \
+						"stroke"; Form.strokeColor; \
 						"stroke-width"; "2")
 					
 					SVG EXPORT TO PICTURE(Form.dom; $pic)
@@ -243,7 +252,7 @@ Case of
 					
 					var $i : Integer
 					For ($i; 1; Form.lineCount)
-						SVG SET ATTRIBUTE(*; "canvas"; "line"+String($i); "stroke"; "black")
+						SVG SET ATTRIBUTE(*; "canvas"; "line"+String($i); "stroke"; Form.strokeColor)
 					End for
 					
 					For ($i; 1; Size of array($ids))

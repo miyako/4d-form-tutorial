@@ -22,7 +22,7 @@ Case of
 					"y1"; Form.startY; \
 					"x2"; Form.startX; \
 					"y2"; Form.startY; \
-					"stroke"; "black"; \
+					"stroke"; Form.strokeColor; \
 					"stroke-width"; "2")
 				
 				SVG EXPORT TO PICTURE(Form.dom; $pic)
@@ -40,7 +40,7 @@ Case of
 					"width"; "0"; \
 					"height"; "0"; \
 					"fill"; "none"; \
-					"stroke"; "black"; \
+					"stroke"; Form.strokeColor; \
 					"stroke-width"; "2")
 				
 				SVG EXPORT TO PICTURE(Form.dom; $pic)
@@ -58,7 +58,7 @@ Case of
 					"rx"; "0"; \
 					"ry"; "0"; \
 					"fill"; "none"; \
-					"stroke"; "black"; \
+					"stroke"; Form.strokeColor; \
 					"stroke-width"; "2")
 				
 				SVG EXPORT TO PICTURE(Form.dom; $pic)
@@ -79,7 +79,7 @@ Case of
 						"id"; "currentPolyline"; \
 						"points"; Form.polyPoints; \
 						"fill"; "none"; \
-						"stroke"; "black"; \
+						"stroke"; Form.strokeColor; \
 						"stroke-width"; "2")
 					
 					// Semi-transparent tracking line from last point to mouse
@@ -91,7 +91,7 @@ Case of
 						"y1"; Form.startY; \
 						"x2"; Form.startX; \
 						"y2"; Form.startY; \
-						"stroke"; "black"; \
+						"stroke"; Form.strokeColor; \
 						"stroke-opacity"; "0.3"; \
 						"stroke-width"; "2")
 					
@@ -147,7 +147,7 @@ Case of
 					"id"; "polyline"+String(Form.lineCount); \
 					"points"; Form.polyPoints; \
 					"fill"; "none"; \
-					"stroke"; "black"; \
+					"stroke"; Form.strokeColor; \
 					"stroke-width"; "2")
 				
 				Form.polyPoints:=Null

@@ -115,6 +115,16 @@
 						"onDoubleClick"
 					],
 					"method": "ObjectMethods/canvas.4dm"
+				},
+				"refStroke": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 1,
+					"height": 1,
+					"class": "ref-stroke",
+					"stroke": "transparent",
+					"visibility": "hidden"
 				}
 			}
 		}

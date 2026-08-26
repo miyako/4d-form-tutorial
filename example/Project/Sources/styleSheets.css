@@ -12,10 +12,16 @@ button {
 	button {
 		stroke: #000080;
 	}
+	.ref-stroke {
+		fill: #000000;
+	}
 }
 
 @media (prefers-color-scheme: dark) {
 	button {
 		stroke: #7FFFD4;
+	}
+	.ref-stroke {
+		fill: #E0E0E0;
 	}
 }
