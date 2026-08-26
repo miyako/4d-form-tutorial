@@ -246,25 +246,14 @@ Some commands were renamed for consistency. The old names still work if tokens a
 
 #### 4D SVG Rendering Engine
 
-4D uses a **proprietary SVG rendering engine**, not a web browser. It is less powerful than browser SVG in some ways but supports some SVG Tiny 1.2 features not available in standard SVG 1.1/2.0.
+4D uses a **proprietary SVG rendering engine** (not a web browser). See `26-svg-rendering.md` for full element/attribute support matrix. Key points:
 
-**Not supported:**
-- SMIL animation (`<animate>`, `<animateTransform>`, etc.)
-- Embedded JavaScript (`<script>`)
-- CSS `rgba()` color notation (use `fill-opacity`/`stroke-opacity` instead)
-
-**Instead of animation/scripting**, use `SVG SET ATTRIBUTE` to update image attributes programmatically from 4D code (rendering tree for real-time feedback, DOM for persistence — see `25-picture-input.md`).
-
-**SVG Tiny 1.2 features supported:**
-
-| Feature | Element/Property | Reference |
-|---------|-----------------|-----------|
-| Block of text (auto-wrapping) | `<textArea>`, `<tbreak>` | https://www.w3.org/TR/SVGTiny12/text.html#TextAreaElement |
-| Line break within textArea | `<tbreak>` | https://www.w3.org/TR/SVGTiny12/text.html#tbreakElement |
-| Canvas background fill | `viewport-fill` property | https://www.w3.org/TR/SVGTiny12/painting.html#viewport-fill-property |
-| Canvas background opacity | `viewport-fill-opacity` property | https://www.w3.org/TR/SVGTiny12/painting.html#viewport-fill-opacity-property |
-
-`<textArea>` is particularly useful — unlike standard SVG `<text>` which requires manual positioning of each line, `<textArea>` auto-wraps text within a bounding box (set `width`/`height` attributes). Use `<tbreak/>` for explicit line breaks within a `<textArea>`.
+- **No SMIL/JS** — use `SVG SET ATTRIBUTE` for animation/dynamic updates
+- **No `rgba()`** — use `rgb()` + `fill-opacity`/`stroke-opacity`
+- **SVG Tiny 1.2 extras**: `<textArea>`, `<tbreak>`, `viewport-fill`, `viewport-fill-opacity`, `text-align`, `display-align`
+- **4D reserved attributes**: `4D-text` (read/write text content), `4D-bringToFront`, `4D-isOfClass-{names}`
+- Filters supported: `feGaussianBlur`, `feColorMatrix`, `feOffset`, `feBlend`, `feComposite`
+- CSS2 styles supported in SVG (selectors, `!important`, `@media`, `@import`)
 - **`var` declarations are method-scoped**, not block-scoped. Never redeclare the same variable in different `Case of` branches — declare once at the top or in the first branch that uses it.
 
 ### Other Form Object Types
