@@ -68,7 +68,10 @@ Case of
 			: (Form.tool="polyline")
 				// POLYLINE TOOL: add a point on each click
 				If (Form.polyPoints=Null)
+					// First point: start new polyline + tracking line
 					Form.polyPoints:=Form.startX+","+Form.startY
+					Form.polyLastX:=Form.startX
+					Form.polyLastY:=Form.startY
 					
 					var $pl : Text
 					$pl:=DOM Create XML element(Form.dom; "polyline")
@@ -79,12 +82,32 @@ Case of
 						"stroke"; "black"; \
 						"stroke-width"; "2")
 					
+					// Semi-transparent tracking line from last point to mouse
+					var $tl : Text
+					$tl:=DOM Create XML element(Form.dom; "line")
+					DOM SET XML ATTRIBUTE($tl; \
+						"id"; "trackLine"; \
+						"x1"; Form.startX; \
+						"y1"; Form.startY; \
+						"x2"; Form.startX; \
+						"y2"; Form.startY; \
+						"stroke"; "black"; \
+						"stroke-opacity"; "0.3"; \
+						"stroke-width"; "2")
+					
 					SVG EXPORT TO PICTURE(Form.dom; $pic)
 					Form.SVG:=$pic
 					DOM REMOVE XML ELEMENT($pl)
+					DOM REMOVE XML ELEMENT($tl)
+					
+					SET TIMER(-1)
 				Else
+					// Subsequent point: append and update tracking origin
 					Form.polyPoints:=Form.polyPoints+" "+Form.startX+","+Form.startY
+					Form.polyLastX:=Form.startX
+					Form.polyLastY:=Form.startY
 					SVG SET ATTRIBUTE(*; "canvas"; "currentPolyline"; "points"; Form.polyPoints)
+					SVG SET ATTRIBUTE(*; "canvas"; "trackLine"; "x1"; Form.startX; "y1"; Form.startY)
 				End if
 				
 			Else
@@ -108,8 +131,8 @@ Case of
 				DOM REMOVE XML ELEMENT($rect)
 		End case
 		
-		// Start timer for continuous mouse tracking (except polyline which tracks per-click)
-		If (Form.tool#"polyline")
+		// Start timer for continuous mouse tracking (polyline starts its own)
+		If ((Form.tool#"polyline") | (Form.polyPoints=Null))
 			SET TIMER(-1)
 		End if
 		
@@ -128,6 +151,7 @@ Case of
 					"stroke-width"; "2")
 				
 				Form.polyPoints:=Null
+				SET TIMER(0)
 				SVG EXPORT TO PICTURE(Form.dom; $pic)
 				Form.SVG:=$pic
 			End if

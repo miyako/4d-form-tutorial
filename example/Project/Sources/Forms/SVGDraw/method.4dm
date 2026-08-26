@@ -50,15 +50,29 @@ Case of
 		
 		Case of
 			: (Form.tool="line")
-				// LINE TOOL
+				// LINE TOOL — Shift constrains to horizontal/vertical
+				var $lx; $ly : Integer
+				$lx:=$mouseX
+				$ly:=$mouseY
+				If (Shift down)
+					var $adx; $ady : Integer
+					$adx:=Abs($mouseX-Num(Form.startX))
+					$ady:=Abs($mouseY-Num(Form.startY))
+					If ($adx>=$ady)
+						$ly:=Num(Form.startY)
+					Else
+						$lx:=Num(Form.startX)
+					End if
+				End if
+				
 				If (Bool($mouseB))
-					SVG SET ATTRIBUTE(*; "canvas"; "currentLine"; "x2"; String($mouseX); "y2"; String($mouseY))
+					SVG SET ATTRIBUTE(*; "canvas"; "currentLine"; "x2"; String($lx); "y2"; String($ly))
 				Else
 					SET TIMER(0)
 					
 					var $x2Str; $y2Str : Text
-					$x2Str:=String($mouseX)
-					$y2Str:=String($mouseY)
+					$x2Str:=String($lx)
+					$y2Str:=String($ly)
 					
 					var $line : Text
 					$line:=DOM Create XML element(Form.dom; "line")
@@ -77,23 +91,32 @@ Case of
 				End if
 				
 			: (Form.tool="rect")
-				// RECT TOOL
+				// RECT TOOL — Shift constrains to square
 				var $rx; $ry; $rw; $rh : Integer
 				var $sXi; $sYi : Integer
 				$sXi:=Num(Form.startX)
 				$sYi:=Num(Form.startY)
+				$rw:=Abs($mouseX-$sXi)
+				$rh:=Abs($mouseY-$sYi)
+				
+				If (Shift down)
+					If ($rw>$rh)
+						$rh:=$rw
+					Else
+						$rw:=$rh
+					End if
+				End if
+				
 				If ($mouseX<$sXi)
-					$rx:=$mouseX
+					$rx:=$sXi-$rw
 				Else
 					$rx:=$sXi
 				End if
 				If ($mouseY<$sYi)
-					$ry:=$mouseY
+					$ry:=$sYi-$rh
 				Else
 					$ry:=$sYi
 				End if
-				$rw:=Abs($mouseX-$sXi)
-				$rh:=Abs($mouseY-$sYi)
 				
 				If (Bool($mouseB))
 					SVG SET ATTRIBUTE(*; "canvas"; "currentRect"; \
@@ -121,15 +144,35 @@ Case of
 				End if
 				
 			: (Form.tool="ellipse")
-				// ELLIPSE TOOL
+				// ELLIPSE TOOL — Shift constrains to circle
 				var $ecx; $ecy; $erx; $ery : Integer
 				var $esXi; $esYi : Integer
 				$esXi:=Num(Form.startX)
 				$esYi:=Num(Form.startY)
-				$ecx:=($esXi+$mouseX)/2
-				$ecy:=($esYi+$mouseY)/2
 				$erx:=Abs($mouseX-$esXi)/2
 				$ery:=Abs($mouseY-$esYi)/2
+				
+				If (Shift down)
+					If ($erx>$ery)
+						$ery:=$erx
+					Else
+						$erx:=$ery
+					End if
+				End if
+				
+				var $emx; $emy : Integer
+				If ($mouseX<$esXi)
+					$emx:=$esXi-($erx*2)
+				Else
+					$emx:=$mouseX
+				End if
+				If ($mouseY<$esYi)
+					$emy:=$esYi-($ery*2)
+				Else
+					$emy:=$mouseY
+				End if
+				$ecx:=($esXi+$emx)/2
+				$ecy:=($esYi+$emy)/2
 				
 				If (Bool($mouseB))
 					SVG SET ATTRIBUTE(*; "canvas"; "currentEllipse"; \
@@ -155,6 +198,23 @@ Case of
 					SVG EXPORT TO PICTURE(Form.dom; $pic)
 					Form.SVG:=$pic
 				End if
+				
+			: (Form.tool="polyline")
+				// POLYLINE TOOL: update tracking line — Shift constrains to H/V
+				var $plx; $ply : Integer
+				$plx:=$mouseX
+				$ply:=$mouseY
+				If (Shift down)
+					var $pdx; $pdy : Integer
+					$pdx:=Abs($mouseX-Num(Form.polyLastX))
+					$pdy:=Abs($mouseY-Num(Form.polyLastY))
+					If ($pdx>=$pdy)
+						$ply:=Num(Form.polyLastY)
+					Else
+						$plx:=Num(Form.polyLastX)
+					End if
+				End if
+				SVG SET ATTRIBUTE(*; "canvas"; "trackLine"; "x2"; String($plx); "y2"; String($ply))
 				
 			Else
 				// SELECT TOOL
