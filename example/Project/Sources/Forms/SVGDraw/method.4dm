@@ -9,12 +9,7 @@ Case of
 		// Create a blank SVG document
 		var $dom : Text
 		$dom:=DOM Create XML Ref("svg"; "http://www.w3.org/2000/svg")
-		DOM SET XML ATTRIBUTE($dom; "width"; "500"; "height"; "400"; "xmlns"; "http://www.w3.org/2000/svg")
-		
-		// Add a white background rectangle
-		var $bg : Text
-		$bg:=DOM Create XML element($dom; "rect")
-		DOM SET XML ATTRIBUTE($bg; "id"; "background"; "width"; "100%"; "height"; "100%"; "fill"; "white")
+		DOM SET XML ATTRIBUTE($dom; "width"; "500"; "height"; "400"; "xmlns"; "http://www.w3.org/2000/svg"; "viewport-fill"; "white"; "viewport-fill-opacity"; "0")
 		
 		// Export to picture and assign to form data source
 		var $pic : Picture
@@ -252,7 +247,7 @@ Case of
 					End for
 					
 					For ($i; 1; Size of array($ids))
-						If ($ids{$i}#"background") & ($ids{$i}#"selRect")
+						If ($ids{$i}#"selRect")
 							SVG SET ATTRIBUTE(*; "canvas"; $ids{$i}; "stroke"; "red")
 						End if
 					End for
