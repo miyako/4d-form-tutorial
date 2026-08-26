@@ -41,7 +41,8 @@ Case of
 				"y"; Form.startY; \
 				"width"; "0"; \
 				"height"; "0"; \
-				"fill"; "rgba(0,120,255,0.1)"; \
+				"fill"; "blue"; \
+				"fill-opacity"; "0.1"; \
 				"stroke"; "blue"; \
 				"stroke-width"; "1"; \
 				"stroke-dasharray"; "4,4")
