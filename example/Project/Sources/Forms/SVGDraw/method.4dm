@@ -28,7 +28,7 @@ Case of
 	: ($event.code=On Timer)
 		// Track mouse position during drawing
 		var $mouseX; $mouseY; $mouseB : Integer
-		GET MOUSE($mouseX; $mouseY; $mouseB; *)
+		MOUSE POSITION($mouseX; $mouseY; $mouseB; *)
 		
 		// Convert screen coords to form-relative
 		CONVERT COORDINATES($mouseX; $mouseY; XY Screen; XY Current form)

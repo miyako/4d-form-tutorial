@@ -86,7 +86,7 @@ Reference: https://developer.4d.com/docs/Events/onTimer
 The `On Mouse Up` event only fires while the pointer is within the picture
 object's bounds. If the user drags outside the object, `On Mouse Up` may not
 fire. For applications where the drag must continue even outside the object
-(e.g. a drawing tool), use **`On Timer`** with `SET TIMER` + `GET MOUSE` /
+(e.g. a drawing tool), use **`On Timer`** with `SET TIMER` + `MOUSE POSITION` /
 `MOUSE POSITION` instead:
 
 ```4d
@@ -94,7 +94,7 @@ fire. For applications where the drag must continue even outside the object
 Case of
   : (FORM Event.code=On Timer)
     var $mouseX; $mouseY; $mouseB : Integer
-    GET MOUSE($mouseX; $mouseY; $mouseB; *)
+    MOUSE POSITION($mouseX; $mouseY; $mouseB; *)
     // Convert screen coords to form-relative
     CONVERT COORDINATES($mouseX; $mouseY; XY Screen; XY Current form)
     // Subtract object origin for object-relative coords
@@ -127,7 +127,7 @@ End case
 | Approach | Tracks outside object | Requires Draggable=false | Complexity |
 |----------|----------------------|--------------------------|------------|
 | `On Mouse Up` | No | Yes | Low |
-| `On Timer` + `GET MOUSE` | **Yes** | No | Medium |
+| `On Timer` + `MOUSE POSITION` | **Yes** | No | Medium |
 
 The svgarea project uses `On Timer` for exactly this reason — the user can drag
 an object's handle outside the picture area and the tracking continues smoothly.
@@ -195,7 +195,7 @@ implemented as a 4D component (subform). Key architectural decisions:
 |-------|---------------|
 | `Area` | Holds DOM reference, document dimensions, grid; exports picture |
 | `Event` | Tracks interaction state: isResizing, isDrawing, isMoving, isSelecting; determines current tool; identifies clicked element via SVG hit-testing |
-| `Timer` | Wraps `SET TIMER(-1)` / `GET MOUSE` / `CONVERT COORDINATES`; polls mouse position and button state each tick |
+| `Timer` | Wraps `SET TIMER(-1)` / `MOUSE POSITION` / `CONVERT COORDINATES`; polls mouse position and button state each tick |
 | `Selection` | Tracks which SVG element IDs are currently selected |
 | `Objects` | Registry of all user-created element IDs |
 
@@ -209,7 +209,7 @@ On Clicked (object method "area.4dm"):
   4. Dispatch based on tool + state (select/draw/resize/move)
 
 On Timer (form method):
-  1. timer.update() — GET MOUSE, CONVERT COORDINATES, check button
+  1. timer.update() — MOUSE POSITION, CONVERT COORDINATES, check button
   2. If button still held:
      - SVG SET ATTRIBUTE(*; "area"; ...) — rendering tree only (fast)
   3. If button released:
@@ -253,5 +253,5 @@ on every finalized interaction.
 |------|----------|
 | Simple clickable map (no drag) | `On Clicked` + `SVG Find element ID by coordinates` |
 | Drag within object bounds | `On Clicked` → `On Mouse Move` → `On Mouse Up` + `Is waiting mouse up` guard |
-| Drag that extends beyond object | `On Clicked` + `SET TIMER(-1)` + `GET MOUSE` in `On Timer` |
+| Drag that extends beyond object | `On Clicked` + `SET TIMER(-1)` + `MOUSE POSITION` in `On Timer` |
 | Full SVG editor (draw/move/resize) | Timer-based tracking + two-tree pattern (rendering for feedback, DOM for commit) |
