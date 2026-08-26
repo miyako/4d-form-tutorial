@@ -351,7 +351,7 @@ controls in-place text editing.
 | Command | Purpose |
 |---------|---------|
 | `APPEND TO LIST` | Add item at end. Optional sublist + expanded params |
-| `INSERT IN LIST` | Insert item at specific position |
+| `INSERT IN LIST` | Insert item **before** a given itemRef (not position!) |
 | `DELETE FROM LIST` | Remove item by position or reference |
 
 `APPEND TO LIST` signature:
@@ -359,15 +359,35 @@ controls in-place text editing.
 APPEND TO LIST(list; itemText; itemRef {; sublist; expanded})
 ```
 
+`INSERT IN LIST` signature:
+```
+INSERT IN LIST(list; beforeItemRef; itemText; itemRef {; sublist; expanded})
+```
+**Important**: the second parameter is an **item reference number**, not a position.
+The new item is inserted before the item with that reference.
+
+`DELETE FROM LIST` signature:
+```
+DELETE FROM LIST(list; itemRef {; *})
+```
+- Without trailing `*`: sublists are **detached but kept in memory** (save the
+  sublist reference beforehand to re-use it)
+- With trailing `*`: sublists are **deleted from memory** permanently
+
 ### Getting and Setting Items
 
 | Command | Purpose |
 |---------|---------|
-| `GET LIST ITEM` | Get text, ref, sublist, expanded state of an item |
+| `GET LIST ITEM` | Get ref, text, sublist, expanded state of an item |
 | `SET LIST ITEM` | Change text, ref, sublist, expanded state |
 | `GET LIST ITEM PROPERTIES` | Get enterable, style, icon, color |
 | `SET LIST ITEM PROPERTIES` | Set enterable, style, icon, color |
 | `SET LIST ITEM FONT` | Set font for a specific item |
+
+`GET LIST ITEM` signature — **note ref comes before text**:
+```
+GET LIST ITEM(list; itemPos; var itemRef; var itemText {; var sublist; var expanded})
+```
 | `SET LIST ITEM ICON` | Set icon for a specific item |
 | `Count list items` | Count items (optionally only visible/expanded) |
 | `List item position` | Get position of item by reference |
@@ -488,9 +508,60 @@ accept CSS strings — in `lists.json`, 4D converts for you.
 
 | Command | Purpose |
 |---------|---------|
-| `Selected list items` | Get selected item(s) — returns position or fills array |
+| `Selected list items` | Get selected item(s) — returns position of first selected |
 | `SELECT LIST ITEMS BY POSITION` | Select by position |
 | `SELECT LIST ITEMS BY REFERENCE` | Select by reference |
+
+`Selected list items` signature:
+```
+Selected list items({*;} list {; itemsArray {; *}}) → Integer
+```
+- Returns position of the **first** selected item (0 if none)
+- With `itemsArray`: fills array with all selected positions
+- With trailing `*`: fills array with **item references** instead of positions
+- Use the `{*; objectName}` form to read selection from the form object representation
+
+### Drag-and-Drop Reordering
+
+Hierarchical lists support drag-and-drop for item reordering. The key events:
+
+| Event | Role |
+|-------|------|
+| `On Begin Drag Over` | Serialize dragged item to pasteboard |
+| `On Drag Over` | Accept/reject drop (`$0:=0` accept, `$0:=-1` reject) |
+| `On Drop` | Perform the move |
+
+**Drop position**: `Drop position` returns the position of the item the drop
+lands on, or -1 if dropped below the last item.
+
+**Implementation pattern for item move:**
+
+```4d
+// On Begin Drag Over: serialize source item
+$context:=New object("itemRef"; $itemRef; "itemText"; $itemText)
+VARIABLE TO BLOB($context; $data)
+APPEND DATA TO PASTEBOARD("private.myapp.list.item"; $data)
+
+// On Drop: move the item
+$dropPos:=Drop position
+// 1. Get source sublist BEFORE delete (preserve children)
+GET LIST ITEM($listRef; $srcPos; $tmpRef; $tmpText; $subList; $expanded)
+// 2. Get target item's ref BEFORE delete (INSERT IN LIST uses ref, not position)
+GET LIST ITEM($listRef; $dropPos; $targetRef; $targetText)
+// 3. Delete without trailing * (keeps sublist in memory)
+DELETE FROM LIST($listRef; $srcItemRef)
+// 4. Insert before target (or APPEND if dropped after last)
+INSERT IN LIST($listRef; $targetRef; $srcText; $srcItemRef)
+// 5. Re-attach sublist
+If (Is a list($subList))
+  SET LIST ITEM($listRef; $srcItemRef; $srcText; $srcItemRef; $subList; $expanded)
+End if
+```
+
+**Direction matters**: when moving DOWN, the source is above the target. After
+deleting the source, the target shifts up. To place the item at the target's
+original position, insert before the item at `dropPosition+1` (or APPEND if
+it was the last item).
 
 ### In-Place Editing
 

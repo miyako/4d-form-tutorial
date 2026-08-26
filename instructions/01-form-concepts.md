@@ -599,6 +599,66 @@ Reference: https://developer.4d.com/docs/commands/dialog
 - With `formClass`: the instance is scoped to the form's lifetime. It is created on load and destroyed on unload.
 - With `DIALOG($form)`: **you** control the lifecycle. The instance exists before and after `DIALOG`, so you can read its state after the form closes. It is cleared when the last reference to it goes out of scope.
 
+### Property Declarations and Compiler Warnings
+
+When a form uses `formClass`, the compiler checks that all `Form.propertyName`
+accesses correspond to declared properties. Undeclared properties generate
+**"Undeclared property 'xxx' used"** warnings.
+
+Fix by adding `property` declarations to the class:
+```4d
+property txt1 : Text
+property pic1 : Picture
+property count : Integer
+
+Class constructor
+  This.count:=0
+```
+
+Reference: https://developer.4d.com/docs/Concepts/classes#property
+
+## Variable Declarations
+
+All local variables should be explicitly declared with `var`:
+```4d
+var $name : Text
+var $count : Integer
+var $list : Object
+```
+
+Undeclared variables generate **compilation errors** (not just warnings).
+The syntax checker (`Compile project` with empty `targets`) catches these.
+
+**Function return values**: If a function returns a value, you must capture it.
+Calling a function as a procedure (ignoring the return value) generates an error:
+```4d
+// ERROR: "This function has been called as a procedure"
+Get database parameter(User param value; $text)
+
+// CORRECT: capture the return value
+var $unused : Real
+$unused:=Get database parameter(User param value; $text)
+```
+
+## Object Method Wiring
+
+An object method file in `ObjectMethods/<ObjectName>.4dm` is **not automatically
+connected** to its form object. You must set the `"method"` property in the
+form JSON:
+
+```json
+{
+  "MyButton": {
+    "type": "button",
+    "method": "ObjectMethods/MyButton.4dm",
+    "events": ["onClick"]
+  }
+}
+```
+
+Without the `"method"` property, the `.4dm` file is orphaned and never invoked.
+Similarly, without `"events"`, the method won't receive any events even if wired.
+
 ## Version Encoding
 
 The `.4DProject` file's `compatibilityVersion` encodes the 4D version:
