@@ -1,6 +1,7 @@
 ---
 object: "picture"
 json_type: "picture"
+requires: ["01-form-concepts.md", "98-tool4d-cli.md", "22-property-reference.md"]
 keywords: ["static picture", "pictureFormat", "scaled", "tiled", "truncatedCenter", "dark mode", "@nx", "_dark", "SVG", "WEBP"]
 summary: "Static picture object: pictureFormat modes, resource paths, high-res/dark-mode naming conventions, SVG/WEBP support."
 ---
@@ -129,4 +130,4 @@ Static pictures have **no data source** and no configurable event set of their o
 
 ## CLI Verification Note
 
-`FORM SCREENSHOT` must be run through the real 4D application binary (`4D.app/Contents/MacOS/4D --headless --user-param ... --startup-method ...`), never through `tool4d`. `tool4d` is unreliable for this object type: depending on build, it can segfault outright, or silently produce blank output for certain picture formats (SVG, WEBP) and fail to apply conditional form behavior such as dark-mode picture substitution.
+See `98-tool4d-cli.md` for version requirements and static template rendering rules. `FORM SCREENSHOT` works in `tool4d` 21 R3+ and in the full 4D application.

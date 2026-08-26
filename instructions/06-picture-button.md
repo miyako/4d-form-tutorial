@@ -1,6 +1,7 @@
 ---
 object: "pictureButton"
 json_type: "pictureButton"
+requires: ["01-form-concepts.md", "22-property-reference.md"]
 keywords: ["picture button", "rowCount", "columnCount", "frame", "command button", "choice selector", "animation", "frameDelay", "switchContinuously"]
 summary: "Picture button object: multi-frame source images, 0-based frame numbering, command-button vs choice-selector modes, animation."
 ---

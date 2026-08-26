@@ -1,6 +1,7 @@
 ---
 object: "checkbox"
 json_type: "checkbox"
+requires: ["01-form-concepts.md", "22-property-reference.md"]
 keywords: ["checkbox", "three-state", "tri-state", "disclosure", "collapseExpand", "Form.property", "standard action"]
 summary: "Checkbox object: 12 styles, three-state mode, data source rules, standard actions, height-based size variants."
 ---

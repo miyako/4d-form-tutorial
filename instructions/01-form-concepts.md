@@ -1,6 +1,7 @@
 ---
 object: "form"
 json_type: null
+requires: ["98-tool4d-cli.md"]
 keywords: ["form", "project form", "table form", "subform", "page", "windowTitle", "windowSizingX", "windowSizingY", "margins", "onLoad", "onUnload", "formClass", "file structure", "4DForm"]
 summary: "Form-level concepts: project/table/subform types, file/directory structure, window & page properties, form-level events, form classes."
 ---
@@ -178,8 +179,11 @@ Reference: https://developer.4d.com/docs/commands/form-event
 
 **Note**: The older `Form event code` (C388) only returns the integer code. Always prefer `FORM Event` which is more informative.
 
+**Type**: `FORM Event` returns a plain `Object` — do NOT type it as `cs.EventObject` or any `cs.*` class. There is no built-in event class in 4D's class system.
+
 ```4d
-var $event:=FORM Event
+var $event : Object
+$event:=FORM Event
 
 Case of 
   : ($event.code=On Clicked)
@@ -455,6 +459,60 @@ button {
 }
 ```
 
+## Filesystem Paths: POSIX vs. Platform
+
+Reference: https://developer.4d.com/docs/Concepts/paths#filesystem-pathnames, https://developer.4d.com/docs/commands/file, https://developer.4d.com/docs/API/FileClass
+
+### 4D Filesystem Pathnames
+
+4D defines virtual **filesystem pathnames** that map to project-relative folders. These are not real POSIX paths — they are 4D-specific aliases resolved at runtime:
+
+| Filesystem | Designates |
+|-----------|-----------|
+| `/DATA` | Current data folder |
+| `/LOGS` | Logs folder (inside data) |
+| `/PACKAGE` | Project root folder |
+| `/PROJECT` | Project folder |
+| `/RESOURCES` | Current project resources folder |
+| `/SOURCES` | Project sources folder |
+
+These provide **OS independence** (no hardcoded platform paths) and **security** (sandboxed — code cannot access above the filesystem root).
+
+### `File()` and `.platformPath`
+
+`File()` and `Folder()` accept only **absolute pathnames** — either a filesystem pathname or a full platform path (with `fk platform path` constant). Relative paths are not accepted.
+
+Many legacy commands (`READ PICTURE FILE`, `WRITE PICTURE FILE`, `DOCUMENT TO BLOB`, etc.) expect a **platform path** (macOS: `/Users/.../`, Windows: `C:\...`), not a filesystem pathname. The `File` object bridges the two:
+
+```4d
+var $file : 4D.File
+$file:=File("/RESOURCES/Images/grid2x2.png")  // 4D filesystem pathname
+READ PICTURE FILE($file.platformPath; $image) // .platformPath → native OS path
+```
+
+This is cleaner than manually building platform paths with `Get 4D folder` + `Folder separator`:
+
+```4d
+// Verbose legacy approach — avoid
+READ PICTURE FILE(Get 4D folder(Current resources folder)+"Images"+Folder separator+"grid2x2.png"; $image)
+```
+
+**Key properties of `4D.File`:**
+
+| Property | Returns | Use for |
+|----------|---------|---------|
+| `.path` | 4D filesystem path (`/RESOURCES/...`) | 4D API calls that accept filesystem paths |
+| `.platformPath` | Native OS path (`/Users/.../` or `C:\...`) | Legacy commands expecting platform paths |
+| `.name` | Filename with extension | Display, logging |
+| `.exists` | Boolean | Guard before reading |
+
+The same pattern applies to `Folder()` for directory references. Use `.file()` and `.folder()` on a folder object for **relative** navigation within a known root:
+
+```4d
+$folder:=Folder("/RESOURCES/Images")
+$file:=$folder.file("grid2x2.png")  // relative path within the folder
+```
+
 ## Data Sources
 
 Interactive form objects can have an associated data source.
@@ -541,6 +599,66 @@ Reference: https://developer.4d.com/docs/commands/dialog
 - With `formClass`: the instance is scoped to the form's lifetime. It is created on load and destroyed on unload.
 - With `DIALOG($form)`: **you** control the lifecycle. The instance exists before and after `DIALOG`, so you can read its state after the form closes. It is cleared when the last reference to it goes out of scope.
 
+### Property Declarations and Compiler Warnings
+
+When a form uses `formClass`, the compiler checks that all `Form.propertyName`
+accesses correspond to declared properties. Undeclared properties generate
+**"Undeclared property 'xxx' used"** warnings.
+
+Fix by adding `property` declarations to the class:
+```4d
+property txt1 : Text
+property pic1 : Picture
+property count : Integer
+
+Class constructor
+  This.count:=0
+```
+
+Reference: https://developer.4d.com/docs/Concepts/classes#property
+
+## Variable Declarations
+
+All local variables should be explicitly declared with `var`:
+```4d
+var $name : Text
+var $count : Integer
+var $list : Object
+```
+
+Undeclared variables generate **compilation errors** (not just warnings).
+The syntax checker (`Compile project` with empty `targets`) catches these.
+
+**Function return values**: If a function returns a value, you must capture it.
+Calling a function as a procedure (ignoring the return value) generates an error:
+```4d
+// ERROR: "This function has been called as a procedure"
+Get database parameter(User param value; $text)
+
+// CORRECT: capture the return value
+var $unused : Real
+$unused:=Get database parameter(User param value; $text)
+```
+
+## Object Method Wiring
+
+An object method file in `ObjectMethods/<ObjectName>.4dm` is **not automatically
+connected** to its form object. You must set the `"method"` property in the
+form JSON:
+
+```json
+{
+  "MyButton": {
+    "type": "button",
+    "method": "ObjectMethods/MyButton.4dm",
+    "events": ["onClick"]
+  }
+}
+```
+
+Without the `"method"` property, the `.4dm` file is orphaned and never invoked.
+Similarly, without `"events"`, the method won't receive any events even if wired.
+
 ## Version Encoding
 
 The `.4DProject` file's `compatibilityVersion` encodes the 4D version:
@@ -548,18 +666,23 @@ The `.4DProject` file's `compatibilityVersion` encodes the 4D version:
 | Value | Version |
 |-------|---------|
 | `2101` | 21.1 |
-| `2009` | 20.9 |
 | `2120` | 21 R2 |
+| `2130` | 21 R3 |
+| `2009` | 20.9 |
 | `20A0` | 20 R10 |
 
+A newer tool4d can safely run an older `compatibilityVersion` project (e.g. tool4d 21 R3 running a `2101` project). The reverse also works, but the project may use commands or features that do not yet exist in the older version.
+
 ## CLI Commands for Testing
+
+See `98-tool4d-cli.md` for centralized CLI reference (version requirements, binary paths, `FORM SCREENSHOT` behavior).
 
 ### Screenshot (no CSS applied)
 
 ```bash
-/Applications/4D\ 21.1/4D.app/Contents/MacOS/4D \
+/Applications/4D\ 21\ R3/tool4d.app/Contents/MacOS/tool4d \
   --startup-method=project_form_to_image \
-  --dataless --headless \
+  --dataless \
   --project=<path>/example.4DProject \
   --user-param=<FormName>:<PageNumber>:<OutputPath.png>
 ```
@@ -567,9 +690,9 @@ The `.4DProject` file's `compatibilityVersion` encodes the 4D version:
 ### Print to PDF (CSS applied)
 
 ```bash
-/Applications/4D\ 21\ R3/4D.app/Contents/MacOS/4D \
+/Applications/4D\ 21\ R3/tool4d.app/Contents/MacOS/tool4d \
   --startup-method=print_form_to_file \
-  --dataless --headless \
+  --dataless \
   --project=<path>/example.4DProject \
   --user-param=<FormName>:<PageNumber>:<OutputPath.pdf>
 ```

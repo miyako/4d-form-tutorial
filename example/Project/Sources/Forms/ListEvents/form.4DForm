@@ -1,0 +1,99 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "fixed",
+	"windowSizingY": "fixed",
+	"windowMinWidth": 0,
+	"windowMinHeight": 0,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"rightMargin": 20,
+	"bottomMargin": 20,
+	"events": [
+		"onLoad",
+		"onUnload"
+	],
+	"method": "method.4dm",
+	"windowTitle": "List Events",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"EventList": {
+					"type": "list",
+					"left": 20,
+					"top": 20,
+					"width": 250,
+					"height": 320,
+					"method": "ObjectMethods/EventList.4dm",
+					"events": [
+						"onClick",
+						"onDoubleClick",
+						"onLosingFocus",
+						"onDrop",
+						"onDataChange",
+						"onDragOver",
+						"onSelectionChange",
+						"onExpand",
+						"onCollapse",
+						"onAfterEdit",
+						"onBeginDragOver",
+						"onDeleteAction"
+					],
+					"selectionMode": "single",
+					"dropping": "custom",
+					"dragging": "custom"
+				},
+				"EventLog": {
+					"type": "input",
+					"left": 290,
+					"top": 20,
+					"width": 350,
+					"height": 320,
+					"dataSource": "Form.eventLog",
+					"enterable": false,
+					"multiline": "yes",
+					"wordwrap": "normal",
+					"scrollbarVertical": "automatic",
+					"focusable": true,
+					"borderStyle": "system",
+					"showSelection": true
+				},
+				"LabelList": {
+					"type": "text",
+					"left": 20,
+					"top": 345,
+					"width": 250,
+					"height": 16,
+					"text": "↑ Click, expand/collapse, select items above",
+					"fontSize": 11,
+					"stroke": "automatic"
+				},
+				"LabelLog": {
+					"type": "text",
+					"left": 290,
+					"top": 345,
+					"width": 350,
+					"height": 16,
+					"text": "↑ Event log (most recent first)",
+					"fontSize": 11,
+					"stroke": "automatic"
+				}
+			}
+		}
+	],
+	"geometryStamp": 1,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"menuBar": "Barre #1"
+}
