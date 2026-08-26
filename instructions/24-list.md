@@ -129,35 +129,70 @@ Inherits from: `objectCommon` (position, size, sizing, visibility, class),
 `events`, `borderStyle`, `drawingSpec` (fill, stroke), `fontSpec` (fontFamily,
 fontSize, fontStyle, fontWeight, textDecoration).
 
-## Data Source Initialization
+## Data Source Initialization: Three Approaches
 
-### Option 1: Choice List (Design-Time)
+There are three ways to associate list content with a hierarchical list form object:
 
-Associate an existing choice list (created in the List editor in Design mode)
-with the `list` property. The list contents are loaded automatically.
+### Approach 1: Static `list` Property (Design-Time)
 
-### Option 2: Programmatic (ListRef)
+Set the `"list"` property directly in the form JSON. 4D manages the list lifecycle
+automatically — no code needed, no cleanup required.
 
-Build the list at runtime using `New list` + `APPEND TO LIST` / `INSERT IN LIST`,
-then assign the `ListRef` to the form object's variable:
+```json
+{
+  "type": "list",
+  "list": {
+    "items": ["Fruits", "Vegetables", "Grains", "Dairy"]
+  }
+}
+```
+
+The `list` value follows the `tree` schema: an object with optional `lineHeight`,
+`editable`, and `items` array. Items can be strings, numbers, or objects with
+`text`, `ref`, `subTree`, etc.
+
+**Limitations**: flat or simple hierarchies only. No runtime customization (icons,
+fonts, parameters). Good for fixed lists whose content is known at design time.
+
+### Approach 2: `OBJECT SET LIST BY NAME` (Runtime, Named Reference)
+
+Load a list from `lists.json` (defined in the Design List Editor) by name at runtime.
+4D manages the list lifecycle — no manual cleanup needed.
+
+```4d
+// In On Load
+OBJECT SET LIST BY NAME(*; "MyListObject"; "FoodTaxonomy")
+```
+
+The named list must exist in `lists.json`. The full hierarchy (sublists, styles,
+icons specified with `path:`) is loaded. Each form object gets its own copy
+in memory.
+
+**Use when**: you want the rich structure of a saved list (hierarchy, per-item
+styles) but need to decide which list to show at runtime.
+
+### Approach 3: `OBJECT SET LIST BY REFERENCE` (Runtime, Programmatic)
+
+Build a ListRef in memory and assign it to the form object. You own the lifecycle
+and **must** clear it manually.
 
 ```4d
 // In On Load
 var $list : Integer
 $list:=New list
-APPEND TO LIST($list; "Fruits"; 1)
-APPEND TO LIST($list; "Vegetables"; 2)
+APPEND TO LIST($list; "Mercury"; 1)
+APPEND TO LIST($list; "Venus"; 2)
+APPEND TO LIST($list; "Earth"; 3)
 
 // Add sublists for hierarchy
 var $sublist : Integer
 $sublist:=New list
-APPEND TO LIST($sublist; "Apple"; 10)
-APPEND TO LIST($sublist; "Banana"; 11)
-APPEND TO LIST($sublist; "Cherry"; 12)
-// Attach sublist to "Fruits" item, expanded
-SET LIST ITEM($list; 1; "Fruits"; 1; $sublist; True)
+APPEND TO LIST($sublist; "Jupiter"; 5)
+APPEND TO LIST($sublist; "Saturn"; 6)
+APPEND TO LIST($list; "Outer Planets"; 9; $sublist; True)
 
-Form.listRef:=$list
+OBJECT SET LIST BY REFERENCE(*; "MyListObject"; $list)
+Form.listRef:=$list  // keep for cleanup
 ```
 
 **Memory management**: always `CLEAR LIST` when done (typically in `On Unload`):
@@ -166,9 +201,22 @@ Form.listRef:=$list
 // In On Unload
 If (Is a list(Form.listRef))
   CLEAR LIST(Form.listRef; *)  // * clears sublists too
-  Form.listRef:=0
 End if
 ```
+
+**Use when**: maximum flexibility — dynamic content, runtime icons via
+`SET LIST ITEM ICON`, per-item fonts, custom parameters, user-editable lists.
+
+### Comparison
+
+| Aspect | Static `list` | By Name | By Reference |
+|--------|---------------|---------|--------------|
+| Where defined | form.4DForm JSON | lists.json | Code (New list) |
+| Hierarchy support | Yes (subTree) | Yes (full) | Yes (full) |
+| Runtime styling | No | Limited (what's in lists.json) | Full (all commands) |
+| Lifecycle | Automatic | Automatic | Manual (CLEAR LIST) |
+| Compiled mode | Always works | Always works (read-only) | Always works |
+| Dynamic content | No | Switch between named lists | Fully dynamic |
 
 ## Item Reference Numbers (itemRef)
 
@@ -205,14 +253,55 @@ user-defined identifier — 4D simply maintains it. Rules:
 | `onExpand` | Item expanded (disclosure triangle) |
 | `onCollapse` | Item collapsed |
 | `onSelectionChange` | Selected item changes |
-| `onDataChange` | Item text modified (when enterable) |
-| `onAfterEdit` | After in-place editing completes |
-| `onDeleteAction` | Delete key pressed |
+| `onAfterEdit` | During in-place editing: keystroke, copy, cut, paste (**not** delete/backspace — possible bug). Use `Get edited text` to read current text |
+| `onDataChange` | After in-place editing ends (focus leaves the item). `$itemText` has the final value |
+| `onDeleteAction` | Delete key pressed **when item is NOT in edit mode** (i.e. item selected but not being edited) |
 | `onGettingFocus` / `onLosingFocus` | Focus enters/leaves the list |
 | `onBeginDragOver` / `onDragOver` / `onDrop` | Drag-and-drop events |
 | `onMouseEnter` / `onMouseLeave` / `onMouseMove` | Mouse tracking |
 | `onHeader` / `onPrintingDetail` / `onPrintingBreak` / `onPrintingFooter` | Printing events |
 | `onValidate` | Form validation |
+
+### Event Ordering (Empirical Findings)
+
+Events are fired in sequence for a single user action. The order varies:
+
+| User Action | Event Sequence (first → last) |
+|-------------|-------------------------------|
+| Click on collapsed node | `On Clicked` → `On Selection Change` → `On Expand` |
+| Click arrow to collapse | `On Collapse` → `On Clicked` |
+| Click on already-selected item | `On Clicked` only |
+| Click on unselected item | `On Clicked` → `On Selection Change` |
+| Double-click unselected item | `On Selection Change` → `On Clicked` → `On Double Clicked` |
+| Double-click selected item | `On Clicked` → `On Double Clicked` |
+| Cmd+click to deselect | `On Selection Change` → `On Clicked` (ref=0, no selection) |
+| Click on empty area | `On Clicked` only (ref=0) |
+| Arrow key navigation | `On Clicked` → `On Selection Change` |
+
+**Key observations**:
+- `On Clicked` is **not** consistently first or last — its position varies by action
+- `On Selection Change` largely covers click events; use `On Clicked` for:
+  - Detecting clicks on empty areas (ref=0)
+  - Cmd+click deselection (ref=0)
+  - Re-clicks on already-selected items (no Selection Change fires)
+- `On Double Clicked` is always preceded by `On Clicked`
+- Expand/collapse via disclosure triangle includes `On Clicked`; via arrow key only fires `On Collapse`/`On Expand`
+
+### Type-Ahead Selection (Built-In)
+
+When a hierarchical list has focus, typing characters performs incremental search
+on **visible** items (only expanded items are searchable):
+
+- **Collapsed**: typing "F" selects "Fruits", "D" selects "Dairy"
+- **Expanded**: typing "C" selects "Cherry", typing "CHEE" selects "Cheese"
+
+The search matches from the beginning of item text and accumulates characters
+(with a brief timeout between keystrokes). Only currently visible items
+(not hidden inside collapsed nodes) participate.
+
+**Note**: The front-end processor (IME) is disabled while the list has focus —
+type-ahead works with direct key input only. This means Japanese/Chinese input
+methods will not activate while the list is focused.
 
 ## Key Commands
 

@@ -1,5 +1,5 @@
 //%attributes = {"invisible":true}
-var $event : cs.EventObject
+var $event : Object
 $event:=FORM Event
 
 Case of 

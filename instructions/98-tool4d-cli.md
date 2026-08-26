@@ -164,9 +164,9 @@ Beyond static screenshots, you can test runtime behavior by writing **startup me
 |--------|------|---------|
 | `tool4d` | Always headless | Commands that don't need UI: string manipulation, file I/O, calculations, `FORM LOAD`-based screenshots |
 | `4D` (no flags) | GUI mode | Commands that need windows: `Open form window`, `DIALOG`, `FORM SCREENSHOT` after runtime code |
-| `4D --headless` | Headless with license | Same as tool4d but with full 4D capabilities (requires license) |
+| `4D --headless` | Headless with license | Server-like batch tasks that don't need DIALOG (requires license) |
 
-**Key limitation**: In headless mode (tool4d or `4D --headless`), `Open form window` and `DIALOG` are **silently ignored** — they do not raise an error, but the form never opens and the form method never fires.
+**Key limitation**: In headless mode (tool4d or `4D --headless`), every call to a dialog box is intercepted and an automatic response is provided ([docs](https://developer.4d.com/docs/Admin/cli)). This means `DIALOG` is immediately auto-dismissed — the form loads but closes before any deferred code (like `CALL FORM` for `FORM SCREENSHOT`) can execute. The process may hang indefinitely. For `dialog_screenshot` workflows, always use **`4D` without `--headless`**.
 
 ### Pattern 1: Direct Test (No UI Needed)
 
@@ -286,3 +286,66 @@ With `DIALOG($form; *)` (non-blocking), the process stays alive because the dial
 - **`Application info.headless`**: Use to branch behavior (e.g. log to stdout in headless, display UI otherwise)
 - **Output format**: JSON is easiest to parse and verify; use `JSON Stringify($obj; *)` for pretty-printing
 - **Styled text in JSON**: The HTML markup is preserved in JSON output, letting you verify that ST commands produced the expected `<span style="...">` tags
+
+### File I/O and Path Handling
+
+4D has two path systems:
+
+| API | Path format | Example |
+|-----|-------------|---------|
+| Commands (`BLOB TO DOCUMENT`, `TEXT TO DOCUMENT`) | System/platform path | `/Users/me/file.txt` (macOS), `C:\file.txt` (Windows) |
+| Classes (`4D.File`, `4D.Folder`) | POSIX path by default | `/Users/me/file.txt` or filesystem path `/RESOURCES/file.txt` |
+
+**Converting between formats:**
+- `Convert path system to POSIX($sysPath)` → POSIX
+- `Convert path POSIX to system($posixPath)` → system
+
+**File/Folder with filesystem paths** (`/RESOURCES/`, `/PACKAGE/`, etc.) are sandboxed:
+```4d
+$f:=File("/RESOURCES/test.txt")  // sandboxed — .path is "/RESOURCES/test.txt"
+// To get absolute path object:
+$f:=OB Class($f).new($f.platformPath; fk platform path)
+```
+
+**Writing files from tool4d/CLI:**
+- tool4d can write within the project scope (e.g. `Get 4D folder(Database folder)`)
+- Writing to arbitrary paths like `/tmp/` may fail silently due to macOS sandboxing
+- Best practice: write output files next to the project, then read from the CLI
+
+```4d
+// Safe output path within project scope
+var $path : Text
+$path:=Get 4D folder(Database folder)+"output.json"
+BLOB TO DOCUMENT($path; $blob)
+```
+
+### Pattern 5: Syntax Check with `Compile project`
+
+Run a syntax check (no compilation) and output errors to a JSON file:
+
+```4d
+var $options : Object
+$options:=New object("targets"; New collection)  // empty targets = syntax only
+
+var $result : Object
+$result:=Compile project($options)
+
+var $json : Text
+$json:=JSON Stringify($result; *)
+var $blob : Blob
+CONVERT FROM TEXT($json; "utf-8"; $blob)
+BLOB TO DOCUMENT(Get 4D folder(Database folder)+"syntax_errors.json"; $blob)
+QUIT 4D
+```
+
+Run with: `tool4d --dataless --project ... --startup-method syntax_check`
+
+The result object contains:
+- `success` (Boolean): true if no errors
+- `errors` (Collection): each error has:
+  - `message`: human-readable description
+  - `isError`: true = error, false = warning
+  - `lineInFile`: line number in the source file
+  - `code.type`: "projectMethod", "formMethod", "formObjectMethod", etc.
+  - `code.methodName` or `code.formName`: identifies the source
+  - `code.methodPath`: relative path to the .4dm file

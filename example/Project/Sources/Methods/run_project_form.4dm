@@ -39,6 +39,7 @@ End if
 var $form : Object
 $form:={}
 
+var $window : Integer
 $window:=Open form window:C675($formName)
 DIALOG:C40($formName; $form; *)
 CALL FORM:C1391($window; Formula:C1597(ACCEPT:C269))

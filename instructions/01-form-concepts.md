@@ -179,8 +179,11 @@ Reference: https://developer.4d.com/docs/commands/form-event
 
 **Note**: The older `Form event code` (C388) only returns the integer code. Always prefer `FORM Event` which is more informative.
 
+**Type**: `FORM Event` returns a plain `Object` — do NOT type it as `cs.EventObject` or any `cs.*` class. There is no built-in event class in 4D's class system.
+
 ```4d
-var $event:=FORM Event
+var $event : Object
+$event:=FORM Event
 
 Case of 
   : ($event.code=On Clicked)

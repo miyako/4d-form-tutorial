@@ -1,10 +1,12 @@
 //%attributes = {"invisible":true}
 // CLI endpoint: opens a form with DIALOG, takes a runtime screenshot, saves to disk, quits.
-// Usage: --startup-method dialog_screenshot --user-param "FormName:Page:/RESOURCES/path.png"
-// Requires 4D (not tool4d) because it uses DIALOG.
+// Usage: --startup-method dialog_screenshot --user-param "FormName:Page:/path/to/output.png"
+// Requires 4D WITHOUT --headless (headless auto-dismisses DIALOG before screenshot can run).
+// Do NOT use tool4d either (no DIALOG support).
 
 var $userParamValue : Text
-Get database parameter(User param value; $userParamValue)
+var $unused : Real
+$unused:=Get database parameter(User param value; $userParamValue)
 
 var $params : Collection
 $params:=Split string($userParamValue; ":")
