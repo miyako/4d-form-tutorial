@@ -378,6 +378,62 @@ An input can also process `On Clicked`, and this works regardless of whether the
 
 **Contrast with a combo box's text-entry area** (`17-combo.md`): much of an input's text-entry behavior (typing, `entryFilter`, `On Data Change`/`On After Edit` on validation/edit, caret/selection mechanics) applies identically to the enterable text part of a combo box (conceptually its "element 0"), since a combo box is fundamentally an enterable text field with an attached pop-up. However, `On Clicked` does **not** fire for a click into that text-entry part -- a combo box's `On Clicked` fires only for a **popup-driven selection** (click the chevron, then choose an item from the list), the same click-is-a-data-change semantics as a drop-down list. Clicking the chevron and then dismissing the popup without choosing anything does not fire `On Clicked` at all.
 
+### Distinguishing Edit Mode: `Is editing text`
+
+Reference: https://developer.4d.com/docs/commands/is-editing-text
+
+When an input (or combo box) receives an event such as `On Clicked` or
+`On Before Keystroke`, the processing may need to differ depending on
+whether the user is actively typing text or not. The command
+`Is editing text` returns **True** if the user is entering values in the
+object, and **False** otherwise.
+
+**Supported objects**: input, list box (enterable and non-enterable),
+combo box. For all other object types the command always returns False.
+
+**Primary use case — list box type-ahead**: The most common use of this
+command is within `On Before Keystroke` on a list box. The event fires
+whenever the list box has focus and a key is pressed — even if no cell
+is being edited. This allows implementing type-ahead search (filter or
+jump to matching rows) without interfering with actual cell editing:
+
+```4d
+Case of
+  : (FORM Event.code=On Before Keystroke)
+    If (Not(Is editing text))
+      // No cell is being edited — use the keystroke for search/navigation
+      var $char : Text
+      $char:=Uppercase(Keystroke)
+      If (($char>="A") & ($char<="Z")) | (($char>="0") & ($char<="9"))
+        // Perform incremental search / row selection
+        Form.results:=ds.people.query("name = :1"; $char+"@")
+      End if
+    Else
+      // Cell is being edited — optionally filter keystrokes
+      If (Keystroke="+") | (Keystroke="-")
+        FILTER KEYSTROKE("")  // disallow certain characters
+      End if
+    End if
+End case
+```
+
+Reference (blog): https://blog.4d.com/type-ahead-made-easy/
+
+**FEP note**: As with `On Before Keystroke` generally (see above),
+IME/FEP composition keystrokes do not reach the 4D event system.
+`Is editing text` returns True during a composition session because the
+object is in edit mode, but the individual composition keystrokes are not
+reported — use `On After Edit` for FEP input processing.
+
+**Contrast with `On Clicked` on an input**: When you need to know
+whether a click on an input is entering edit mode (first click) versus
+clicking while already editing (e.g. repositioning the caret), you can
+call `Is editing text` inside `On Clicked`. On the first click that
+gives focus, the object is not yet in edit mode, so `Is editing text`
+returns False. On subsequent clicks (while already typing), it returns
+True. This can be used to differentiate "selection click" from
+"editing click" in the same handler.
+
 ### Mouse Coordinates: `MOUSEX`/`MOUSEY`
 
 Reference: https://developer.4d.com/docs/Concepts/variables#system-variables
