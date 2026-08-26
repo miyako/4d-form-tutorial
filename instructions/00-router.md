@@ -54,6 +54,7 @@ prerequisite, check whether you have already loaded it. Skip if yes.
 | Tab control | `19-tab.md` |
 | Group box | `20-group-box.md` |
 | Input / field / text entry | `21-input.md` |
+| Picture input: interactive SVG, mouse tracking, DOM vs rendering tree, clickable map, drawing tool | `25-picture-input.md` |
 | Static text / label / title / rotation / dynamic reference | `23-text.md` |
 | Hierarchical list / tree / ListRef / expand-collapse / choice list | `24-list.md` |
 | Property cross-reference: JSON keys, CSS names, getter/setter commands, applicable types | `22-property-reference.md` |
