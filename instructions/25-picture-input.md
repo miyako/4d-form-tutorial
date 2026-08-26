@@ -77,6 +77,8 @@ Reference: https://developer.4d.com/docs/Events/onClicked, https://developer.4d.
 - If **Draggable** is enabled on the object, `On Mouse Up` is **never generated** — the drag-and-drop system takes over
 - `MOUSEX`/`MOUSEY` are automatically updated for picture inputs on `On Clicked`; for non-picture inputs they are NOT (use `MOUSE POSITION` instead)
 
+**Best practice for interactive SVG canvases**: always set `"dragging": "none"` and `"dropping": "none"` explicitly on picture inputs used as drawing/editing surfaces. A picture-type input supports automatic drag and drop by default — if left at defaults, the drag-and-drop system intercepts mouse gestures before `On Clicked` can fire, preventing any custom click/draw interaction.
+
 ## Timer-Based Mouse Tracking
 
 Reference: https://developer.4d.com/docs/Events/onTimer

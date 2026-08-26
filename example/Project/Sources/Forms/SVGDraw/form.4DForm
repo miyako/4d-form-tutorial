@@ -36,6 +36,8 @@
 					"enterable": false,
 					"focusable": true,
 					"contextMenu": "none",
+					"dragging": "none",
+					"dropping": "none",
 					"pictureFormat": "truncatedTopLeft",
 					"events": [
 						"onLoad",
