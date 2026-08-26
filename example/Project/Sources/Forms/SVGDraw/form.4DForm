@@ -53,6 +53,48 @@
 					],
 					"method": "ObjectMethods/toolLine.4dm"
 				},
+				"toolRect": {
+					"type": "checkbox",
+					"text": "Rect",
+					"style": "toolbar",
+					"top": 20,
+					"left": 188,
+					"width": 80,
+					"height": 24,
+					"dataSource": "Form.toolRect",
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/toolRect.4dm"
+				},
+				"toolEllipse": {
+					"type": "checkbox",
+					"text": "Ellipse",
+					"style": "toolbar",
+					"top": 20,
+					"left": 272,
+					"width": 80,
+					"height": 24,
+					"dataSource": "Form.toolEllipse",
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/toolEllipse.4dm"
+				},
+				"toolPolyline": {
+					"type": "checkbox",
+					"text": "Polyline",
+					"style": "toolbar",
+					"top": 20,
+					"left": 356,
+					"width": 80,
+					"height": 24,
+					"dataSource": "Form.toolPolyline",
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/toolPolyline.4dm"
+				},
 				"canvas": {
 					"type": "input",
 					"left": 20,
@@ -69,7 +111,8 @@
 					"pictureFormat": "truncatedTopLeft",
 					"events": [
 						"onLoad",
-						"onClick"
+						"onClick",
+						"onDoubleClick"
 					],
 					"method": "ObjectMethods/canvas.4dm"
 				}

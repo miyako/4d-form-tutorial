@@ -255,6 +255,7 @@ Some commands were renamed for consistency. The old names still work if tokens a
 - Filters supported: `feGaussianBlur`, `feColorMatrix`, `feOffset`, `feBlend`, `feComposite`
 - CSS2 styles supported in SVG (selectors, `!important`, `@media`, `@import`)
 - **`var` declarations are method-scoped**, not block-scoped. Never redeclare the same variable in different `Case of` branches — declare once at the top or in the first branch that uses it.
+- **`Else if` does not exist** in 4D. Use nested `Case of` for multi-branch tool/type selection, or nested `If/Else/End if` blocks.
 
 ### Other Form Object Types
 - I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, **picture pop-up menu**, **tab control**, **group box**, and **input** in depth. The remaining object types (text, listbox, subform, etc.) have not been covered yet.
