@@ -302,5 +302,131 @@
 				}
 			}
 		]
+	},
+	"LineHeight30": {
+		"lineHeight": 30,
+		"items": [
+			{
+				"text": "Item A",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item B",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item C",
+				"ref": 3,
+				"editable": true,
+				"collapsed": true
+			}
+		]
+	},
+	"NoDoubleClick": {
+		"items": [
+			{
+				"text": "Parent",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Parent",
+				"ref": 1,
+				"editable": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Child 1",
+							"ref": 10,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Child 2",
+							"ref": 11,
+							"editable": true,
+							"collapsed": true
+						}
+					]
+				}
+			}
+		]
+	},
+	"MultiSelect": {
+		"items": [
+			{
+				"text": "Select me 1",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Select me 2",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Select me 3",
+				"ref": 3,
+				"editable": true,
+				"collapsed": true
+			}
+		]
+	},
+	"NotEditableChoiceList": {
+		"editable": false,
+		"items": [
+			{
+				"text": "Read-only 1",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Read-only 2",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			}
+		]
+	},
+	"AllListProps": {
+		"lineHeight": 24,
+		"editable": false,
+		"items": [
+			{
+				"text": "All options",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Combined",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Parent node",
+				"ref": 3,
+				"editable": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Sub item",
+							"ref": 10,
+							"editable": true,
+							"collapsed": true
+						}
+					]
+				}
+			}
+		]
 	}
 }

@@ -230,6 +230,33 @@ Reference: https://developer.4d.com/docs/commands/theme/Hierarchical-Lists
 | `SAVE LIST` | Save list back to List editor |
 | `BLOB to list` / `LIST TO BLOB` | Serialize/deserialize to BLOB |
 
+### List-Level Properties
+
+| Command | Purpose |
+|---------|---------|
+| `SET LIST PROPERTIES` | Set list-level properties (ref: https://developer.4d.com/docs/commands/set-list-properties) |
+| `GET LIST PROPERTIES` | Read list-level properties back |
+
+`SET LIST PROPERTIES(list; appearance; icon {; lineHeight {; doubleClick {; multiSelections {; editable}}}})`
+
+- `appearance` and `icon`: **deprecated**, always pass `0`
+- `lineHeight`: minimum row height in pixels (0 = default from font)
+- `doubleClick`: `0` = expand/collapse on double-click (default), `1` = disable
+  (users can still click the disclosure triangle)
+- `multiSelections`: `0` = single selection (default), `1` = enable multi-select
+  (Shift+click for continuous, Ctrl/Cmd+click for discontinuous)
+- `editable`: `1` = list is editable as a choice list (default — shows "Modify"
+  button), `0` = not editable as a choice list
+
+**Note**: `editable` here is a **list-level** property that controls whether the
+list shows a "Modify" button when used as a choice list in data entry. This is
+distinct from the per-item `enterable` in `SET LIST ITEM PROPERTIES` which
+controls in-place text editing.
+
+**Persistence**: only `lineHeight` and `editable` are saved to `lists.json`
+(at the list level, outside `items`). `doubleClick` and `multiSelections` are
+**runtime-only** — set them after `Load list`.
+
 ### Adding and Removing Items
 
 | Command | Purpose |
@@ -294,6 +321,17 @@ means `SAVE LIST` **cannot be used in compiled mode**.
   built from data, user input, or any source that changes at runtime
 - `Load list` creates a **copy in memory** — you can modify the copy freely at
   runtime, but you cannot save it back in compiled mode
+
+### List-level properties stored in lists.json
+
+These appear at the top level of each named list, outside the `items` array:
+
+| JSON Key | Source | Persisted? | Notes |
+|----------|--------|------------|-------|
+| `lineHeight` | `SET LIST PROPERTIES` lineHeight param | ✅ Yes | Minimum row height in pixels; omitted when 0 (default) |
+| `editable` | `SET LIST PROPERTIES` editable param | ✅ Yes | `false` = list not editable as choice list; omitted when `true` (default) |
+| `doubleClick` | `SET LIST PROPERTIES` doubleClick param | ❌ No | Runtime-only — set after `Load list` |
+| `multiSelections` | `SET LIST PROPERTIES` multiSelections param | ❌ No | Runtime-only — set after `Load list` |
 
 ### Properties stored per item
 
