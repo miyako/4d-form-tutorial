@@ -242,7 +242,7 @@ Some commands were renamed for consistency. The old names still work if tokens a
 | `Get table fragmentation` | `Table fragmentation` |
 | `Session storage by id` | `Session storage` |
 - **`FORM Event` returns a plain `Object`** — declare it as `var $event : Object`, never as `cs.FormEvent` or any `cs.*` class. There is no built-in event class in 4D's class system (see `01-form-concepts.md`).
-- **4D's SVG renderer does not support CSS `rgba()` color notation.** Use separate `fill`/`stroke` color + `fill-opacity`/`stroke-opacity` attributes instead (standard SVG 1.1 approach).
+- **4D's SVG renderer does not support `rgba()` color notation.** Use `rgb()` for colors (works fine) and separate `fill-opacity`/`stroke-opacity` attributes for transparency. Named colors and hex (`#rrggbb`) also work.
 - **`var` declarations are method-scoped**, not block-scoped. Never redeclare the same variable in different `Case of` branches — declare once at the top or in the first branch that uses it.
 
 ### Other Form Object Types
