@@ -257,6 +257,82 @@ APPEND TO LIST(list; itemText; itemRef {; sublist; expanded})
 | `List item position` | Get position of item by reference |
 | `List item parent` | Get parent reference of an item |
 
+### Item Parameters
+
+| Command | Purpose |
+|---------|---------|
+| `SET LIST ITEM PARAMETER` | Set a named parameter on an item (ref: https://developer.4d.com/docs/commands/set-list-item-parameter) |
+| `GET LIST ITEM PARAMETER` | Read a named parameter back |
+| `GET LIST ITEM PARAMETER ARRAYS` | Get all parameter names and values for an item |
+
+**Built-in selectors** (constants in `Hierarchical Lists` theme):
+
+| Constant | Selector string | Value type | Purpose |
+|----------|----------------|------------|---------|
+| `Additional text` | `"4D_additional_text"` | Text | Displays secondary text right-aligned in the list row |
+| `Associated standard action` | `"4D_standard_action_name"` | Text | Associates a standard action (e.g. `"fontSize?value=12pt"`) |
+
+**Custom selectors**: pass any text string as selector with a Text, Number, or
+Boolean value. Retrieved via `GET LIST ITEM PARAMETER`. Useful for attaching
+metadata (record IDs, categories, flags) to items without subclassing.
+
+## lists.json Structure and Persistence
+
+`SAVE LIST` writes to `Project/Sources/lists.json`. Each named list is a top-level
+key containing an `items` array. Each item can have:
+
+### Properties stored per item
+
+| JSON Key | Source | Type | Notes |
+|----------|--------|------|-------|
+| `text` | item text | string | Display text |
+| `ref` | itemRef | integer | Reference number |
+| `editable` | `SET LIST ITEM PROPERTIES` enterable param | boolean | Per-item editability |
+| `collapsed` | expand/collapse state | boolean | `true` = collapsed |
+| `fontWeight` | styles bitmask bit 0 (Bold=1) | `"bold"` | Only present when bold |
+| `fontStyle` | styles bitmask bit 1 (Italic=2) | `"italic"` | Only present when italic |
+| `textDecoration` | styles bitmask bit 2 (Underline=4) | `"underline"` | Only present when underline |
+| `stroke` | color param (0x00RRGGBB) | `"#RRGGBB"` | CSS hex string — note the format conversion from integer! |
+| `action` | `SET LIST ITEM PARAMETER` with `Associated standard action` | string | Standard action name |
+| `subTree` | attached sublist | object with `items` | Nested hierarchy |
+
+### What is NOT persisted to lists.json
+
+**Important**: most `SET LIST ITEM PARAMETER` values are **runtime-only** (in memory).
+They are **not saved** by `SAVE LIST`:
+
+- `"4D_additional_text"` — ❌ not saved
+- Custom parameters (any user-defined selector) — ❌ not saved
+- `SET LIST ITEM FONT` — ❌ not saved (the font set via this command is not persisted)
+- `SET LIST ITEM ICON` (Picture-based icons) — ❌ not saved (only `path:`-based icons
+  via `SET LIST ITEM PROPERTIES` are saved)
+
+Only `"4D_standard_action_name"` persists as the `"action"` key.
+
+This means: if you need additional text, custom parameters, or per-item fonts/icons,
+you must set them **programmatically after `Load list`** — they cannot be defined
+in the List editor or `lists.json` alone.
+
+### Style integer → JSON decomposition
+
+The `styles` parameter in `SET LIST ITEM PROPERTIES` is an integer bitmask:
+
+| Value | Constant | JSON keys added |
+|-------|----------|-----------------|
+| 0 | Plain | (none) |
+| 1 | Bold | `"fontWeight": "bold"` |
+| 2 | Italic | `"fontStyle": "italic"` |
+| 4 | Underline | `"textDecoration": "underline"` |
+| 3 | Bold+Italic | both `fontWeight` + `fontStyle` |
+| 5 | Bold+Underline | both `fontWeight` + `textDecoration` |
+| 7 | All three | all three keys |
+
+### Color integer → CSS hex conversion
+
+The color param (integer `0x00RRGGBB`) is stored as CSS hex `"#RRGGBB"` in the
+`stroke` key. This is the **opposite** of `ST SET ATTRIBUTES` which does NOT
+accept CSS strings — in `lists.json`, 4D converts for you.
+
 ### Selection
 
 | Command | Purpose |

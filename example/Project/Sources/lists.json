@@ -133,5 +133,174 @@
 				"collapsed": true
 			}
 		]
+	},
+	"PropertyTests": {
+		"items": [
+			{
+				"text": "Plain item",
+				"ref": 1,
+				"editable": false,
+				"collapsed": true
+			},
+			{
+				"text": "Bold item",
+				"ref": 2,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold"
+			},
+			{
+				"text": "Italic item",
+				"ref": 3,
+				"editable": false,
+				"collapsed": true,
+				"fontStyle": "italic"
+			},
+			{
+				"text": "Underline item",
+				"ref": 4,
+				"editable": false,
+				"collapsed": true,
+				"textDecoration": "underline"
+			},
+			{
+				"text": "Bold+Italic",
+				"ref": 5,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"fontStyle": "italic"
+			},
+			{
+				"text": "Bold+Underline",
+				"ref": 6,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"textDecoration": "underline"
+			},
+			{
+				"text": "All styles",
+				"ref": 7,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"fontStyle": "italic",
+				"textDecoration": "underline"
+			},
+			{
+				"text": "Red text",
+				"ref": 8,
+				"editable": false,
+				"collapsed": true,
+				"stroke": "#FF0000"
+			},
+			{
+				"text": "Green text",
+				"ref": 9,
+				"editable": false,
+				"collapsed": true,
+				"stroke": "#00FF00"
+			},
+			{
+				"text": "Blue bold",
+				"ref": 10,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"stroke": "#0000FF"
+			},
+			{
+				"text": "Enterable item",
+				"ref": 11,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Non-enterable item",
+				"ref": 12,
+				"editable": false,
+				"collapsed": true
+			}
+		]
+	},
+	"ParameterTests": {
+		"items": [
+			{
+				"text": "Item with additional text",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item with custom text param",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item with custom number param",
+				"ref": 3,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item with custom boolean param",
+				"ref": 4,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item with multiple params",
+				"ref": 5,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Standard action item",
+				"ref": 6,
+				"editable": true,
+				"collapsed": true,
+				"action": "fontSize?value=12pt"
+			}
+		]
+	},
+	"CombinedTests": {
+		"items": [
+			{
+				"text": "Bold red with extra text",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"stroke": "#FF0000"
+			},
+			{
+				"text": "Parent with styled children",
+				"ref": 2,
+				"editable": false,
+				"fontWeight": "bold",
+				"subTree": {
+					"items": [
+						{
+							"text": "Child italic green",
+							"ref": 10,
+							"editable": false,
+							"collapsed": true,
+							"fontStyle": "italic",
+							"stroke": "#008000"
+						},
+						{
+							"text": "Child underline blue",
+							"ref": 11,
+							"editable": false,
+							"collapsed": true,
+							"textDecoration": "underline",
+							"stroke": "#0000FF"
+						}
+					]
+				}
+			}
+		]
 	}
 }
