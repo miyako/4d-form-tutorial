@@ -9,7 +9,16 @@ summary: "4D's proprietary SVG rendering engine capabilities: supported elements
 
 4D has a **proprietary SVG rendering engine** based on SVG 1.1 (http://www.w3.org/TR/SVG11) with selected SVG Tiny 1.2 extensions. It is not a web browser — SMIL animation and embedded JavaScript are not supported. Instead, use `SVG SET ATTRIBUTE` for dynamic updates (see `25-picture-input.md`).
 
-Based on the v12 specification sheet (some features added in later versions).
+Based on the v12 specification sheet with updates through v17+.
+
+## Platform Rendering Engines
+
+| Platform | Engine | Since |
+|----------|--------|-------|
+| macOS | Core Graphics (Quartz 2D) | Always |
+| Windows | **Direct2D** (software mode) | v14 R5 (replaced GDI+) |
+
+The switch to Direct2D on Windows brought **filter effects** (blur, color matrix, blend, composite, offset) to Windows — previously Mac-only. Some v12-era Windows limitations (noted below) may no longer apply.
 
 ## Color Support
 
@@ -70,7 +79,7 @@ All basic shapes are fully supported:
 | `fill-rule` | Yes (v12) | |
 | `stroke` | Yes | Pattern paint server from v12 |
 | `stroke-opacity` | Yes | |
-| `stroke-linecap` | Yes | On Windows, `butt` implemented as `square` |
+| `stroke-linecap` | Yes | v12 note: on Windows/GDI+, `butt` was implemented as `square`; may be fixed with Direct2D (v14 R5+) |
 | `stroke-linejoin` | Yes | |
 | `stroke-miterlimit` | Yes (v12) | |
 | `stroke-dasharray` | Yes (v12) | |
@@ -152,8 +161,8 @@ All basic shapes are fully supported:
 | `<feGaussianBlur>` | Yes | Single `stdDeviation` value for both X and Y |
 | `<feColorMatrix>` | Yes | All types |
 | `<feOffset>` | Yes | `dx`, `dy` |
-| `<feBlend>` | Yes | Windows: only `over`; Mac: all blend types |
-| `<feComposite>` | Yes | Windows: only `over`; Mac: `normal`, `in`, `out`, `atop` |
+| `<feBlend>` | Yes | v12: Windows only `over`, Mac all types. With Direct2D (v14 R5+), all blend types should work cross-platform |
+| `<feComposite>` | Yes | v12: Windows only `over`, Mac `normal`/`in`/`out`/`atop`. With Direct2D (v14 R5+), parity expected |
 
 **Mac-only Shadow shortcut**: If a `<filter>` element has `id="Shadow"`, it is implemented as a native Quartz2D shadow layer (offset from `feOffset`, color from `feColorMatrix` last column, blur from `feGaussianBlur`).
 
