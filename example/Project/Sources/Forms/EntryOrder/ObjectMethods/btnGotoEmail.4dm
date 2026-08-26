@@ -1,1 +1,0 @@
-GOTO OBJECT(*; "Email")
