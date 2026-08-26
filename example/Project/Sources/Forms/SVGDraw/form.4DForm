@@ -41,7 +41,7 @@
 					"pictureFormat": "truncatedTopLeft",
 					"events": [
 						"onLoad",
-						"onClicked"
+						"onClick"
 					],
 					"method": "ObjectMethods/canvas.4dm"
 				}
