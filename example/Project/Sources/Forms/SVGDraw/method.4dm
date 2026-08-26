@@ -64,7 +64,6 @@ Case of
 				"stroke-width"; "2")
 			
 			// Re-export the DOM to picture
-			var $pic : Picture
 			SVG EXPORT TO PICTURE(Form.dom; $pic)
 			Form.SVG:=$pic
 		End if
