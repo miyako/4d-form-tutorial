@@ -1,0 +1,137 @@
+{
+	"FoodTaxonomy": {
+		"items": [
+			{
+				"text": "Fruits",
+				"ref": 1,
+				"editable": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Apple",
+							"ref": 101,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Banana",
+							"ref": 102,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Cherry",
+							"ref": 103,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Mango",
+							"ref": 104,
+							"editable": true,
+							"collapsed": true
+						}
+					]
+				}
+			},
+			{
+				"text": "Vegetables",
+				"ref": 2,
+				"editable": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Leafy Greens",
+							"ref": 21,
+							"editable": true,
+							"subTree": {
+								"items": [
+									{
+										"text": "Spinach",
+										"ref": 211,
+										"editable": true,
+										"collapsed": true
+									},
+									{
+										"text": "Kale",
+										"ref": 212,
+										"editable": true,
+										"collapsed": true
+									},
+									{
+										"text": "Lettuce",
+										"ref": 213,
+										"editable": true,
+										"collapsed": true
+									}
+								]
+							}
+						},
+						{
+							"text": "Root Vegetables",
+							"ref": 22,
+							"editable": true,
+							"collapsed": true,
+							"subTree": {
+								"items": [
+									{
+										"text": "Carrot",
+										"ref": 221,
+										"editable": true,
+										"collapsed": true
+									},
+									{
+										"text": "Potato",
+										"ref": 222,
+										"editable": true,
+										"collapsed": true
+									},
+									{
+										"text": "Beet",
+										"ref": 223,
+										"editable": true,
+										"collapsed": true
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"text": "Grains",
+				"ref": 3,
+				"editable": true,
+				"collapsed": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Rice",
+							"ref": 301,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Wheat",
+							"ref": 302,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Oats",
+							"ref": 303,
+							"editable": true,
+							"collapsed": true
+						}
+					]
+				}
+			},
+			{
+				"text": "Dairy",
+				"ref": 4,
+				"editable": true,
+				"collapsed": true
+			}
+		]
+	}
+}
