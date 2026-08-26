@@ -210,8 +210,37 @@ note: "Do NOT load this file for routine object/task work — it duplicates cont
 ### 4D Language
 - I have **not learned the 4D language** systematically. The code I write mimics patterns I observed from the user's examples but I don't know the full syntax, type system, or command set.
 - I should **never invent command names or guess syntax** — always refer to documentation or existing project code.
-- Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
+- Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must **never** write them. The IDE resolves command/constant names by their token IDs; without suffixes, the IDE adds them on first open. If I guess a suffix wrong, the IDE will resolve it to a completely different command — far worse than leaving an unrecognised old name. An unrecognised name produces a clear error; a wrong suffix silently calls the wrong command.
 - **Never guess constant names.** If I don't know the exact constant name for a command parameter, I must either look it up in the documentation or omit the parameter to use the default. Inventing constant names (e.g. writing `Is SVG` when the real constant is `Copy XML data source`) causes compilation errors.
+
+#### Renamed Commands (4D 20 R7+)
+
+Some commands were renamed for consistency. The old names still work if tokens are present, but I should always use the **new** names. Reference: https://blog.4d.com/simplified-commands-for-cleaner-codebase/
+
+| Old Name | New Name |
+|----------|----------|
+| `Get action info` | `Action info` |
+| `GET ACTIVITY SNAPSHOT` | `ACTIVITY SNAPSHOT` |
+| `Get application info` | `Application info` |
+| `GET BACKUP INFORMATION` | `BACKUP INFO` |
+| `Get call chain` | `Call chain` |
+| `Get database measures` | `Database measures` |
+| `Get last field number` | `Last field number` |
+| `Get last query path` | `Last query path` |
+| `Get last query plan` | `Last query plan` |
+| `Get last table number` | `Last table number` |
+| `Get license info` | `License info` |
+| `Get license usage` | `License usage` |
+| `Get localized document path` | `Localized document path` |
+| `Get localized string` | `Localized string` |
+| `Get locked records info` | `Locked records info` |
+| `GET MEMORY STATISTICS` | `MEMORY STATISTICS` |
+| `Get Monitored Activity` | `Monitored activity` |
+| `GET MOUSE` | `MOUSE POSITION` |
+| `GET RESTORE INFORMATION` | `RESTORE INFO` |
+| `Get system info` | `System info` |
+| `Get table fragmentation` | `Table fragmentation` |
+| `Session storage by id` | `Session storage` |
 - **`FORM Event` returns a plain `Object`** — declare it as `var $event : Object`, never as `cs.FormEvent` or any `cs.*` class. There is no built-in event class in 4D's class system (see `01-form-concepts.md`).
 - **4D's SVG renderer does not support CSS `rgba()` color notation.** Use separate `fill`/`stroke` color + `fill-opacity`/`stroke-opacity` attributes instead (standard SVG 1.1 approach).
 - **`var` declarations are method-scoped**, not block-scoped. Never redeclare the same variable in different `Case of` branches — declare once at the top or in the first branch that uses it.
