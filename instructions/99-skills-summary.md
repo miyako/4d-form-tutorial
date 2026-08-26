@@ -243,6 +243,28 @@ Some commands were renamed for consistency. The old names still work if tokens a
 | `Session storage by id` | `Session storage` |
 - **`FORM Event` returns a plain `Object`** — declare it as `var $event : Object`, never as `cs.FormEvent` or any `cs.*` class. There is no built-in event class in 4D's class system (see `01-form-concepts.md`).
 - **4D's SVG renderer does not support `rgba()` color notation.** Use `rgb()` for colors (works fine) and separate `fill-opacity`/`stroke-opacity` attributes for transparency. Named colors and hex (`#rrggbb`) also work.
+
+#### 4D SVG Rendering Engine
+
+4D uses a **proprietary SVG rendering engine**, not a web browser. It is less powerful than browser SVG in some ways but supports some SVG Tiny 1.2 features not available in standard SVG 1.1/2.0.
+
+**Not supported:**
+- SMIL animation (`<animate>`, `<animateTransform>`, etc.)
+- Embedded JavaScript (`<script>`)
+- CSS `rgba()` color notation (use `fill-opacity`/`stroke-opacity` instead)
+
+**Instead of animation/scripting**, use `SVG SET ATTRIBUTE` to update image attributes programmatically from 4D code (rendering tree for real-time feedback, DOM for persistence — see `25-picture-input.md`).
+
+**SVG Tiny 1.2 features supported:**
+
+| Feature | Element/Property | Reference |
+|---------|-----------------|-----------|
+| Block of text (auto-wrapping) | `<textArea>`, `<tbreak>` | https://www.w3.org/TR/SVGTiny12/text.html#TextAreaElement |
+| Line break within textArea | `<tbreak>` | https://www.w3.org/TR/SVGTiny12/text.html#tbreakElement |
+| Canvas background fill | `viewport-fill` property | https://www.w3.org/TR/SVGTiny12/painting.html#viewport-fill-property |
+| Canvas background opacity | `viewport-fill-opacity` property | https://www.w3.org/TR/SVGTiny12/painting.html#viewport-fill-opacity-property |
+
+`<textArea>` is particularly useful — unlike standard SVG `<text>` which requires manual positioning of each line, `<textArea>` auto-wraps text within a bounding box (set `width`/`height` attributes). Use `<tbreak/>` for explicit line breaks within a `<textArea>`.
 - **`var` declarations are method-scoped**, not block-scoped. Never redeclare the same variable in different `Case of` branches — declare once at the top or in the first branch that uses it.
 
 ### Other Form Object Types
