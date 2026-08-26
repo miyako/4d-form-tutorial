@@ -146,7 +146,84 @@ Each page contains an `objects` map (keyed by object name) and an optional `entr
 ]
 ```
 
-## Form Events
+## Entry Order (Tab/Focus Order)
+
+Reference: https://developer.4d.com/docs/FormEditor/overview#data-entry-order
+
+The **entry order** determines how Tab and Return keys cycle focus among objects. It is independent of the rendering/layering order (which is determined by JSON object declaration order within `"objects"`).
+
+### Default Entry Order
+
+If no explicit entry order is defined, the default order is based on the **z-order** (layering) of objects — i.e. the order they appear in the JSON `"objects"` map. Objects declared first (bottom of the stack) come first in the default entry order.
+
+### JSON `entryOrder` Property
+
+Each page can declare an `entryOrder` array to explicitly control which objects participate in the tab cycle and in what order:
+
+```json
+{
+  "objects": {
+    "Input": { ... },
+    "Input1": { ... },
+    "Input2": { ... },
+    "Input3": { ... },
+    "Input4": { ... }
+  },
+  "entryOrder": [
+    "Input",
+    "Input3"
+  ]
+}
+```
+
+**Key rules:**
+- Only objects listed in `entryOrder` participate in the Tab/Return cycle
+- Objects NOT listed are **excluded** from the keyboard navigation cycle — they can still be focused programmatically via `GOTO OBJECT` or by clicking, but Tab/Return will skip them
+- The array order defines the cycle order
+- Only focusable objects are valid entries (non-focusable objects are ignored)
+- Page 0 objects and inherited form objects also participate in the entry order
+
+### Runtime Commands
+
+| Command | Purpose |
+|---------|---------|
+| `FORM SET ENTRY ORDER($names)` | Set entry order dynamically for current process |
+| `FORM GET ENTRY ORDER($names)` | Get the defined entry order |
+| `FORM GET ENTRY ORDER($names; *)` | Get the **actual** entry order (only valid/focusable objects) |
+| `GOTO OBJECT(*; "objectName")` | Move focus to a specific object |
+| `GOTO OBJECT(*; "")` | **Remove focus** from all objects (clear selection) |
+
+Reference:
+- https://developer.4d.com/docs/commands/form-set-entry-order
+- https://developer.4d.com/docs/commands/form-get-entry-order
+- https://developer.4d.com/docs/commands/goto-object
+
+### Auto-Focus on Page Load
+
+When a page becomes active (form load, page change, `FORM GOTO PAGE`), 4D **automatically gives focus to the first object in entry order** if that object is enterable. This can cause display side effects (e.g. number-formatted inputs showing raw values while focused — see `21-input.md`).
+
+**Workaround**: Call `GOTO OBJECT(*; "")` in `On Load` or `On Page Change` to immediately clear auto-focus:
+
+```4d
+: ($event.code=On Page Change)
+  GOTO OBJECT(*; "")
+```
+
+### Entry Order vs. Rendering Order
+
+| Concept | Determined by | Purpose |
+|---------|---------------|---------|
+| **Rendering order** (z-order/layering) | Declaration order in JSON `"objects"` map | Visual stacking (back-to-front) |
+| **Entry order** (tab order) | `"entryOrder"` array, or default z-order | Keyboard focus cycling (Tab/Return) |
+
+These are fully independent. An object can be at the front visually (last in `"objects"`) but first in entry order, and vice versa.
+
+### `FORM SET ENTRY ORDER` Notes
+
+- Ignores the **Tabbable** object property — only **focusable** matters
+- Does **not** set the first focused object — use `GOTO OBJECT` in On Load for that
+- Entry order within a subform is defined in the subform itself (call the command from the subform context)
+- Invalid objects (non-existent, non-focusable, wrong page) are silently ignored
 
 Forms subscribe to events via the `events` array. Only subscribed events will trigger a form event cycle.
 
