@@ -200,14 +200,16 @@ Reference:
 
 ### Auto-Focus on Page Load
 
-When a page becomes active (form load, page change, `FORM GOTO PAGE`), 4D **automatically gives focus to the first object in entry order** if that object is enterable. This can cause display side effects (e.g. number-formatted inputs showing raw values while focused — see `21-input.md`).
+Auto-focus behavior differs between page 1 and subsequent pages:
 
-**Workaround**: Call `GOTO OBJECT(*; "")` in `On Load` or `On Page Change` to immediately clear auto-focus:
+- **Page 1** (initial form load): the first object in entry order (from page 0 or page 1) **automatically receives focus**.
+- **Pages 2+** (page change): **no object receives focus by default**. You must call `GOTO OBJECT(*; "objectName")` explicitly if you want a specific object focused after a page switch.
 
-```4d
-: ($event.code=On Page Change)
-  GOTO OBJECT(*; "")
-```
+To clear unwanted auto-focus on page 1, call `GOTO OBJECT(*; "")` in `On Load`.
+
+### Tab Behavior from an Object Outside Entry Order
+
+If the user clicks on an object that is **not** in the entry order (or has no entry order defined), pressing Tab will jump focus to the **last** object in the entry order. Shift+Tab also jumps to the last object. This is because the system has no "current position" in the order to advance from.
 
 ### Entry Order vs. Rendering Order
 
