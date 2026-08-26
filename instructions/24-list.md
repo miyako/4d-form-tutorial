@@ -357,7 +357,17 @@ They are **not saved** by `SAVE LIST`:
 - Custom parameters (any user-defined selector) — ❌ not saved
 - `SET LIST ITEM FONT` — ❌ not saved (the font set via this command is not persisted)
 - `SET LIST ITEM ICON` (Picture-based icons) — ❌ not saved (only `path:`-based icons
-  via `SET LIST ITEM PROPERTIES` are saved)
+  via `SET LIST ITEM PROPERTIES` are saved as the `"icon"` key)
+
+### Icon persistence: two approaches
+
+| Method | `icon` param | Persisted to lists.json? |
+|--------|-------------|--------------------------|
+| `SET LIST ITEM PROPERTIES($l; ref; True; 0; "path:/RESOURCES/icon.svg")` | File path string | ✅ Yes → `"icon": "/RESOURCES/icon.svg"` (prefix stripped) |
+| `SET LIST ITEM ICON($l; ref; $pictureVariable)` | In-memory Picture | ❌ No |
+
+Use `path:` references for design-time icons; use `SET LIST ITEM ICON` for
+runtime-generated icons (SVG, loaded images, etc.).
 
 Only `"4D_standard_action_name"` persists as the `"action"` key.
 
