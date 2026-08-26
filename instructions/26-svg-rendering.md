@@ -202,13 +202,22 @@ All common properties (`fill`, `stroke`, `marker`, etc.) are animatable.
 - Modifies only the SVG graph tree attached to the form object (not the picture variable data source)
 - Invalidates only the bounding box of the modified element (fast refresh)
 - Ideal for animation/real-time feedback; **not for editing** (changes cannot be exported)
+- Pass a trailing `*` to modify the SVG picture data itself (persistent)
+- Non-modifiable elements: `linearGradient`, `radialGradient`, `stop`, `solidColor`, `marker`, `symbol`, `clipPath`, `fe*` children, `style`, `pattern`
 - No error thrown for wrong element ID or attribute — command silently does nothing
+- https://developer.4d.com/docs/commands/svg-set-attribute
 
 ### `SVG GET ATTRIBUTE` Behavior
 
 - Can return **current** value (from form object rendering tree) or **initial** value (from parsed data source)
 - Wrong element ID → empty string, `OK` set to 0
 - Wrong attribute → empty string, `OK` unchanged
+- https://developer.4d.com/docs/commands/svg-get-attribute
+
+### `SVG SHOW ELEMENT`
+
+- Scrolls/pans the SVG rendering to make the specified element visible in the form object
+- https://developer.4d.com/docs/commands/svg-show-element
 
 ## 4D Reserved Attributes
 
