@@ -446,18 +446,124 @@ To convert the object-relative coordinates to screen-relative coordinates, use `
 
 ### SVG Hit-Testing
 
+Reference: https://developer.4d.com/docs/commands/svg-find-element-id-by-coordinates, https://developer.4d.com/docs/commands/svg-find-element-ids-by-rect
+
 If the picture data source is an SVG document, `MOUSEX`/`MOUSEY` from `On Clicked` are ready to pass directly into the SVG hit-testing commands:
 
-- `SVG Find element ID by coordinates` -- https://developer.4d.com/docs/commands/svg-find-element-id-by-coordinates
-- `SVG Find element IDs by rect` -- https://developer.4d.com/docs/commands/svg-find-element-ids-by-rect
+- `SVG Find element ID by coordinates($picture; $x; $y)` → Text — returns the
+  `id` attribute of the topmost SVG element at the given point
+- `SVG Find element IDs by rect($picture; $x; $y; $w; $h)` → Text array —
+  returns the `id` attributes of all SVG elements that intersect the rectangle
 
-This is the standard pattern for making an SVG picture input clickable/interactive by element (e.g. a clickable map or diagram).
+This is the standard pattern for making an SVG picture input into a **clickable
+map** or **interactive diagram**. Each clickable region in the SVG must have a
+unique `id` attribute; the hit-test returns that `id`, and your code dispatches
+on it:
 
-## On Mouse Up: Picture-Only
+```4d
+Case of
+  : (FORM Event.code=On Clicked)
+    var $elementId : Text
+    $elementId:=SVG Find element ID by coordinates(Form.svgPicture; MouseX; MouseY)
+    Case of
+      : ($elementId="region_north")
+        // handle click on north region
+      : ($elementId="btn_zoom_in")
+        // handle zoom button
+    End case
+End case
+```
 
-Reference: https://developer.4d.com/docs/Events/onMouseUp
+## Picture Input as Interactive Canvas
 
-`On Mouse Up` fires for an input **only when the data source is a picture**. It never fires for a non-picture input, regardless of `enterable`/`focusable` settings. Combined with `On Mouse Move`/`On Mouse Enter`/`On Mouse Leave`, this makes a picture-type input the natural object for building custom mouse-tracked interactions (e.g. drag-to-select on an image, or completing an SVG click-and-release gesture).
+A picture-type input supports a richer set of mouse events than a text input,
+making it the natural object for building **clickable maps**, **GUI editors**,
+and **drag-to-draw/move** interactions — especially with SVG as the data source.
+
+### Event Lifecycle for Mouse Tracking
+
+| Event | Fires when | `MOUSEX`/`MOUSEY` updated |
+|---|---|---|
+| `On Clicked` | Mouse button pressed | Yes (object-relative) |
+| `On Mouse Move` | Mouse moves while button held | Yes |
+| `On Mouse Up` | Mouse button released | Yes |
+
+Reference: https://developer.4d.com/docs/Events/onClicked, https://developer.4d.com/docs/Events/onMouseUp
+
+`On Mouse Up` fires for an input **only when the data source is a picture**. It
+never fires for a non-picture input, regardless of `enterable`/`focusable`
+settings.
+
+> **Important**: If the **Draggable** property is enabled on the picture object,
+> `On Mouse Up` is **never** generated — the drag-and-drop system takes over
+> mouse tracking. Disable Draggable for interactive canvas use.
+
+Reference: https://developer.4d.com/docs/FormObjects/propertiesAction#draggable
+
+### Distinguishing Drag from Click: `Is waiting mouse up`
+
+Reference: https://developer.4d.com/docs/commands/is-waiting-mouse-up
+
+Similar to how `Is editing text` distinguishes editing-vs-not for text inputs,
+`Is waiting mouse up` distinguishes **active mouse tracking** from an
+interrupted state for picture inputs. It returns **True** if the current object
+was clicked and the mouse button has not yet been released (and the parent
+window still has focus). It returns **False** if the mouse-up was "lost" —
+for example, because an alert dialog appeared while the button was held, or
+the parent window lost focus.
+
+Without this guard, your `On Mouse Move` handler could keep executing
+indefinitely in a desynchronized state — the object is waiting for a mouse-up
+that will never arrive.
+
+**Pattern — guarded mouse tracking**:
+
+```4d
+// Object method of a picture input
+var $tracking : Integer  // 0 = idle, 1 = tracking
+
+Case of
+  : (FORM Event.code=On Clicked)
+    If (Is waiting mouse up)
+      // Mouse button still held — begin tracking
+      $tracking:=1
+      // ... initialization (record start position, etc.)
+    End if
+
+  : (FORM Event.code=On Mouse Move)
+    If ($tracking=1)
+      If (Not(Is waiting mouse up))
+        // Mouse-up was lost (alert appeared, window lost focus, etc.)
+        $tracking:=0
+        // ... cancel or rollback the drag operation
+      Else
+        // Still tracking — update the visual
+        // MouseX / MouseY give current object-relative position
+        // ... move/resize/draw the SVG element
+      End if
+    End if
+
+  : (FORM Event.code=On Mouse Up)
+    // Mouse button released normally — finalize
+    $tracking:=0
+    // ... commit the move/resize/draw
+End case
+```
+
+Reference (blog): https://blog.4d.com/new-on-mouse-up-event-for-picture-object/
+
+### Typical Use Cases
+
+| Use case | Technique |
+|---|---|
+| **Clickable map** | SVG with `id` per region; `On Clicked` + `SVG Find element ID by coordinates` |
+| **Object selection** | `On Clicked` to select; `On Mouse Move` to show selection handles |
+| **Drag-to-move** | `On Clicked` (start) → `On Mouse Move` (update position) → `On Mouse Up` (commit) |
+| **Rubber-band select** | `On Clicked` (anchor) → `On Mouse Move` (draw rect) → `On Mouse Up` (query `SVG Find element IDs by rect`) |
+| **Drawing tool** | `On Clicked` (create element) → `On Mouse Move` (resize as drawn) → `On Mouse Up` (finalize) |
+
+All patterns should use the `Is waiting mouse up` guard in `On Mouse Move`
+to handle interrupted tracking gracefully.
 
 ## Context Menu Behavior
 
