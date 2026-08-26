@@ -266,6 +266,7 @@
 				},
 				"btnReverse": {
 					"type": "button",
+					"focusable": false,
 					"text": "Reverse",
 					"left": 20,
 					"top": 120,
@@ -276,6 +277,7 @@
 				},
 				"btnReset": {
 					"type": "button",
+					"focusable": false,
 					"text": "Reset",
 					"left": 140,
 					"top": 120,
@@ -331,6 +333,7 @@
 				},
 				"btnGotoName": {
 					"type": "button",
+					"focusable": false,
 					"text": "→ Name",
 					"left": 20,
 					"top": 120,
@@ -341,6 +344,7 @@
 				},
 				"btnGotoEmail": {
 					"type": "button",
+					"focusable": false,
 					"text": "→ Email",
 					"left": 140,
 					"top": 120,
@@ -351,6 +355,7 @@
 				},
 				"btnGotoPhone": {
 					"type": "button",
+					"focusable": false,
 					"text": "→ Phone",
 					"left": 260,
 					"top": 120,
@@ -361,6 +366,7 @@
 				},
 				"btnClearFocus": {
 					"type": "button",
+					"focusable": false,
 					"text": "Clear Focus",
 					"left": 380,
 					"top": 120,
