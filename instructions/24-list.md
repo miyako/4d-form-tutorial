@@ -281,6 +281,20 @@ metadata (record IDs, categories, flags) to items without subclassing.
 `SAVE LIST` writes to `Project/Sources/lists.json`. Each named list is a top-level
 key containing an `items` array. Each item can have:
 
+### Compiled Mode and Read-Only Structures
+
+**Important**: when a 4D project is compiled, the entire `Project/Sources/` folder
+(including `lists.json`) is packaged inside a `.4DZ` file as **read-only**. This
+means `SAVE LIST` **cannot be used in compiled mode**.
+
+**Rule of thumb**:
+- Use `lists.json` (and the List editor) for **static or default lists** — lists
+  whose structure is known at design time and does not change at runtime
+- Use `New list` + `APPEND TO LIST` (programmatic) for **mutable lists** — lists
+  built from data, user input, or any source that changes at runtime
+- `Load list` creates a **copy in memory** — you can modify the copy freely at
+  runtime, but you cannot save it back in compiled mode
+
 ### Properties stored per item
 
 | JSON Key | Source | Type | Notes |
