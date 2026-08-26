@@ -211,6 +211,8 @@ note: "Do NOT load this file for routine object/task work — it duplicates cont
 - I have **not learned the 4D language** systematically. The code I write mimics patterns I observed from the user's examples but I don't know the full syntax, type system, or command set.
 - I should **never invent command names or guess syntax** — always refer to documentation or existing project code.
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
+- **Never guess constant names.** If I don't know the exact constant name for a command parameter, I must either look it up in the documentation or omit the parameter to use the default. Inventing constant names (e.g. writing `Is SVG` when the real constant is `Copy XML data source`) causes compilation errors.
+- **`FORM Event` returns a plain `Object`** — declare it as `var $event : Object`, never as `cs.FormEvent` or any `cs.*` class. There is no built-in event class in 4D's class system (see `01-form-concepts.md`).
 
 ### Other Form Object Types
 - I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, **picture pop-up menu**, **tab control**, **group box**, and **input** in depth. The remaining object types (text, listbox, subform, etc.) have not been covered yet.
