@@ -99,34 +99,12 @@ Case of
 					"y"; String($sy); \
 					"width"; String($sw); \
 					"height"; String($sh))
-			Else
-				// Mouse released - find lines within the selection rectangle
-				SET TIMER(0)
 				
-				// Calculate selection bounds
-				var $selX1; $selY1; $selW; $selH : Integer
-				var $sXi; $sYi : Integer
-				$sXi:=Num(Form.startX)
-				$sYi:=Num(Form.startY)
-				If ($mouseX<$sXi)
-					$selX1:=$mouseX
-				Else
-					$selX1:=$sXi
-				End if
-				If ($mouseY<$sYi)
-					$selY1:=$mouseY
-				Else
-					$selY1:=$sYi
-				End if
-				$selW:=Abs($mouseX-$sXi)
-				$selH:=Abs($mouseY-$sYi)
-				
-				// Use SVG Find element IDs by rect to find intersecting elements
+				// Live highlight: find intersecting lines and update colors
 				ARRAY TEXT($ids; 0)
 				var $found : Boolean
-				$found:=SVG Find element IDs by rect(*; "canvas"; $selX1; $selY1; $selW; $selH; $ids)
+				$found:=SVG Find element IDs by rect(*; "canvas"; $sx; $sy; $sw; $sh; $ids)
 				
-				// Reset all lines to black, then highlight selected ones
 				var $i : Integer
 				For ($i; 1; Form.lineCount)
 					SVG SET ATTRIBUTE(*; "canvas"; "line"+String($i); "stroke"; "black")
@@ -138,7 +116,9 @@ Case of
 					End if
 				End for
 				
-				// Remove selection rectangle from rendering tree
+			Else
+				// Mouse released - stop timer, hide selection rectangle
+				SET TIMER(0)
 				SVG SET ATTRIBUTE(*; "canvas"; "selRect"; "width"; "0"; "height"; "0")
 			End if
 		End if
