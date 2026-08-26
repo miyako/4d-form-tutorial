@@ -213,6 +213,8 @@ note: "Do NOT load this file for routine object/task work — it duplicates cont
 - Token suffixes (`:CNNN`, `:KNN:NN`) are added by the IDE automatically — I must never write them.
 - **Never guess constant names.** If I don't know the exact constant name for a command parameter, I must either look it up in the documentation or omit the parameter to use the default. Inventing constant names (e.g. writing `Is SVG` when the real constant is `Copy XML data source`) causes compilation errors.
 - **`FORM Event` returns a plain `Object`** — declare it as `var $event : Object`, never as `cs.FormEvent` or any `cs.*` class. There is no built-in event class in 4D's class system (see `01-form-concepts.md`).
+- **4D's SVG renderer does not support CSS `rgba()` color notation.** Use separate `fill`/`stroke` color + `fill-opacity`/`stroke-opacity` attributes instead (standard SVG 1.1 approach).
+- **`var` declarations are method-scoped**, not block-scoped. Never redeclare the same variable in different `Case of` branches — declare once at the top or in the first branch that uses it.
 
 ### Other Form Object Types
 - I have studied **button**, **checkbox**, **radio**, **button grid**, **picture button**, **splitter**, **ruler**, **stepper**, **progress indicator**, **spinner**, **static picture**, **dropdown**, **combo box**, **picture pop-up menu**, **tab control**, **group box**, and **input** in depth. The remaining object types (text, listbox, subform, etc.) have not been covered yet.
