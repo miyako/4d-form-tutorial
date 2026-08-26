@@ -209,7 +209,7 @@ To clear unwanted auto-focus on page 1, call `GOTO OBJECT(*; "")` in `On Load`.
 
 ### Tab Behavior from an Object Outside Entry Order
 
-If the user clicks on an object that is **not** in the entry order (or has no entry order defined), pressing Tab will jump focus to the **last** object in the entry order. Shift+Tab also jumps to the last object. This is because the system has no "current position" in the order to advance from.
+If the user clicks on an object that is **not** in the entry order (or has no entry order defined), pressing Tab or Shift+Tab will jump focus to the **first** object in the entry order. This is because the system has no "current position" in the order to advance from, so it starts from the beginning.
 
 ### Entry Order vs. Rendering Order
 
