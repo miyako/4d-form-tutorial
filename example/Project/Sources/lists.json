@@ -1,0 +1,432 @@
+{
+	"FoodTaxonomy": {
+		"items": [
+			{
+				"text": "Fruits",
+				"ref": 1,
+				"editable": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Apple",
+							"ref": 101,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Banana",
+							"ref": 102,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Cherry",
+							"ref": 103,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Mango",
+							"ref": 104,
+							"editable": true,
+							"collapsed": true
+						}
+					]
+				}
+			},
+			{
+				"text": "Vegetables",
+				"ref": 2,
+				"editable": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Leafy Greens",
+							"ref": 21,
+							"editable": true,
+							"subTree": {
+								"items": [
+									{
+										"text": "Spinach",
+										"ref": 211,
+										"editable": true,
+										"collapsed": true
+									},
+									{
+										"text": "Kale",
+										"ref": 212,
+										"editable": true,
+										"collapsed": true
+									},
+									{
+										"text": "Lettuce",
+										"ref": 213,
+										"editable": true,
+										"collapsed": true
+									}
+								]
+							}
+						},
+						{
+							"text": "Root Vegetables",
+							"ref": 22,
+							"editable": true,
+							"collapsed": true,
+							"subTree": {
+								"items": [
+									{
+										"text": "Carrot",
+										"ref": 221,
+										"editable": true,
+										"collapsed": true
+									},
+									{
+										"text": "Potato",
+										"ref": 222,
+										"editable": true,
+										"collapsed": true
+									},
+									{
+										"text": "Beet",
+										"ref": 223,
+										"editable": true,
+										"collapsed": true
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"text": "Grains",
+				"ref": 3,
+				"editable": true,
+				"collapsed": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Rice",
+							"ref": 301,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Wheat",
+							"ref": 302,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Oats",
+							"ref": 303,
+							"editable": true,
+							"collapsed": true
+						}
+					]
+				}
+			},
+			{
+				"text": "Dairy",
+				"ref": 4,
+				"editable": true,
+				"collapsed": true
+			}
+		]
+	},
+	"PropertyTests": {
+		"items": [
+			{
+				"text": "Plain item",
+				"ref": 1,
+				"editable": false,
+				"collapsed": true
+			},
+			{
+				"text": "Bold item",
+				"ref": 2,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold"
+			},
+			{
+				"text": "Italic item",
+				"ref": 3,
+				"editable": false,
+				"collapsed": true,
+				"fontStyle": "italic"
+			},
+			{
+				"text": "Underline item",
+				"ref": 4,
+				"editable": false,
+				"collapsed": true,
+				"textDecoration": "underline"
+			},
+			{
+				"text": "Bold+Italic",
+				"ref": 5,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"fontStyle": "italic"
+			},
+			{
+				"text": "Bold+Underline",
+				"ref": 6,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"textDecoration": "underline"
+			},
+			{
+				"text": "All styles",
+				"ref": 7,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"fontStyle": "italic",
+				"textDecoration": "underline"
+			},
+			{
+				"text": "Red text",
+				"ref": 8,
+				"editable": false,
+				"collapsed": true,
+				"stroke": "#FF0000"
+			},
+			{
+				"text": "Green text",
+				"ref": 9,
+				"editable": false,
+				"collapsed": true,
+				"stroke": "#00FF00"
+			},
+			{
+				"text": "Blue bold",
+				"ref": 10,
+				"editable": false,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"stroke": "#0000FF"
+			},
+			{
+				"text": "Enterable item",
+				"ref": 11,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Non-enterable item",
+				"ref": 12,
+				"editable": false,
+				"collapsed": true
+			}
+		]
+	},
+	"ParameterTests": {
+		"items": [
+			{
+				"text": "Item with additional text",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item with custom text param",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item with custom number param",
+				"ref": 3,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item with custom boolean param",
+				"ref": 4,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item with multiple params",
+				"ref": 5,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Standard action item",
+				"ref": 6,
+				"editable": true,
+				"collapsed": true,
+				"action": "fontSize?value=12pt"
+			}
+		]
+	},
+	"CombinedTests": {
+		"items": [
+			{
+				"text": "Bold red with extra text",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true,
+				"fontWeight": "bold",
+				"stroke": "#FF0000"
+			},
+			{
+				"text": "Parent with styled children",
+				"ref": 2,
+				"editable": false,
+				"fontWeight": "bold",
+				"subTree": {
+					"items": [
+						{
+							"text": "Child italic green",
+							"ref": 10,
+							"editable": false,
+							"collapsed": true,
+							"fontStyle": "italic",
+							"stroke": "#008000"
+						},
+						{
+							"text": "Child underline blue",
+							"ref": 11,
+							"editable": false,
+							"collapsed": true,
+							"textDecoration": "underline",
+							"stroke": "#0000FF"
+						}
+					]
+				}
+			}
+		]
+	},
+	"LineHeight30": {
+		"lineHeight": 30,
+		"items": [
+			{
+				"text": "Item A",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item B",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Item C",
+				"ref": 3,
+				"editable": true,
+				"collapsed": true
+			}
+		]
+	},
+	"NoDoubleClick": {
+		"items": [
+			{
+				"text": "Parent",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Parent",
+				"ref": 1,
+				"editable": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Child 1",
+							"ref": 10,
+							"editable": true,
+							"collapsed": true
+						},
+						{
+							"text": "Child 2",
+							"ref": 11,
+							"editable": true,
+							"collapsed": true
+						}
+					]
+				}
+			}
+		]
+	},
+	"MultiSelect": {
+		"items": [
+			{
+				"text": "Select me 1",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Select me 2",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Select me 3",
+				"ref": 3,
+				"editable": true,
+				"collapsed": true
+			}
+		]
+	},
+	"NotEditableChoiceList": {
+		"editable": false,
+		"items": [
+			{
+				"text": "Read-only 1",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Read-only 2",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			}
+		]
+	},
+	"AllListProps": {
+		"lineHeight": 24,
+		"editable": false,
+		"items": [
+			{
+				"text": "All options",
+				"ref": 1,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Combined",
+				"ref": 2,
+				"editable": true,
+				"collapsed": true
+			},
+			{
+				"text": "Parent node",
+				"ref": 3,
+				"editable": true,
+				"subTree": {
+					"items": [
+						{
+							"text": "Sub item",
+							"ref": 10,
+							"editable": true,
+							"collapsed": true
+						}
+					]
+				}
+			}
+		]
+	}
+}

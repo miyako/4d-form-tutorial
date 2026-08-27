@@ -1,6 +1,7 @@
 ---
 object: "oval"
 json_type: "oval"
+requires: ["01-form-concepts.md", "22-property-reference.md"]
 keywords: ["oval", "shape", "stroke"]
 summary: "Oval shape object: basic static oval definition."
 ---

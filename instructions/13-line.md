@@ -1,6 +1,7 @@
 ---
 object: "line"
 json_type: "line"
+requires: ["01-form-concepts.md", "22-property-reference.md"]
 keywords: ["line", "shape", "startPoint"]
 summary: "Line shape object: basic static line definition with start point."
 ---

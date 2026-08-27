@@ -1,6 +1,7 @@
 ---
 object: "buttonGrid"
 json_type: "buttonGrid"
+requires: ["01-form-concepts.md", "22-property-reference.md"]
 keywords: ["button grid", "rowCount", "columnCount", "transparent overlay", "gotoPage", "cell numbering"]
 summary: "Button grid object: grid overlay concept, 1-based cell numbering, gotoPage standard action."
 ---
