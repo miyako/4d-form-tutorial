@@ -7,7 +7,11 @@ How to design a form in 4D
 - [ ] List forms
 - [ ] Subforms (sublist)
 - [ ] Listbox
-- [ ] Web Area
-- [ ] Write Pro Area
-- [ ] View Pro Area
+- [ ] Web area
 - [ ] Subforms (widget)
+
+## Not planned
+
+- [ ] Write Pro area
+- [ ] View Pro area
+- [ ] Quick Report area
