@@ -64,9 +64,9 @@ both work.
 `example/Project/Sources/Methods/` contains the CLI entry points used to
 render and test forms: `project_form_to_image`, `print_form_to_file`,
 `run_project_form`, `dialog_screenshot`, `goto_page_then_screenshot`,
-`screenshot_and_accept`, plus `syntax_check` and `test`.
+`screenshot_and_accept`.
 
-Six of these are also shipped by the `4dcli` skill, as installable assets
+All six are also shipped by the `4dcli` skill, as installable assets
 for projects that do not have them. The two copies are **close but not
 identical**, and the skill's are the maintained ones:
 
@@ -76,10 +76,22 @@ identical**, and the skill's are the maintained ones:
 - Both now parse `--user-param` as `FormName:Page:Path` by rejoining
   everything after the second colon, so a Windows path such as
   `C:\out.png` survives rather than being truncated to `"C"`.
-- `syntax_check` is not shipped by the skill at all; use `4dlsp`'s
-  `check-syntax`, which needs no startup method. The copy here is kept
-  because it is this project's own CLI entry point.
-- `test` is not shipped by the skill either.
 
 Treat the versions in `4dcli` as authoritative. If you change the ones
 here, do not assume the skill should follow.
+
+### Syntax checking: do not add a startup method
+
+This project previously carried a `syntax_check` startup method that
+called `Compile project` and wrote `syntax_errors.json`, plus a `test`
+scratch method. Both were removed. They predate LSP integration and are
+functionally superseded by the `4dlsp` skill, which checks syntax
+directly and needs no startup method, no launch of the project, and no
+data file:
+
+```sh
+tools/4dlsp/tool4d-lsp-stdio check-syntax --workspace Project/
+```
+
+Do not reintroduce syntax checking or test running by injecting a method
+into this project. Use `4dlsp`.
