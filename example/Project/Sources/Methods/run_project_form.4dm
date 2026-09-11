@@ -15,7 +15,7 @@ $formName:=$userParams[0]
 var $formPage : Integer
 $formPage:=Num:C11($userParams[1])
 var $formObjectPath : Text
-$formObjectPath:=$userParams[2]
+$formObjectPath:=$userParams.slice(2).join(":")
 
 If ($formObjectPath="")
 	return 
