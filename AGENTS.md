@@ -67,18 +67,19 @@ render and test forms: `project_form_to_image`, `print_form_to_file`,
 `screenshot_and_accept`, plus `syntax_check` and `test`.
 
 Six of these are also shipped by the `4dcli` skill, as installable assets
-for projects that do not have them. **The two copies are not identical**,
-and the skill's versions are the maintained ones:
+for projects that do not have them. The two copies are **close but not
+identical**, and the skill's are the maintained ones:
 
 - The skill's assets are untokenized, for portability across projects.
-- The skill's assets parse `--user-param` as `FormName:Page:Path` by
-  rejoining everything after the second colon, so a Windows path such as
-  `C:\out.png` survives. The copies here still use `$params[2]` directly
-  and will silently truncate such a path to `"C"`. Prefer a colon-free
-  path, or a 4D filesystem path like `/PACKAGE/out.png`, when invoking the
-  copies in this repository.
+  Some copies here are tokenized (`:C643`, `:K37:94`), because this
+  project is IDE-maintained.
+- Both now parse `--user-param` as `FormName:Page:Path` by rejoining
+  everything after the second colon, so a Windows path such as
+  `C:\out.png` survives rather than being truncated to `"C"`.
 - `syntax_check` is not shipped by the skill at all; use `4dlsp`'s
-  `check-syntax`, which needs no startup method.
+  `check-syntax`, which needs no startup method. The copy here is kept
+  because it is this project's own CLI entry point.
+- `test` is not shipped by the skill either.
 
 Treat the versions in `4dcli` as authoritative. If you change the ones
 here, do not assume the skill should follow.
